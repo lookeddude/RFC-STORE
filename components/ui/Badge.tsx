@@ -6,6 +6,8 @@
  *   - Dark Navy bg, white uppercase text for standard badges
  *   - Coral Red bg for accent/urgent badges
  *   - Tiny uppercase Inter Bold text
+ *
+ * Styles come from globals.css (.badge) — variants applied via inline style overrides.
  */
 import React from "react";
 import { cn } from "@/lib/utils/cn";
@@ -17,30 +19,6 @@ interface BadgeProps {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
-}
-
-const variantStyles: Record<BadgeVariant, string> = {
-  default: "badge--default",
-  accent: "badge--accent",
-  outline: "badge--outline",
-  success: "badge--success",
-  warning: "badge--warning",
-};
-
-export function Badge({
-  variant = "default",
-  children,
-  className,
-  style,
-}: BadgeProps) {
-  return (
-    <span
-      className={cn("badge", `badge--${variantStyles[variant] ? variant : "default"}`, className)}
-      style={{ ...badgeStyles[variant], ...style }}
-    >
-      {children}
-    </span>
-  );
 }
 
 const badgeStyles: Record<BadgeVariant, React.CSSProperties> = {
@@ -67,19 +45,18 @@ const badgeStyles: Record<BadgeVariant, React.CSSProperties> = {
   },
 };
 
-// Inline global badge styles injected once
-export const badgeGlobalStyles = `
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 8px;
-  border-radius: 0; /* square-edged per Stitch spec */
-  font-family: var(--font-label);
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
+export function Badge({
+  variant = "default",
+  children,
+  className,
+  style,
+}: BadgeProps) {
+  return (
+    <span
+      className={cn("badge", className)}
+      style={{ ...badgeStyles[variant], ...style }}
+    >
+      {children}
+    </span>
+  );
 }
-`;

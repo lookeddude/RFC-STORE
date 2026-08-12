@@ -19,13 +19,6 @@ interface CardProps {
   padding?: "none" | "sm" | "md" | "lg";
 }
 
-const paddingStyles: Record<NonNullable<CardProps["padding"]>, string> = {
-  none: "",
-  sm: "padding: var(--space-4)",
-  md: "padding: var(--space-6)",
-  lg: "padding: var(--space-8)",
-};
-
 export function Card({
   children,
   className,

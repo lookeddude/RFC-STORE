@@ -2,8 +2,9 @@
  * RFC Store — Root Layout
  *
  * Applied to every page in the application.
- * Sets up fonts, global CSS, and base SEO metadata.
+ * Sets up fonts, global CSS, base SEO metadata, and accessibility foundation.
  */
+import React from "react";
 import type { Metadata, Viewport } from "next";
 import { defaultMetadata } from "@/config/site";
 import "@/app/globals.css";
@@ -23,11 +24,11 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/*
          * Google Fonts are loaded via globals.css @import.
-         * DNS prefetch improves load time for fonts.googleapis.com.
+         * Preconnect + dns-prefetch to eliminate render-blocking latency.
          */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link
@@ -35,9 +36,21 @@ export default function RootLayout({ children }: RootLayoutProps) {
           href="https://fonts.googleapis.com"
           crossOrigin="anonymous"
         />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
       </head>
       <body>
+        {/*
+         * Skip-to-content link — keyboard accessibility best practice.
+         * CSS-only show-on-focus pattern (no JS event handlers needed).
+         * Styled via globals.css .skip-to-content rule.
+         */}
+        <a href="#main-content" className="skip-to-content">
+          Skip to content
+        </a>
         {children}
       </body>
     </html>
