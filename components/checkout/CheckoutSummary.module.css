@@ -1,0 +1,203 @@
+/*
+ * RFC Store — CheckoutSummary Styles
+ */
+
+.panel {
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-default);
+  padding: 28px;
+  position: sticky;
+  top: 120px;
+}
+
+.heading {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+}
+
+/* ── Item List ──────────────────────────────────────────── */
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.imageWrap {
+  position: relative;
+  width: 60px;
+  height: 72px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--color-outline-variant);
+  flex-shrink: 0;
+  background: #f0f0f0;
+}
+
+.image { object-fit: cover; }
+
+.imagePlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0b1c30 0%, #1a2a3a 100%);
+  font-family: var(--font-headline);
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  z-index: 1;
+}
+
+.itemInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemName {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
+}
+
+.itemVariant {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: rgba(11, 28, 48, 0.5);
+  margin-top: 3px;
+}
+
+.itemTotal {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+/* ── Divider ────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background-color: var(--color-outline-variant);
+  margin-block: 16px;
+}
+
+/* ── Totals ─────────────────────────────────────────────── */
+.totals {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: rgba(11, 28, 48, 0.6);
+}
+
+.row span:last-child {
+  font-family: var(--font-label);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.row span[data-free="true"] {
+  color: #1a7a3c;
+  font-weight: 700;
+}
+
+/* ── Total ──────────────────────────────────────────────── */
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.totalLabel {
+  font-family: var(--font-label);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-primary);
+}
+
+.totalValue {
+  font-family: var(--font-label);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.priceNote {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: rgba(11, 28, 48, 0.35);
+  text-align: center;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ── Trust ──────────────────────────────────────────────── */
+.trust {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  gap: 8px;
+}
+
+.trustItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: rgba(11, 28, 48, 0.45);
+  text-align: center;
+  flex: 1;
+}
+
+.trustItem span:first-child { font-size: 16px; }

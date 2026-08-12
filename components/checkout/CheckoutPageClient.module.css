@@ -1,0 +1,103 @@
+/*
+ * RFC Store — CheckoutPageClient Styles
+ */
+
+.page {
+  padding-block: 40px 120px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Page Header ────────────────────────────────────────── */
+.pageHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.pageTitle {
+  font-family: var(--font-headline);
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--color-primary);
+}
+
+.backLink {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(11, 28, 48, 0.5);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color var(--transition-fast);
+}
+.backLink:hover { color: var(--color-primary); }
+
+/* ── Two Column Layout ──────────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 48px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.formCol {}
+.summaryCol {}
+
+/* ── Empty Guard ────────────────────────────────────────── */
+.emptyGuard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+  padding: 80px 24px;
+}
+
+.emptyHeading {
+  font-family: var(--font-headline);
+  font-size: 28px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 12px;
+}
+
+.emptyText {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: rgba(11, 28, 48, 0.55);
+  margin-bottom: 32px;
+}
+
+.shopBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding-inline: 40px;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background-color: var(--color-secondary);
+  color: var(--color-on-secondary);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+.shopBtn:hover { background-color: var(--color-secondary-dark); }

@@ -1,0 +1,411 @@
+/*
+ * RFC Store — Order Confirmation Page Styles
+ * Premium success state — clean, athletic, reassuring
+ */
+
+.page {
+  min-height: 100vh;
+  background: var(--color-surface);
+  padding-block: 40px 120px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 4vw, 64px);
+}
+
+/* ── Hero ───────────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.checkCircle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  margin-bottom: 20px;
+  box-shadow: 0 4px 24px rgba(34, 197, 94, 0.3);
+}
+
+.heroTitle {
+  font-family: var(--font-headline);
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+.heroSub {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: rgba(11, 28, 48, 0.6);
+  margin-bottom: 24px;
+}
+
+.orderNumBadge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 28px;
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
+  color: #fff;
+}
+
+.orderNumLabel {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.orderNum {
+  font-family: var(--font-headline);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* ── Two Column Layout ──────────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+}
+
+.leftCol, .rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Card ───────────────────────────────────────────────── */
+.card {
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-default);
+  padding: 24px;
+}
+
+.cardTitle {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(11, 28, 48, 0.45);
+  margin-bottom: 16px;
+}
+
+/* ── Item List ──────────────────────────────────────────── */
+.itemList {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-outline-variant);
+}
+.item:last-child { border-bottom: none; padding-bottom: 0; }
+
+.itemInfo { flex: 1; min-width: 0; }
+
+.itemName {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  letter-spacing: 0.02em;
+}
+
+.itemVariant {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: rgba(11, 28, 48, 0.5);
+  margin-top: 3px;
+}
+
+.itemSku {
+  font-family: var(--font-label);
+  font-size: 11px;
+  color: rgba(11, 28, 48, 0.35);
+  margin-top: 2px;
+}
+
+.itemRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.itemQty {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: rgba(11, 28, 48, 0.45);
+}
+
+.itemTotal {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* ── Totals ─────────────────────────────────────────────── */
+.totals {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-outline-variant);
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: rgba(11, 28, 48, 0.6);
+}
+
+.totalRow span:last-child {
+  font-family: var(--font-label);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.totalRow span[data-free="true"] {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.discountVal { color: #16a34a !important; }
+
+.grandTotal {
+  padding-top: 10px;
+  border-top: 1.5px solid var(--color-primary);
+  margin-top: 4px;
+}
+
+.grandTotal span {
+  font-family: var(--font-label) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: var(--color-primary) !important;
+}
+
+/* ── Steps ──────────────────────────────────────────────── */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.stepNum {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  color: #fff;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stepTitle {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 3px;
+  letter-spacing: 0.01em;
+}
+
+.stepDesc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(11, 28, 48, 0.55);
+  line-height: 1.5;
+}
+
+/* ── Address ────────────────────────────────────────────── */
+.address {
+  font-style: normal;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(11, 28, 48, 0.7);
+}
+
+.addrName {
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.addrPhone {
+  margin-top: 4px;
+  color: rgba(11, 28, 48, 0.5);
+  font-size: 13px;
+}
+
+/* ── Status ─────────────────────────────────────────────── */
+.statusGrid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.statusItem {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.statusLabel {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(11, 28, 48, 0.4);
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+  background: var(--color-surface-container);
+  color: var(--color-primary);
+}
+
+/* Payment status variants */
+.pay_pending { background: #fef3c7; color: #92400e; }
+.pay_paid    { background: #dcfce7; color: #166534; }
+.pay_failed  { background: var(--color-error-container); color: var(--color-on-error-container); }
+
+/* Order status variants */
+.pending    { background: #fef3c7; color: #92400e; }
+.confirmed  { background: #dcfce7; color: #166534; }
+.processing { background: #dbeafe; color: #1e40af; }
+.shipped    { background: #ede9fe; color: #4c1d95; }
+.delivered  { background: #dcfce7; color: #166534; }
+.cancelled  { background: var(--color-error-container); color: var(--color-on-error-container); }
+
+.paymentNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  background: #fffbeb;
+  border: 1px solid #f59e0b;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #92400e;
+  line-height: 1.5;
+}
+
+/* ── Contact ────────────────────────────────────────────── */
+.contactEmail {
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+
+.contactNote {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(11, 28, 48, 0.5);
+  line-height: 1.5;
+}
+
+/* ── Footer CTAs ────────────────────────────────────────── */
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.shopBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding-inline: 48px;
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background-color: var(--color-secondary);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+.shopBtn:hover { background-color: var(--color-secondary-dark); }
+
+.homeLink {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: rgba(11, 28, 48, 0.45);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.homeLink:hover { color: var(--color-primary); }
