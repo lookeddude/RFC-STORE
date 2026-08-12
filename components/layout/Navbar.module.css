@@ -1,0 +1,241 @@
+/*
+ * RFC Store — Navbar Styles
+ * Dark Navy bar with glassmorphism on scroll
+ */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--navbar-height);
+  background-color: var(--color-primary);
+  transition:
+    backdrop-filter var(--transition-base),
+    background-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+/* Glassmorphism effect on scroll */
+.navbar--scrolled {
+  background-color: rgba(10, 14, 20, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: var(--space-6);
+}
+
+/* ── Brand ─────────────────────────────────────────────── */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.brandMark {
+  font-family: var(--font-headline);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--color-secondary); /* Coral Red RFC mark */
+  text-transform: uppercase;
+}
+
+.brandName {
+  font-family: var(--font-headline);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--color-on-primary);
+  text-transform: uppercase;
+  opacity: 0.85;
+  /* Hide on very small screens */
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .brandName {
+    display: block;
+  }
+}
+
+/* ── Nav Links ─────────────────────────────────────────── */
+.navLinks {
+  display: none;
+  align-items: center;
+  gap: var(--space-8);
+  flex: 1;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .navLinks {
+    display: flex;
+  }
+}
+
+.navLink {
+  font-family: var(--font-label);
+  font-size: var(--font-label-bold-size);
+  font-weight: var(--font-label-bold-weight);
+  letter-spacing: var(--font-label-bold-letter-spacing);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  padding-block: var(--space-2);
+  position: relative;
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-secondary);
+  transform: scaleX(0);
+  transition: transform var(--transition-fast);
+}
+
+.navLink:hover {
+  color: var(--color-on-primary);
+}
+
+.navLink:hover::after {
+  transform: scaleX(1);
+}
+
+/* ── Actions ───────────────────────────────────────────── */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  color: rgba(255, 255, 255, 0.75);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
+  text-decoration: none;
+  position: relative;
+}
+
+.iconBtn:hover {
+  color: var(--color-on-primary);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Cart badge */
+.cartBtn {
+  position: relative;
+}
+
+.cartCount {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  min-width: 16px;
+  height: 16px;
+  background-color: var(--color-secondary);
+  color: var(--color-on-secondary);
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-label);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
+/* Mobile menu toggle — visible only on mobile */
+.menuToggle {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .menuToggle {
+    display: none;
+  }
+}
+
+/* ── Mobile Menu ───────────────────────────────────────── */
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background-color: rgba(10, 14, 20, 0.8);
+  backdrop-filter: blur(4px);
+  animation: fadeIn var(--transition-fast) ease;
+}
+
+.mobileMenu {
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
+  background-color: var(--color-primary);
+  padding: var(--space-4) 0 var(--space-8);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  animation: slideDown var(--transition-base) ease;
+}
+
+.mobileMenu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobileNavLink {
+  display: block;
+  padding: var(--space-4) var(--space-6);
+  font-family: var(--font-headline);
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.mobileNavLink:hover {
+  color: var(--color-on-primary);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

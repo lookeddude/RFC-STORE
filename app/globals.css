@@ -1,0 +1,418 @@
+/*
+ * RFC STORE — Global Design System
+ * Based on Stitch Project: 6383426045060807708
+ * "RFC Design System Foundation" by Revive Fight Club
+ *
+ * Design Philosophy: "Athlete's Discipline"
+ *   The Arena (Dark) — hero sections, brand narratives
+ *   The Lab (Light)  — product grids, checkout, clean data
+ *
+ * Structure:
+ *   1. Google Fonts
+ *   2. CSS Custom Properties (Design Tokens)
+ *   3. CSS Reset
+ *   4. Base Typography
+ *   5. Utility Classes
+ */
+
+/* ── 1. Google Fonts ──────────────────────────────────────
+   Archivo Narrow: Headlines (H1–H3, uppercase, aggressive)
+   Inter:          Body copy, labels, CTAs
+   ──────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap");
+
+/* ── 2. CSS Custom Properties (Design Tokens) ────────────
+   All values sourced from Stitch "RFC Design System Foundation"
+   Project ID: 6383426045060807708
+   ──────────────────────────────────────────────────────── */
+:root {
+  /* ── Color Palette ──────────────────────────────────── */
+
+  /* Primary — Dark Navy (The Arena) */
+  --color-primary: #0a0e14;
+  --color-primary-container: #181c22;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #80848c;
+
+  /* Secondary — Coral Red (Energy, CTAs) */
+  --color-secondary: #ff3b30;
+  --color-secondary-dark: #bc000a;
+  --color-secondary-container: #e2241f;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #fffbff;
+
+  /* Surface — The Lab (Light) */
+  --color-surface: #f8f9ff;
+  --color-surface-bright: #f8f9ff;
+  --color-surface-dim: #cbdbf5;
+  --color-surface-container: #e5eeff;
+  --color-surface-container-low: #eff4ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #dce9ff;
+  --color-surface-container-highest: #d3e4fe;
+  --color-surface-variant: #d3e4fe;
+
+  /* Background */
+  --color-background: #f8f9ff;
+  --color-on-background: #0b1c30;
+
+  /* On-Surface (text) */
+  --color-on-surface: #0b1c30;
+  --color-on-surface-variant: #45474b;
+
+  /* Inverse — for dark sections */
+  --color-inverse-surface: #213145;
+  --color-inverse-on-surface: #eaf1ff;
+  --color-inverse-primary: #c3c6cf;
+
+  /* Outline */
+  --color-outline: #76777b;
+  --color-outline-variant: #c6c6cb;
+
+  /* Error */
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #93000a;
+
+  /* Tertiary */
+  --color-tertiary: #000000;
+  --color-tertiary-container: #191c1d;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #828485;
+
+  /* ── Semantic Aliases ───────────────────────────────── */
+  --color-brand-dark: var(--color-primary);        /* #0A0E14 */
+  --color-brand-red: var(--color-secondary);       /* #FF3B30 */
+  --color-page-bg: var(--color-background);        /* #F8F9FF */
+  --color-card-bg: var(--color-surface-container-lowest); /* #FFFFFF */
+  --color-border: var(--color-outline-variant);    /* #C6C6CB */
+  --color-text-primary: var(--color-on-surface);   /* #0B1C30 */
+  --color-text-secondary: var(--color-on-surface-variant); /* #45474B */
+
+  /* ── Typography Scale ───────────────────────────────── */
+  /* Sourced directly from Stitch typography tokens */
+
+  /* Display — hero headlines */
+  --font-display-size: 80px;
+  --font-display-weight: 700;
+  --font-display-line-height: 1.0;
+  --font-display-letter-spacing: -0.02em;
+
+  /* Headline Large — section titles desktop */
+  --font-headline-lg-size: 48px;
+  --font-headline-lg-weight: 700;
+  --font-headline-lg-line-height: 1.1;
+  --font-headline-lg-letter-spacing: -0.01em;
+
+  /* Headline Large — section titles mobile */
+  --font-headline-lg-mobile-size: 32px;
+  --font-headline-lg-mobile-weight: 700;
+  --font-headline-lg-mobile-line-height: 1.1;
+
+  /* Headline Medium — card and component titles */
+  --font-headline-md-size: 24px;
+  --font-headline-md-weight: 600;
+  --font-headline-md-line-height: 1.2;
+
+  /* Body Large — paragraph text */
+  --font-body-lg-size: 18px;
+  --font-body-lg-weight: 400;
+  --font-body-lg-line-height: 1.6;
+
+  /* Body Medium — standard body */
+  --font-body-md-size: 16px;
+  --font-body-md-weight: 400;
+  --font-body-md-line-height: 1.5;
+
+  /* Label Bold — CTAs, chips, navigation */
+  --font-label-bold-size: 14px;
+  --font-label-bold-weight: 600;
+  --font-label-bold-line-height: 1.2;
+  --font-label-bold-letter-spacing: 0.05em;
+
+  /* Font families */
+  --font-headline: "Archivo Narrow", "Arial Narrow", Arial, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-label: "Inter", system-ui, -apple-system, sans-serif;
+
+  /* ── Border Radius ──────────────────────────────────── */
+  --radius-sm: 0.125rem;   /* 2px  — Buttons (sharp precision-cut) */
+  --radius-default: 0.25rem; /* 4px — Cards */
+  --radius-md: 0.375rem;   /* 6px */
+  --radius-lg: 0.5rem;     /* 8px */
+  --radius-xl: 0.75rem;    /* 12px */
+  --radius-full: 9999px;   /* Pills — avoid for most elements */
+
+  /* ── Spacing Scale (8px base) ───────────────────────── */
+  --space-unit: 4px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-30: 120px;       /* Section gap */
+
+  --space-gutter: 24px;           /* Grid gutter */
+  --space-margin-mobile: 16px;    /* Mobile page margin */
+  --space-margin-desktop: 64px;   /* Desktop page margin */
+  --space-section-gap: 120px;     /* Between major sections */
+
+  /* ── Shadows ────────────────────────────────────────── */
+  /* Stitch: avoid heavy shadows — use tonal layers + outlines */
+  --shadow-card-hover: 0px 10px 20px rgba(10, 14, 20, 0.05);
+  --shadow-modal: 0px 24px 48px rgba(10, 14, 20, 0.12);
+
+  /* ── Transitions ────────────────────────────────────── */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* ── Layout ─────────────────────────────────────────── */
+  --container-max: 1440px;
+  --navbar-height: 64px;
+}
+
+/* ── 3. CSS Reset ──────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--font-body-md-size);
+  font-weight: var(--font-body-md-weight);
+  line-height: var(--font-body-md-line-height);
+  color: var(--color-text-primary);
+  background-color: var(--color-page-bg);
+  min-height: 100dvh;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ── 4. Base Typography ────────────────────────────────── */
+
+/* Headlines use Archivo Narrow, always uppercase for H1-H3 */
+h1,
+h2,
+h3 {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+h4,
+h5,
+h6 {
+  font-family: var(--font-headline);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+}
+
+h1 { font-size: clamp(var(--font-headline-lg-mobile-size), 5vw, var(--font-display-size)); letter-spacing: var(--font-display-letter-spacing); }
+h2 { font-size: clamp(var(--font-headline-lg-mobile-size), 4vw, var(--font-headline-lg-size)); }
+h3 { font-size: clamp(20px, 2.5vw, var(--font-headline-md-size)); text-transform: none; }
+
+p {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+/* ── 5. Utility Classes ────────────────────────────────── */
+
+/* ── Card ───────────────────────────────────────────────── */
+/* Stitch: white bg, 4px radius, 1px border, hover shadow */
+.rfc-card {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-default);
+  padding: var(--card-padding, var(--space-6));
+  overflow: hidden;
+}
+
+.rfc-card--interactive {
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.rfc-card--interactive:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.rfc-card__header {
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rfc-card__body {
+  /* pass-through */
+}
+
+.rfc-card__footer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ── Badge ──────────────────────────────────────────────── */
+/* Stitch: square-edged, tiny uppercase Inter Bold text */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 0; /* square-edged per Stitch spec */
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border: 1px solid transparent;
+}
+
+/* ── Animations ─────────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ── 6. Utility Classes ────────────────────────────────── */
+
+/* Container — max-width, centred, responsive padding */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-margin-mobile);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-inline: var(--space-gutter);
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    padding-inline: var(--space-margin-desktop);
+  }
+}
+
+/* Section spacing */
+.section {
+  padding-block: var(--space-section-gap);
+}
+
+.section--sm {
+  padding-block: calc(var(--space-section-gap) / 2);
+}
+
+/* The Arena — dark brand sections */
+.arena {
+  background-color: var(--color-brand-dark);
+  color: var(--color-on-primary);
+}
+
+.arena h1,
+.arena h2,
+.arena h3,
+.arena p {
+  color: var(--color-on-primary);
+}
+
+/* The Lab — light product sections */
+.lab {
+  background-color: var(--color-page-bg);
+  color: var(--color-text-primary);
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus visible — accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+}
