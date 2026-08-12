@@ -17,11 +17,27 @@ import styles from "./CheckoutSummary.module.css";
 
 export function CheckoutSummary() {
   const { state } = useCart();
-  const { items, subtotal } = state;
+  const { items, subtotal, isLoading } = state;
 
   const shipping = subtotal >= SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_CONFIG.STANDARD_RATE;
   const tax = Math.round(subtotal * TAX_CONFIG.RATE * 100) / 100;
   const total = subtotal + shipping + tax;
+
+  // Show skeleton during localStorage hydration to avoid ₹0 flash
+  if (isLoading) {
+    return (
+      <div className={styles.panel}>
+        <div className={styles.skeletonTitle} />
+        {[0, 1].map((i) => (
+          <div key={i} className={styles.skeletonItem} />
+        ))}
+        <div className={styles.divider} />
+        <div className={styles.skeletonRow} />
+        <div className={styles.skeletonRow} />
+        <div className={styles.skeletonTotal} />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.panel}>

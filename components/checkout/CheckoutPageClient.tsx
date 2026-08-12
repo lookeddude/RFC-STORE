@@ -24,7 +24,7 @@ import { useCart } from "@/context/CartContext";
 import { placeOrderAction } from "@/lib/actions/checkout";
 import { CheckoutForm } from "./CheckoutForm";
 import { CheckoutSummary } from "./CheckoutSummary";
-import type { CheckoutFormData, CheckoutFormErrors, PlaceOrderResult } from "@/types/order";
+import type { CheckoutFormData, CheckoutFormErrors } from "@/types/order";
 import styles from "./CheckoutPageClient.module.css";
 
 const INITIAL_FORM: CheckoutFormData = {
@@ -48,7 +48,9 @@ export function CheckoutPageClient() {
   const [formData, setFormData] = useState<CheckoutFormData>(INITIAL_FORM);
   const [fieldErrors, setFieldErrors] = useState<CheckoutFormErrors>({});
   const [serverError, setServerError] = useState<string | null>(null);
-  const [result, setResult] = useState<PlaceOrderResult | null>(null);
+  // isOrdered: true after successful order creation.
+  // Guards the empty-cart check during the brief window between clearCart() + router.push().
+  const [isOrdered, setIsOrdered] = useState(false);
 
   // Idempotency key — generated once per page load
   // Prevents duplicate orders if the user double-clicks or retries
@@ -95,7 +97,7 @@ export function CheckoutPageClient() {
         }
 
         // ── Success path ─────────────────────────────────────
-        setResult(res);
+        setIsOrdered(true);
         // Clear cart from localStorage
         clearCart();
         // Redirect to order confirmation
@@ -107,8 +109,9 @@ export function CheckoutPageClient() {
     });
   };
 
-  // Guard: redirect empty cart back
-  if (!cartState.isLoading && cartState.items.length === 0 && !result) {
+  // Guard: redirect empty cart back to shop.
+  // isOrdered check prevents flash during clearCart() → router.push() window.
+  if (!cartState.isLoading && cartState.items.length === 0 && !isOrdered) {
     return (
       <div className={styles.emptyGuard}>
         <h1 className={styles.emptyHeading}>Nothing to Check Out</h1>

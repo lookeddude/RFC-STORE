@@ -46,10 +46,11 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
   const supabase = await createClient();
 
   // Fetch order with items (admin client — bypasses RLS for server-side render)
+  // user_id included here to avoid a second DB round-trip for the security check below
   const { data: orderRaw, error } = await admin
     .from("orders")
     .select(`
-      id, order_number, status, payment_status,
+      id, order_number, status, payment_status, user_id,
       customer_name, customer_email, customer_phone,
       shipping_address, subtotal, shipping_amount, tax_amount,
       discount_amount, total_amount, currency, created_at,
@@ -70,6 +71,7 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
     order_number: string;
     status: string;
     payment_status: string;
+    user_id: string | null;
     customer_name: string;
     customer_email: string;
     customer_phone: string;
@@ -95,17 +97,11 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
     }>;
   };
 
-  // Security: if this order belongs to a specific user, verify the session user matches
+  // Security: if this order belongs to a specific user, verify session matches.
+  // user_id is already available from the first query — no second DB round-trip needed.
   const { data: { session } } = await supabase.auth.getSession();
-  const { data: orderUser } = await admin
-    .from("orders")
-    .select("user_id")
-    .eq("order_number", orderNumber)
-    .maybeSingle();
-
-  if (orderUser && (orderUser as { user_id: string | null }).user_id) {
-    const ownerUserId = (orderUser as { user_id: string | null }).user_id;
-    if (!session?.user || session.user.id !== ownerUserId) {
+  if (order.user_id) {
+    if (!session?.user || session.user.id !== order.user_id) {
       notFound();
     }
   }

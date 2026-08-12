@@ -2,6 +2,27 @@
  * RFC Store — CheckoutSummary Styles
  */
 
+/* ── Skeleton shimmer ───────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.skeletonTitle,
+.skeletonItem,
+.skeletonRow,
+.skeletonTotal {
+  background: linear-gradient(90deg, #f0f4ff 25%, #e5eeff 50%, #f0f4ff 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 4px;
+}
+
+.skeletonTitle  { height: 20px; width: 60%; margin-bottom: 20px; }
+.skeletonItem   { height: 60px; margin-bottom: 12px; }
+.skeletonRow    { height: 16px; width: 80%; margin-bottom: 10px; }
+.skeletonTotal  { height: 24px; width: 60%; margin-top: 8px; margin-left: auto; }
+
 .panel {
   background: var(--color-surface-container-lowest);
   border: 1px solid var(--color-outline-variant);

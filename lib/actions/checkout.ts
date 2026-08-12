@@ -195,11 +195,13 @@ export async function placeOrderAction(
       const variant = variantRaw as {
         id: string; name: string; sku: string; price: number;
         is_available: boolean;
-        inventory: { quantity: number; reserved: number } | null;
+        // Supabase returns one-to-many joins as arrays.
+        // inventory has a unique constraint on variant_id so it's always 0 or 1 record.
+        inventory: Array<{ quantity: number; reserved: number }>;
       };
 
-      const inv = variant.inventory;
-      const available = inv ? Math.max(0, inv.quantity - inv.reserved) : 0;
+      const invRecord = variant.inventory?.[0] ?? null;
+      const available = invRecord ? Math.max(0, invRecord.quantity - invRecord.reserved) : 0;
 
       if (available < clientItem.quantity) {
         return {
