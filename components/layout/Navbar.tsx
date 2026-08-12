@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { NAV_LINKS, ROUTES, RFC_BRAND } from "@/lib/constants/site";
 import { Container } from "@/components/ui/Container";
+import { useCart } from "@/context/CartContext";
 import styles from "./Navbar.module.css";
 import { cn } from "@/lib/utils/cn";
 
@@ -29,6 +30,8 @@ export function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
   const router = useRouter();
+  const { state: cartState } = useCart();
+  const cartCount = cartState.itemCount;
 
   // Auto-hide on scroll down, reappear on scroll up (Stitch JS behavior)
   useEffect(() => {
@@ -108,10 +111,14 @@ export function Navbar() {
               <Link
                 href={ROUTES.cart}
                 className={cn(styles.iconBtn, styles.cartBtn)}
-                aria-label="Shopping cart"
+                aria-label={`Shopping cart${cartCount > 0 ? `, ${cartCount} item${cartCount === 1 ? "" : "s"}` : ""}`}
               >
                 <CartIcon />
-                <span className={styles.cartCount} aria-label="0 items in cart">0</span>
+                {cartCount > 0 && (
+                  <span className={styles.cartCount} aria-hidden="true">
+                    {cartCount > 99 ? "99+" : cartCount}
+                  </span>
+                )}
               </Link>
 
               {/* Account */}

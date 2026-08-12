@@ -1,0 +1,54 @@
+/*
+ * RFC Store — EmptyCart Styles
+ */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  text-align: center;
+  min-height: 40vh;
+}
+
+.icon { margin-bottom: 24px; }
+
+.heading {
+  font-family: var(--font-headline);
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--color-primary);
+  margin-bottom: 12px;
+}
+
+.text {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(11, 28, 48, 0.55);
+  max-width: 380px;
+  margin-bottom: 32px;
+}
+
+.shopBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding-inline: 40px;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background-color: var(--color-secondary);
+  color: var(--color-on-secondary);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.shopBtn:hover { background-color: var(--color-secondary-dark); }

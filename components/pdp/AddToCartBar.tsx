@@ -5,19 +5,15 @@
  * This is the primary interactive shell of the PDP right panel.
  * It owns state for: selectedVariant, quantity, wishlistActive.
  *
- * Renders:
- *   - VariantSelector (if product has variants)
- *   - Availability indicator
- *   - QuantitySelector
- *   - ADD TO CART primary CTA button
- *   - Wishlist heart button
- *   - Trust signals (free shipping, secure checkout)
+ * Phase 5: Connected to CartContext via addToCartAction Server Action.
+ *   1. User clicks ADD TO CART
+ *   2. addToCartAction (Server Action) validates product/variant + fetches
+ *      server-authoritative price from Supabase
+ *   3. Returns CartItemData → dispatched into CartContext
+ *   4. CartContext persists to localStorage
+ *   5. Navbar count updates instantly
  *
- * Phase 5 integration point: replace handleAddToCart stub with
- *   cart context dispatch (useCart hook).
- *
- * Phase 7 integration point: replace handleWishlist stub with
- *   authenticated wishlist API call.
+ * Phase 7 integration point: handleWishlist → authenticated API
  *
  * Availability logic (customer-visible only):
  *   hasVariants + noVariantSelected → "SELECT A SIZE / OPTION"
@@ -26,8 +22,10 @@
  *   selectedVariant.inventoryCount > 3  → "IN STOCK"
  *   noVariants + basePrice → "IN STOCK" (no inventory tracking on product level)
  */
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useTransition } from "react";
 import type { Product, ProductVariant } from "@/types/product";
+import { useCart } from "@/context/CartContext";
+import { addToCartAction } from "@/lib/actions/cart";
 import { VariantSelector } from "./VariantSelector";
 import { QuantitySelector } from "./QuantitySelector";
 import styles from "./AddToCartBar.module.css";
@@ -46,10 +44,13 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
   const { variants } = product;
   const hasVariants = variants.length > 0;
 
+  const { addToCart } = useCart();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [wishlistActive, setWishlistActive] = useState(false);
   const [addedFeedback, setAddedFeedback] = useState(false);
+  const [cartError, setCartError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   // Determine availability
   const availability: AvailabilityState = (() => {
@@ -67,37 +68,41 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
   const canAddToCart =
     availability === "in-stock" || availability === "low-stock";
 
-  // ── Phase 5 integration point ─────────────────────────────
+  // ── Phase 5: Real cart integration ─────────────────────
   const handleAddToCart = useCallback(() => {
-    if (!canAddToCart) return;
+    if (!canAddToCart || isPending) return;
 
-    // TODO Phase 5: dispatch to cart context
-    // cartDispatch({ type: 'ADD_ITEM', payload: {
-    //   productId: product.id,
-    //   variantId: selectedVariant?.id ?? null,
-    //   quantity,
-    // }});
+    setCartError(null);
 
-    // Temporary UI feedback
-    setAddedFeedback(true);
-    setTimeout(() => setAddedFeedback(false), 2000);
+    startTransition(async () => {
+      try {
+        const result = await addToCartAction({
+          productId: product.id,
+          variantId: selectedVariant?.id ?? null,
+          quantity,
+        });
 
-    console.log("[AddToCart] Phase 5 stub:", {
-      productId: product.id,
-      productName: product.name,
-      variantId: selectedVariant?.id ?? null,
-      sku: selectedVariant?.sku ?? null,
-      quantity,
-      price: selectedVariant?.price ?? product.basePrice,
+        if (!result.success || !result.item) {
+          setCartError(result.error ?? "Could not add item to cart. Please try again.");
+          return;
+        }
+
+        // Dispatch to CartContext → localStorage persistence + Navbar count update
+        addToCart(result.item);
+
+        // Success feedback
+        setAddedFeedback(true);
+        setTimeout(() => setAddedFeedback(false), 2000);
+      } catch {
+        setCartError("Could not add item to cart. Please try again.");
+      }
     });
-  }, [canAddToCart, product, selectedVariant, quantity]);
+  }, [canAddToCart, isPending, product, selectedVariant, quantity, addToCart]);
 
   // ── Phase 7 integration point ─────────────────────────────
   const handleWishlist = useCallback(() => {
     setWishlistActive((v) => !v);
     // TODO Phase 7: persist to wishlist_items table via API route
-    // if (!session) → prompt login
-    // else → toggle wishlist_items record
   }, []);
 
   return (
@@ -107,7 +112,10 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
         <div className={styles.section}>
           <VariantSelector
             variants={variants}
-            onVariantChange={setSelectedVariant}
+            onVariantChange={(v) => {
+              setSelectedVariant(v);
+              setCartError(null);
+            }}
           />
         </div>
       )}
@@ -123,17 +131,19 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
           quantity={quantity}
           onQuantityChange={setQuantity}
           maxQuantity={maxQty}
-          disabled={!canAddToCart}
+          disabled={!canAddToCart || isPending}
         />
 
         <button
           type="button"
           className={styles.addBtn}
           onClick={handleAddToCart}
-          disabled={!canAddToCart}
+          disabled={!canAddToCart || isPending}
           data-feedback={addedFeedback}
           aria-label={
-            !canAddToCart
+            isPending
+              ? "Adding to cart…"
+              : !canAddToCart
               ? availability === "select-variant"
                 ? "Select a size first"
                 : "Out of stock"
@@ -141,8 +151,15 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
               ? "Added to cart"
               : "Add to cart"
           }
+          aria-busy={isPending}
         >
-          {addedFeedback ? "✓ ADDED" : availability === "out-of-stock" ? "OUT OF STOCK" : "ADD TO CART"}
+          {isPending
+            ? "ADDING…"
+            : addedFeedback
+            ? "✓ ADDED TO CART"
+            : availability === "out-of-stock"
+            ? "OUT OF STOCK"
+            : "ADD TO CART"}
         </button>
 
         {/* Wishlist heart */}
@@ -157,6 +174,13 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
           <HeartIcon filled={wishlistActive} />
         </button>
       </div>
+
+      {/* Server Action error message */}
+      {cartError && (
+        <p className={styles.cartError} role="alert" aria-live="assertive">
+          {cartError}
+        </p>
+      )}
 
       {/* Trust Signals */}
       <div className={styles.trust}>

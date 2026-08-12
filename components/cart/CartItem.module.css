@@ -1,0 +1,208 @@
+/*
+ * RFC Store — CartItem Row Styles
+ * Stitch: horizontal row layout, mobile-responsive
+ */
+
+.row {
+  display: grid;
+  grid-template-columns: 96px 1fr auto auto auto;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-outline-variant);
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: 80px 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 12px;
+  }
+}
+
+/* ── Image ──────────────────────────────────────────────── */
+.imageLink {
+  display: block;
+  text-decoration: none;
+}
+
+.imageWrap {
+  position: relative;
+  width: 96px;
+  height: 120px; /* 4:5 ratio */
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--color-outline-variant);
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .imageWrap { width: 80px; height: 100px; }
+}
+
+.image { object-fit: cover; }
+
+.imagePlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0b1c30 0%, #1a2a3a 100%);
+}
+
+.imagePlaceholder span {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Info ───────────────────────────────────────────────── */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.productName {
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--transition-fast);
+}
+
+.productName:hover { color: var(--color-secondary); }
+
+.variant {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(11, 28, 48, 0.55);
+}
+
+.sku {
+  font-family: var(--font-label);
+  font-size: 11px;
+  color: rgba(11, 28, 48, 0.4);
+}
+
+.unitPrice {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(11, 28, 48, 0.55);
+}
+
+/* ── Quantity Control ───────────────────────────────────── */
+.qtyCell {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  /* On mobile: qty control goes to row 2, spanning info column */
+  .qtyCell {
+    grid-column: 2 / 3;
+    grid-row: 2;
+  }
+}
+
+.qtyControl {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--color-outline-variant);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.qtyBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.qtyBtn:hover:not(:disabled) {
+  background-color: var(--color-surface-container-low);
+}
+
+.qtyBtn:disabled {
+  color: rgba(11, 28, 48, 0.25);
+  cursor: not-allowed;
+}
+
+.qtyValue {
+  min-width: 36px;
+  text-align: center;
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-primary);
+  border-left: 1px solid var(--color-outline-variant);
+  border-right: 1px solid var(--color-outline-variant);
+  line-height: 36px;
+  user-select: none;
+}
+
+/* ── Line Total ─────────────────────────────────────────── */
+.lineTotal {
+  font-family: var(--font-label);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-align: right;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+@media (max-width: 640px) {
+  .lineTotal {
+    grid-column: 3 / 4;
+    grid-row: 1;
+  }
+}
+
+/* ── Remove ─────────────────────────────────────────────── */
+.removeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: rgba(11, 28, 48, 0.3);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.removeBtn:hover {
+  color: var(--color-error);
+  background-color: var(--color-error-container);
+}
+
+@media (max-width: 640px) {
+  .removeBtn {
+    grid-column: 3 / 4;
+    grid-row: 2;
+    justify-self: end;
+  }
+}

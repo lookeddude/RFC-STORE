@@ -3,10 +3,16 @@
  *
  * Applied to every page in the application.
  * Sets up fonts, global CSS, base SEO metadata, and accessibility foundation.
+ *
+ * CartProvider wraps the entire app so useCart() is available everywhere:
+ *   - Navbar (cart count badge)
+ *   - AddToCartBar (add item to cart)
+ *   - Cart page (display and mutate cart)
  */
 import React from "react";
 import type { Metadata, Viewport } from "next";
 import { defaultMetadata } from "@/config/site";
+import { CartProvider } from "@/context/CartContext";
 import "@/app/globals.css";
 
 export const metadata: Metadata = defaultMetadata;
@@ -43,15 +49,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
       <body>
-        {/*
-         * Skip-to-content link — keyboard accessibility best practice.
-         * CSS-only show-on-focus pattern (no JS event handlers needed).
-         * Styled via globals.css .skip-to-content rule.
-         */}
+        {/* Skip-to-content — keyboard accessibility */}
         <a href="#main-content" className="skip-to-content">
           Skip to content
         </a>
-        {children}
+        <CartProvider>{children}</CartProvider>
       </body>
     </html>
   );
