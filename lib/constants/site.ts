@@ -72,6 +72,8 @@ export const IMAGE_SIZES = {
 } as const;
 
 export const NAV_LINKS = [
-  { label: "Shop All", href: ROUTES.shop },
+  { label: "Shop", href: ROUTES.shop },
   { label: "Categories", href: ROUTES.categories },
+  { label: "Training", href: "/training" },
+  { label: "About", href: "/about" },
 ] as const;

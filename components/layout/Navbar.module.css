@@ -1,28 +1,24 @@
 /*
- * RFC Store — Navbar Styles
- * Dark Navy bar with glassmorphism on scroll
+ * RFC Store — Navbar Styles (Light Theme)
+ * Stitch spec: surface/white background, dark text, border-bottom,
+ * auto-hide on scroll down, reappear on scroll up.
  */
 
+/* ── Navbar Base ─────────────────────────────────────────── */
 .navbar {
   position: fixed;
-  top: 0;
   left: 0;
   right: 0;
   z-index: 100;
   height: var(--navbar-height);
-  background-color: var(--color-primary);
-  transition:
-    backdrop-filter var(--transition-base),
-    background-color var(--transition-base),
-    box-shadow var(--transition-base);
+  background-color: #f8f9ff; /* surface-bright — The Lab */
+  border-bottom: 1px solid #c6c6cb; /* outline-variant */
+  transition: transform var(--transition-base);
 }
 
-/* Glassmorphism effect on scroll */
-.navbar--scrolled {
-  background-color: rgba(10, 14, 20, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+/* Auto-hide when scrolling down */
+.navbar--hidden {
+  transform: translateY(-100%);
 }
 
 .nav {
@@ -32,52 +28,35 @@
   gap: var(--space-6);
 }
 
-/* ── Brand ─────────────────────────────────────────────── */
+/* ── Brand ───────────────────────────────────────────────── */
 .brand {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
   flex-shrink: 0;
   text-decoration: none;
 }
 
-.brandMark {
+.brandText {
   font-family: var(--font-headline);
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  color: var(--color-secondary); /* Coral Red RFC mark */
+  letter-spacing: -0.01em;
+  color: #0b1c30; /* on-background */
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.brandName {
-  font-family: var(--font-headline);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--color-on-primary);
-  text-transform: uppercase;
-  opacity: 0.85;
-  /* Hide on very small screens */
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .brandName {
-    display: block;
-  }
-}
-
-/* ── Nav Links ─────────────────────────────────────────── */
+/* ── Nav Links ───────────────────────────────────────────── */
 .navLinks {
   display: none;
-  align-items: center;
-  gap: var(--space-8);
+  align-items: stretch;
+  gap: 0;
   flex: 1;
   justify-content: center;
   list-style: none;
   padding: 0;
   margin: 0;
+  height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -86,40 +65,42 @@
   }
 }
 
+.navItem {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
 .navLink {
   font-family: var(--font-label);
   font-size: var(--font-label-bold-size);
   font-weight: var(--font-label-bold-weight);
   letter-spacing: var(--font-label-bold-letter-spacing);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.75);
+  color: #45474b; /* on-surface-variant */
   text-decoration: none;
-  transition: color var(--transition-fast);
-  padding-block: var(--space-2);
+  padding-inline: var(--space-5);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
   position: relative;
 }
 
-.navLink::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background-color: var(--color-secondary);
-  transform: scaleX(0);
-  transition: transform var(--transition-fast);
-}
-
 .navLink:hover {
-  color: var(--color-on-primary);
+  color: var(--color-secondary); /* Coral Red */
+  border-bottom-color: var(--color-secondary);
 }
 
-.navLink:hover::after {
-  transform: scaleX(1);
+/* Active link — first item (Shop) active in Stitch */
+.navLink[data-active="true"],
+.navLink:first-child {
+  color: var(--color-secondary);
+  border-bottom-color: var(--color-secondary);
 }
 
-/* ── Actions ───────────────────────────────────────────── */
+/* ── Actions ─────────────────────────────────────────────── */
 .actions {
   display: flex;
   align-items: center;
@@ -127,6 +108,44 @@
   margin-left: auto;
 }
 
+/* Inline search — desktop only */
+.searchBar {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid #c6c6cb;
+  padding-bottom: 4px;
+  width: 180px;
+  color: #45474b;
+}
+
+@media (min-width: 768px) {
+  .searchBar {
+    display: flex;
+  }
+}
+
+.searchInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: #0b1c30;
+  width: 100%;
+  padding: 0;
+  height: 24px;
+}
+
+.searchInput::placeholder {
+  color: #76777b;
+}
+
+.searchInput::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* Icon buttons */
 .iconBtn {
   display: flex;
   align-items: center;
@@ -134,7 +153,7 @@
   width: 40px;
   height: 40px;
   border-radius: var(--radius-sm);
-  color: rgba(255, 255, 255, 0.75);
+  color: #45474b;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -146,8 +165,8 @@
 }
 
 .iconBtn:hover {
-  color: var(--color-on-primary);
-  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--color-secondary);
+  background-color: rgba(11, 28, 48, 0.05);
 }
 
 /* Cart badge */
@@ -157,8 +176,8 @@
 
 .cartCount {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 5px;
+  right: 5px;
   min-width: 16px;
   height: 16px;
   background-color: var(--color-secondary);
@@ -173,7 +192,7 @@
   padding: 0 3px;
 }
 
-/* Mobile menu toggle — visible only on mobile */
+/* Mobile menu toggle — visible only mobile */
 .menuToggle {
   display: flex;
 }
@@ -184,24 +203,24 @@
   }
 }
 
-/* ── Mobile Menu ───────────────────────────────────────── */
+/* ── Mobile Menu ─────────────────────────────────────────── */
 .mobileOverlay {
   position: fixed;
   inset: 0;
   z-index: 99;
-  background-color: rgba(10, 14, 20, 0.8);
+  background-color: rgba(11, 28, 48, 0.6);
   backdrop-filter: blur(4px);
   animation: fadeIn var(--transition-fast) ease;
 }
 
 .mobileMenu {
-  position: fixed;
+  position: absolute;
   top: var(--navbar-height);
   left: 0;
   right: 0;
-  background-color: var(--color-primary);
+  background-color: #f8f9ff;
   padding: var(--space-4) 0 var(--space-8);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid #c6c6cb;
   animation: slideDown var(--transition-base) ease;
 }
 
@@ -218,16 +237,16 @@
   font-size: 22px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: -0.01em;
+  color: #0b1c30;
   text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(11, 28, 48, 0.06);
   transition: color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .mobileNavLink:hover {
-  color: var(--color-on-primary);
-  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--color-secondary);
+  background-color: rgba(11, 28, 48, 0.03);
 }
 
 @keyframes fadeIn {

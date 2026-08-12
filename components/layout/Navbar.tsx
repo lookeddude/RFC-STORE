@@ -3,27 +3,45 @@
 /**
  * RFC Store — Navigation Bar
  *
- * Stitch design reference: RFC Master Design System
- * - Dark Navy (#0A0E14) background
- * - RFC branding left-aligned
- * - Navigation links centred
- * - Cart + Account icons right-aligned
- * - Glassmorphism on scroll (subtle backdrop-blur)
- * - Mobile: hamburger menu
+ * Stitch design spec (Light themed — "The Lab"):
+ *   - Surface background (#F8F9FF) with bottom border
+ *   - Sits below the fixed AnnouncementBar (offset by 36px bar height)
+ *   - RFC brand logotype left-aligned
+ *   - Nav links centre: Shop, Categories, Training, About
+ *   - Right: inline search (desktop), cart icon, account icon
+ *   - Auto-hide on scroll down, reappear on scroll up
+ *   - Active link: Coral Red underline
+ *   - Mobile: hamburger menu
  */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { NAV_LINKS, ROUTES, RFC_BRAND } from "@/lib/constants/site";
 import { Container } from "@/components/ui/Container";
 import styles from "./Navbar.module.css";
 import { cn } from "@/lib/utils/cn";
 
-export function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+/** Height of announcement bar — used to offset navbar position */
+const ANNOUNCEMENT_BAR_HEIGHT = 36;
 
+export function Navbar() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+  const router = useRouter();
+
+  // Auto-hide on scroll down, reappear on scroll up (Stitch JS behavior)
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      if (currentY > lastScrollY.current && currentY > ANNOUNCEMENT_BAR_HEIGHT + 80) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      lastScrollY.current = currentY;
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -39,22 +57,26 @@ export function Navbar() {
       <header
         className={cn(
           styles.navbar,
-          isScrolled && styles["navbar--scrolled"]
+          !isVisible && styles["navbar--hidden"]
         )}
         role="banner"
+        style={{ top: `${ANNOUNCEMENT_BAR_HEIGHT}px` }}
       >
         <Container>
           <nav className={styles.nav} aria-label="Main navigation">
             {/* Brand */}
-            <Link href={ROUTES.home} className={styles.brand} aria-label={`${RFC_BRAND.name} — Home`}>
-              <span className={styles.brandMark}>RFC</span>
-              <span className={styles.brandName}>{RFC_BRAND.name}</span>
+            <Link
+              href={ROUTES.home}
+              className={styles.brand}
+              aria-label={`${RFC_BRAND.name} — Home`}
+            >
+              <span className={styles.brandText}>REVIVE FIGHT CLUB</span>
             </Link>
 
             {/* Desktop Nav Links */}
             <ul className={styles.navLinks} role="list">
               {NAV_LINKS.map((link) => (
-                <li key={link.href}>
+                <li key={link.href} className={styles.navItem}>
                   <Link href={link.href} className={styles.navLink}>
                     {link.label}
                   </Link>
@@ -64,13 +86,32 @@ export function Navbar() {
 
             {/* Right Actions */}
             <div className={styles.actions}>
-              {/* Search */}
-              <Link
-                href={ROUTES.search}
-                className={styles.iconBtn}
-                aria-label="Search"
-              >
+              {/* Inline Search — desktop only */}
+              <div className={styles.searchBar} role="search">
+                <input
+                  type="search"
+                  placeholder="Search..."
+                  className={styles.searchInput}
+                  aria-label="Search products"
+                  // Phase 3: wire to search route
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      const q = (e.target as HTMLInputElement).value.trim();
+                      if (q) router.push(`/search?q=${encodeURIComponent(q)}`);
+                    }
+                  }}
+                />
                 <SearchIcon />
+              </div>
+
+              {/* Cart */}
+              <Link
+                href={ROUTES.cart}
+                className={cn(styles.iconBtn, styles.cartBtn)}
+                aria-label="Shopping cart"
+              >
+                <CartIcon />
+                <span className={styles.cartCount} aria-label="0 items in cart">0</span>
               </Link>
 
               {/* Account */}
@@ -80,16 +121,6 @@ export function Navbar() {
                 aria-label="Account"
               >
                 <AccountIcon />
-              </Link>
-
-              {/* Cart */}
-              <Link
-                href={ROUTES.cart}
-                className={cn(styles.iconBtn, styles.cartBtn)}
-                aria-label="Shopping cart"
-              >
-                <CartIcon />
-                <span className={styles.cartCount} aria-hidden="true">0</span>
               </Link>
 
               {/* Mobile Menu Toggle */}
@@ -116,6 +147,7 @@ export function Navbar() {
           aria-modal="true"
           aria-label="Mobile navigation"
           onClick={() => setIsMobileMenuOpen(false)}
+          style={{ top: `${ANNOUNCEMENT_BAR_HEIGHT}px` }}
         >
           <nav
             className={styles.mobileMenu}
@@ -159,11 +191,11 @@ export function Navbar() {
   );
 }
 
-/* ── Icon Components ──────────────────────────────────── */
+/* ── Icon Components ──────────────────────────────────────── */
 
 function SearchIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.35-4.35" />
     </svg>
