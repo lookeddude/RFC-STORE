@@ -1,0 +1,102 @@
+/*
+ * RFC Store — Product Detail Page Layout
+ * Stitch: left gallery + right info panel, full-width tabs below
+ */
+
+.page {
+  padding-block: 40px 120px;
+}
+
+/* ── Breadcrumbs ────────────────────────────────────────── */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 40px;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.breadcrumbLink {
+  color: rgba(11, 28, 48, 0.45);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.breadcrumbLink:hover {
+  color: var(--color-primary);
+}
+
+.breadcrumbSep {
+  color: rgba(11, 28, 48, 0.25);
+}
+
+.breadcrumbCurrent {
+  color: var(--color-primary);
+  /* Truncate long names on mobile */
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── PDP Grid ───────────────────────────────────────────── */
+.pdpGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+@media (min-width: 768px) {
+  .pdpGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+}
+
+@media (min-width: 1200px) {
+  .pdpGrid {
+    grid-template-columns: 560px 1fr;
+    gap: 64px;
+  }
+}
+
+/* ── Columns ────────────────────────────────────────────── */
+.galleryCol {
+  width: 100%;
+}
+
+.infoCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Sticky info panel on desktop */
+@media (min-width: 768px) {
+  .infoCol {
+    position: sticky;
+    top: 108px; /* AnnouncementBar + Navbar height */
+    align-self: flex-start;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    /* Hide scrollbar */
+    scrollbar-width: none;
+  }
+
+  .infoCol::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── Divider ────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background-color: var(--color-outline-variant);
+  margin-block: 0;
+}

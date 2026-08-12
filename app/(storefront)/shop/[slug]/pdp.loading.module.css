@@ -1,0 +1,125 @@
+/*
+ * RFC Store — PDP Loading Skeleton Styles
+ */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #eff4ff 25%, #e5eeff 50%, #eff4ff 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.page {
+  padding-block: 40px 120px;
+}
+
+.breadcrumb {
+  height: 12px;
+  width: 280px;
+  margin-bottom: 40px;
+  background: linear-gradient(90deg, #eff4ff 25%, #e5eeff 50%, #eff4ff 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: 560px 1fr;
+  }
+}
+
+/* Gallery */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mainImage {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  background: linear-gradient(90deg, #eff4ff 25%, #e5eeff 50%, #eff4ff 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.thumbs {
+  display: flex;
+  gap: 8px;
+}
+
+.thumb {
+  width: 72px;
+  height: 90px;
+  background: linear-gradient(90deg, #eff4ff 25%, #e5eeff 50%, #eff4ff 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* Info */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.category,
+.name,
+.nameShort,
+.price,
+.desc,
+.descShort,
+.pill,
+.qty,
+.cta {
+  background: linear-gradient(90deg, #eff4ff 25%, #e5eeff 50%, #eff4ff 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.category { height: 12px; width: 100px; }
+.name { height: 28px; width: 90%; }
+.nameShort { height: 28px; width: 60%; }
+.price { height: 32px; width: 140px; }
+.desc { height: 14px; width: 100%; }
+.descShort { height: 14px; width: 75%; }
+
+.pillRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pill { height: 40px; width: 64px; border-radius: 4px; }
+
+.ctaRow {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.qty { height: 52px; width: 136px; border-radius: 4px; }
+.cta { height: 52px; flex: 1; border-radius: 4px; }

@@ -252,7 +252,7 @@ export async function getCategoryBySlug(
 }
 
 /**
- * Fetches a single product by slug with all fields.
+ * Fetches a single product by slug with all fields including inventory.
  * Used by Phase 4 Product Detail page.
  */
 export async function getProductBySlug(slug: string): Promise<Product | null> {
@@ -263,8 +263,11 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     .select(`
       *,
       categories (*),
-      product_images (*),
-      product_variants (*)
+      product_images (id, url, alt_text, sort_order, is_primary),
+      product_variants (
+        id, name, sku, price, compare_at_price, attributes, is_available,
+        inventory (quantity, reserved, low_threshold)
+      )
     `)
     .eq("slug", slug)
     .eq("is_active", true)
@@ -277,7 +280,6 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
   if (!data) return null;
 
-  // Full product mapper for Phase 4
   const raw = data as unknown as DBProduct & {
     product_variants: Array<{
       id: string;
@@ -287,6 +289,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
       compare_at_price: number | null;
       attributes: Record<string, string>;
       is_available: boolean;
+      inventory: { quantity: number; reserved: number; low_threshold: number } | null;
     }>;
   };
 
@@ -300,25 +303,31 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     category: raw.categories ? mapCategory(raw.categories as DBCategory) : null,
     basePrice: Number(raw.base_price),
     compareAtPrice: raw.compare_at_price ? Number(raw.compare_at_price) : null,
-    images: raw.product_images.map((img) => ({
-      id: img.id,
-      productId: raw.id,
-      url: img.url,
-      altText: img.alt_text,
-      sortOrder: img.sort_order,
-      isPrimary: img.is_primary,
-    })),
-    variants: raw.product_variants.map((v) => ({
-      id: v.id,
-      productId: raw.id,
-      name: v.name,
-      sku: v.sku,
-      price: Number(v.price),
-      compareAtPrice: v.compare_at_price ? Number(v.compare_at_price) : null,
-      attributes: v.attributes,
-      inventoryCount: 0,
-      isAvailable: v.is_available,
-    })),
+    images: [...raw.product_images]
+      .sort((a, b) => (a.is_primary ? -1 : 1) - (b.is_primary ? -1 : 1) || a.sort_order - b.sort_order)
+      .map((img) => ({
+        id: img.id,
+        productId: raw.id,
+        url: img.url,
+        altText: img.alt_text,
+        sortOrder: img.sort_order,
+        isPrimary: img.is_primary,
+      })),
+    variants: raw.product_variants.map((v) => {
+      const inv = v.inventory;
+      const available = inv ? Math.max(0, inv.quantity - inv.reserved) : 0;
+      return {
+        id: v.id,
+        productId: raw.id,
+        name: v.name,
+        sku: v.sku,
+        price: Number(v.price),
+        compareAtPrice: v.compare_at_price ? Number(v.compare_at_price) : null,
+        attributes: v.attributes,
+        inventoryCount: available,
+        isAvailable: v.is_available && available > 0,
+      };
+    }),
     isActive: raw.is_active,
     isFeatured: raw.is_featured,
     tags: raw.tags,
@@ -330,12 +339,40 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 }
 
 /**
+ * Fetches related products in the same category (for PDP recommendations).
+ * Excludes the current product.
+ */
+export async function getRelatedProducts(
+  categoryId: string,
+  excludeSlug: string,
+  limit = 4
+): Promise<ProductCardType[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("products")
+    .select(PRODUCT_CARD_SELECT)
+    .eq("is_active", true)
+    .eq("category_id", categoryId)
+    .neq("slug", excludeSlug)
+    .order("is_featured", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error("[getRelatedProducts] Supabase error:", error.message);
+    return [];
+  }
+
+  return (data as unknown as DBProduct[]).map(mapProductCard);
+}
+
+/**
  * Fetches featured products for the homepage.
  * Phase 3+: replaces homepage seed data.
  */
 export async function getFeaturedProducts(
   limit = 4
 ): Promise<ProductCardType[]> {
-  const { products } = await getProducts({ }, "featured", 1, limit);
+  const { products } = await getProducts({}, "featured", 1, limit);
   return products.filter((p) => p.isFeatured).slice(0, limit);
 }

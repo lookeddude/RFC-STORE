@@ -1,0 +1,189 @@
+/*
+ * RFC Store — AddToCartBar Styles
+ * CTA button, wishlist, trust signals
+ */
+
+.bar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Section separator ──────────────────────────────────── */
+.section {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-outline-variant);
+}
+
+/* ── Availability ───────────────────────────────────────── */
+.availability {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inStock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #1a7a3c;
+}
+
+.inStock::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #1a7a3c;
+  flex-shrink: 0;
+}
+
+.lowStock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #c47000;
+}
+
+.lowStock::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #c47000;
+  flex-shrink: 0;
+}
+
+.outOfStock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-error);
+}
+
+.outOfStock::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-error);
+  flex-shrink: 0;
+}
+
+.availNote {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(11, 28, 48, 0.5);
+  font-style: italic;
+}
+
+/* ── CTA Row ────────────────────────────────────────────── */
+.ctaRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ADD TO CART button — spans remaining width */
+.addBtn {
+  flex: 1;
+  height: 52px;
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background-color: var(--color-secondary);
+  color: var(--color-on-secondary);
+  transition:
+    background-color var(--transition-fast),
+    opacity var(--transition-fast),
+    transform 100ms ease;
+}
+
+.addBtn:hover:not(:disabled) {
+  background-color: var(--color-secondary-dark);
+}
+
+.addBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.addBtn:disabled {
+  background-color: rgba(11, 28, 48, 0.12);
+  color: rgba(11, 28, 48, 0.35);
+  cursor: not-allowed;
+}
+
+/* Added feedback state */
+.addBtn[data-feedback="true"] {
+  background-color: #1a7a3c;
+}
+
+/* Wishlist button */
+.wishlistBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 1.5px solid var(--color-outline-variant);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: rgba(11, 28, 48, 0.55);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.wishlistBtn:hover {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+.wishlistBtn[aria-pressed="true"] {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+/* ── Trust Signals ──────────────────────────────────────── */
+.trust {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.trustItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(11, 28, 48, 0.6);
+}
+
+.trustItem svg {
+  flex-shrink: 0;
+  color: rgba(11, 28, 48, 0.4);
+}

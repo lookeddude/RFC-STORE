@@ -1,0 +1,170 @@
+/*
+ * RFC Store — ProductTabs Styles
+ * Tab bar + panels, responsive accordion on mobile
+ */
+
+.container {
+  margin-top: 64px;
+  border-top: 1px solid var(--color-outline-variant);
+}
+
+/* ── Tab Bar ────────────────────────────────────────────── */
+.tabBar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--color-outline-variant);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabBar::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  flex-shrink: 0;
+  padding: 18px 24px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(11, 28, 48, 0.45);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--color-primary);
+}
+
+.tab[data-active="true"] {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-secondary);
+}
+
+/* ── Panels ─────────────────────────────────────────────── */
+.panels {
+  padding-top: 40px;
+}
+
+.panel {
+  display: none;
+}
+
+.panel[data-active="true"] {
+  display: block;
+}
+
+.panelHeading {
+  /* visually hidden — accessible only */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.empty {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: rgba(11, 28, 48, 0.45);
+  font-style: italic;
+}
+
+/* ── Description ────────────────────────────────────────── */
+.descText {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(11, 28, 48, 0.7);
+  max-width: 720px;
+}
+
+/* ── Specifications Table ───────────────────────────────── */
+.specTable {
+  width: 100%;
+  max-width: 600px;
+  border-collapse: collapse;
+}
+
+.specRow {
+  border-bottom: 1px solid var(--color-surface-container);
+}
+
+.specRow:last-child {
+  border-bottom: none;
+}
+
+.specLabel {
+  padding: 14px 0;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(11, 28, 48, 0.45);
+  text-align: left;
+  width: 40%;
+  vertical-align: top;
+}
+
+.specValue {
+  padding: 14px 0;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-primary);
+  vertical-align: top;
+}
+
+/* ── Shipping Panel ─────────────────────────────────────── */
+.shippingList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 600px;
+}
+
+.shippingItem {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.shippingIcon {
+  font-size: 22px;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.shippingTitle {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 4px;
+}
+
+.shippingBody {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(11, 28, 48, 0.6);
+}

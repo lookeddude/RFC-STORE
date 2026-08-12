@@ -1,151 +1,181 @@
 /**
- * RFC Store — Product Detail Page Placeholder
+ * RFC Store — Product Detail Page
  *
- * Phase 3: Placeholder to ensure product card links are functional.
- * Full Product Detail implementation is Phase 4.
+ * Route: /shop/[slug]
  *
- * Provides:
- *   - Valid route so clicking ProductCard doesn't 404
- *   - Breadcrumb navigation back to Shop
- *   - "Coming Soon" message
+ * Server Component — all data fetched at render time.
+ * Client components (gallery, variant selector, add to cart) are
+ * imported inside this server shell.
+ *
+ * Architecture:
+ *   page.tsx (server) — fetches product + related products
+ *   └── ProductGallery (client)   — image browsing
+ *   └── ProductInfo (server)      — name, price, description
+ *   └── AddToCartBar (client)     — variants, qty, CTA, wishlist
+ *   └── ProductTabs (client)      — description, specs, shipping
+ *   └── RelatedProducts (server)  — same-category products
+ *   └── ProductStructuredData     — JSON-LD SEO
+ *
+ * SEO:
+ *   - generateMetadata: product title, description, OG image
+ *   - ProductStructuredData: Product schema JSON-LD
+ *   - Canonical URL via metadata.alternates
  */
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { getProductBySlug } from "@/lib/data/products";
-import { slugToTitle } from "@/lib/utils/format";
+import {
+  ProductGallery,
+  ProductInfo,
+  AddToCartBar,
+  ProductTabs,
+  RelatedProducts,
+  ProductStructuredData,
+} from "@/components/pdp";
+import { getProductBySlug, getRelatedProducts } from "@/lib/data/products";
+import styles from "./pdp.module.css";
 
-interface ProductDetailPageProps {
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://rfcstore.in";
+
+interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
 
+// ── SEO Metadata ──────────────────────────────────────────
+
 export async function generateMetadata({
   params,
-}: ProductDetailPageProps): Promise<Metadata> {
+}: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  const title = product?.name ?? slugToTitle(slug);
+
+  if (!product) {
+    return {
+      title: "Product Not Found | REVIVE FIGHT CLUB",
+    };
+  }
+
+  const primaryImage =
+    product.images.find((img) => img.isPrimary) ?? product.images[0];
+
+  const title = product.metaTitle ?? `${product.name} | REVIVE FIGHT CLUB`;
+  const description =
+    product.metaDescription ??
+    product.shortDescription ??
+    `Shop ${product.name} at RFC Store. ${product.category?.name ?? "Premium fight gear"} engineered for performance.`;
+
   return {
-    title: `${title} | REVIVE FIGHT CLUB`,
-    description: product?.shortDescription ?? undefined,
+    title,
+    description,
+    alternates: {
+      canonical: `${BASE_URL}/shop/${slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `${BASE_URL}/shop/${slug}`,
+      ...(primaryImage
+        ? {
+            images: [
+              {
+                url: primaryImage.url,
+                alt: primaryImage.altText ?? product.name,
+              },
+            ],
+          }
+        : {}),
+    },
   };
 }
 
-export default async function ProductDetailPage({
-  params,
-}: ProductDetailPageProps) {
+// ── Page ──────────────────────────────────────────────────
+
+export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = await params;
+
+  // Fetch product + related products in parallel
   const product = await getProductBySlug(slug);
 
-  return (
-    <Container>
-      <div style={{ paddingBlock: "48px 120px" }}>
-        {/* Breadcrumbs */}
-        <nav
-          aria-label="Breadcrumb"
-          style={{
-            display: "flex",
-            gap: 8,
-            alignItems: "center",
-            marginBottom: 48,
-            fontFamily: "var(--font-label)",
-            fontSize: 13,
-            fontWeight: 600,
-            letterSpacing: "0.05em",
-          }}
-        >
-          <Link href="/" style={{ color: "rgba(11,28,48,0.5)", textDecoration: "none" }}>
-            Home
-          </Link>
-          <span style={{ color: "rgba(11,28,48,0.3)" }}>/</span>
-          <Link href="/shop" style={{ color: "rgba(11,28,48,0.5)", textDecoration: "none" }}>
-            Shop
-          </Link>
-          <span style={{ color: "rgba(11,28,48,0.3)" }}>/</span>
-          <span style={{ color: "var(--color-primary)" }}>
-            {product?.name ?? slugToTitle(slug)}
-          </span>
-        </nav>
+  if (!product) {
+    notFound();
+  }
 
-        {/* Phase 4 Placeholder */}
-        <div
-          style={{
-            textAlign: "center",
-            padding: "80px 24px",
-            minHeight: "50vh",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "var(--font-headline)",
-              fontSize: "clamp(64px, 10vw, 120px)",
-              fontWeight: 700,
-              color: "rgba(11,28,48,0.04)",
-              letterSpacing: "-0.02em",
-              lineHeight: 1,
-              marginBottom: 32,
-              userSelect: "none",
-            }}
-            aria-hidden="true"
-          >
-            RFC
+  // Parallel fetch: related products (non-blocking — empty array on error)
+  const relatedProducts = product.categoryId
+    ? await getRelatedProducts(product.categoryId, slug, 4)
+    : [];
+
+  // Compute badge for gallery
+  const badge: { label: string; variant: "sale" | "badge" } | null =
+    product.compareAtPrice
+      ? { label: "SALE", variant: "sale" }
+      : product.isFeatured
+      ? { label: "FEATURED", variant: "badge" }
+      : null;
+
+  const productUrl = `${BASE_URL}/shop/${slug}`;
+
+  return (
+    <>
+      {/* Structured Data */}
+      <ProductStructuredData product={product} url={productUrl} />
+
+      <Container>
+        <div className={styles.page}>
+          {/* Breadcrumbs */}
+          <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
+            <Link href="/" className={styles.breadcrumbLink}>Home</Link>
+            <span className={styles.breadcrumbSep} aria-hidden="true">/</span>
+            <Link href="/shop" className={styles.breadcrumbLink}>Shop</Link>
+            {product.category && (
+              <>
+                <span className={styles.breadcrumbSep} aria-hidden="true">/</span>
+                <Link
+                  href={`/shop?category=${product.category.slug}`}
+                  className={styles.breadcrumbLink}
+                >
+                  {product.category.name}
+                </Link>
+              </>
+            )}
+            <span className={styles.breadcrumbSep} aria-hidden="true">/</span>
+            <span className={styles.breadcrumbCurrent} aria-current="page">
+              {product.name}
+            </span>
+          </nav>
+
+          {/* PDP Layout: Gallery (left) + Info Panel (right) */}
+          <div className={styles.pdpGrid}>
+            {/* Left: Image Gallery */}
+            <div className={styles.galleryCol}>
+              <ProductGallery
+                images={product.images}
+                productName={product.name}
+                badge={badge}
+              />
+            </div>
+
+            {/* Right: Product Info + CTA */}
+            <div className={styles.infoCol}>
+              <ProductInfo product={product} />
+
+              <div className={styles.divider} aria-hidden="true" />
+
+              <AddToCartBar product={product} />
+            </div>
           </div>
 
-          <h1
-            style={{
-              fontFamily: "var(--font-headline)",
-              fontSize: "clamp(24px, 4vw, 40px)",
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: "-0.01em",
-              color: "var(--color-primary)",
-              marginBottom: 16,
-            }}
-          >
-            {product?.name ?? slugToTitle(slug)}
-          </h1>
+          {/* Full-width tabs below the grid */}
+          <ProductTabs product={product} />
 
-          <p
-            style={{
-              fontFamily: "var(--font-body)",
-              fontSize: 16,
-              color: "rgba(11,28,48,0.55)",
-              maxWidth: 440,
-              lineHeight: 1.6,
-              marginBottom: 40,
-            }}
-          >
-            Full product detail page coming in Phase 4 — including images,
-            specifications, variants, and add to cart.
-          </p>
-
-          <Link
-            href="/shop"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: 48,
-              paddingInline: 32,
-              fontFamily: "var(--font-label)",
-              fontSize: 13,
-              fontWeight: 600,
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              textDecoration: "none",
-              backgroundColor: "var(--color-secondary)",
-              color: "var(--color-on-secondary)",
-              borderRadius: "var(--radius-sm)",
-            }}
-          >
-            ← Back to Shop
-          </Link>
+          {/* Related Products */}
+          {relatedProducts.length > 0 && (
+            <RelatedProducts products={relatedProducts} />
+          )}
         </div>
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 }

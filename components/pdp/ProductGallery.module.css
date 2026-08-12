@@ -1,0 +1,147 @@
+/*
+ * RFC Store — ProductGallery Styles
+ * Stitch: 4:5 main image, horizontal thumb strip, white bg
+ */
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+/* ── Main Image ─────────────────────────────────────────── */
+.main {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background-color: #ffffff;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.mainImage {
+  object-fit: cover;
+  transition: opacity 250ms ease;
+}
+
+/* ── Badge ──────────────────────────────────────────────── */
+.badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  padding: 4px 10px;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+}
+
+.badge[data-variant="badge"] {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.badge[data-variant="sale"] {
+  background-color: var(--color-secondary);
+  color: var(--color-on-secondary);
+}
+
+/* ── Placeholder ────────────────────────────────────────── */
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0b1c30 0%, #1a2a3a 100%);
+}
+
+.placeholder span {
+  font-family: var(--font-headline);
+  font-size: 96px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.06);
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+
+/* ── Arrow Buttons ──────────────────────────────────────── */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition:
+    background-color var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.arrow:hover {
+  background: #ffffff;
+}
+
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.arrow[data-dir="prev"] {
+  left: 12px;
+}
+
+.arrow[data-dir="next"] {
+  right: 12px;
+}
+
+/* ── Thumbnail Strip ────────────────────────────────────── */
+.thumbs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.thumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.thumb {
+  position: relative;
+  width: 72px;
+  height: 90px; /* 4:5 aspect */
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background: #ffffff;
+  padding: 0;
+  transition: border-color var(--transition-fast);
+}
+
+.thumb[data-active="true"] {
+  border-color: var(--color-secondary);
+}
+
+.thumb:hover:not([data-active="true"]) {
+  border-color: rgba(11, 28, 48, 0.3);
+}
+
+.thumbImage {
+  object-fit: cover;
+}

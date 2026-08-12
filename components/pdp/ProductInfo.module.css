@@ -1,0 +1,112 @@
+/*
+ * RFC Store — ProductInfo Styles
+ * Stitch: category → name → price → desc → tags
+ */
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.category {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(11, 28, 48, 0.45);
+  margin-bottom: 10px;
+}
+
+.name {
+  font-family: var(--font-headline);
+  font-size: clamp(24px, 3.5vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* ── Price Row ──────────────────────────────────────────── */
+.priceRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.price {
+  font-family: var(--font-label);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-secondary);
+}
+
+.compareAt {
+  font-family: var(--font-label);
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(11, 28, 48, 0.35);
+  text-decoration: line-through;
+  letter-spacing: 0.01em;
+}
+
+.discountBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  background-color: var(--color-secondary);
+  color: var(--color-on-secondary);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border-radius: var(--radius-sm);
+}
+
+.featuredBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Description ────────────────────────────────────────── */
+.shortDesc {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(11, 28, 48, 0.65);
+  margin-bottom: 20px;
+}
+
+/* ── Tags ───────────────────────────────────────────────── */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.tag {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(11, 28, 48, 0.5);
+  padding: 3px 8px;
+  border: 1px solid rgba(11, 28, 48, 0.2);
+  border-radius: 2px;
+}
