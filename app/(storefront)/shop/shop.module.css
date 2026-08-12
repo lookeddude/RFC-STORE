@@ -1,0 +1,28 @@
+/*
+ * RFC Store — Shop Page Layout Styles
+ */
+
+.page {
+  padding-block: 48px 120px;
+}
+
+/* ── Main Layout: Sidebar + Grid ────────────────────────── */
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    flex-direction: row;
+    gap: 40px;
+    align-items: flex-start;
+  }
+}
+
+/* Main product area grows to fill */
+.main {
+  flex: 1;
+  min-width: 0; /* prevent overflow in flex context */
+}

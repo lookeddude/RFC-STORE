@@ -1,0 +1,193 @@
+/*
+ * RFC Store — Filter Sidebar Styles
+ */
+
+.sidebar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 132px; /* AnnouncementBar + Navbar */
+    align-self: flex-start;
+  }
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.heading {
+  font-family: var(--font-label);
+  font-size: var(--font-label-bold-size);
+  font-weight: var(--font-label-bold-weight);
+  letter-spacing: var(--font-label-bold-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.clearAll {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-secondary);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Chips ──────────────────────────────────────────────── */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #dce9ff;
+  color: var(--color-primary);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.chip:hover {
+  background-color: #c6c6cb;
+}
+
+/* ── Filter Group ────────────────────────────────────────── */
+.group {
+  border-top: 1px solid #c6c6cb;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.groupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-label);
+  font-size: var(--font-label-bold-size);
+  font-weight: var(--font-label-bold-weight);
+  letter-spacing: var(--font-label-bold-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-primary);
+  text-align: left;
+}
+
+.groupBody {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Checkbox ───────────────────────────────────────────── */
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  border: 1.5px solid #76777b;
+  accent-color: var(--color-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkboxText {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: rgba(11, 28, 48, 0.65);
+  transition: color var(--transition-fast);
+}
+
+.checkboxLabel:hover .checkboxText {
+  color: var(--color-primary);
+}
+
+/* ── Price Inputs ────────────────────────────────────────── */
+.priceInputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.priceInput {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid #c6c6cb;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-primary);
+  text-align: center;
+  outline: none;
+  min-width: 0;
+  transition: border-color var(--transition-fast);
+}
+
+.priceInput:focus {
+  border-color: var(--color-secondary);
+}
+
+.priceSep {
+  color: rgba(11, 28, 48, 0.4);
+  flex-shrink: 0;
+}
+
+.applyBtn {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  margin-top: 8px;
+  width: 100%;
+  transition: opacity var(--transition-fast);
+}
+
+.applyBtn:hover {
+  opacity: 0.85;
+}

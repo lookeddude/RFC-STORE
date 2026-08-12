@@ -1,0 +1,59 @@
+/*
+ * RFC Store — ProductGridSkeleton Styles
+ * Shimmer animation matching ProductCard layout
+ */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* 3:4 image placeholder */
+.image {
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(
+    90deg,
+    #eff4ff 25%,
+    #e5eeff 50%,
+    #eff4ff 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.info {
+  padding: 12px 4px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.category,
+.name,
+.nameShort,
+.price {
+  background: linear-gradient(
+    90deg,
+    #eff4ff 25%,
+    #e5eeff 50%,
+    #eff4ff 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  height: 12px;
+}
+
+.category { width: 40%; height: 10px; }
+.name { width: 90%; height: 14px; }
+.nameShort { width: 65%; height: 14px; }
+.price { width: 30%; height: 14px; }

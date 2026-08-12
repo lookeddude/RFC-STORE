@@ -1,0 +1,48 @@
+/*
+ * RFC Store — Category Tabs Styles
+ * Stitch: horizontal scroll, tab underline active state
+ */
+
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 32px;
+  margin-bottom: 48px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(11, 28, 48, 0.12);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0 0 12px;
+  margin-bottom: -2px;
+  cursor: pointer;
+  font-family: var(--font-label);
+  font-size: var(--font-label-bold-size);
+  font-weight: var(--font-label-bold-weight);
+  letter-spacing: var(--font-label-bold-letter-spacing);
+  text-transform: uppercase;
+  color: rgba(11, 28, 48, 0.5);
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--color-primary);
+}
+
+.tab[data-active="true"] {
+  color: var(--color-secondary);
+  border-bottom-color: var(--color-secondary);
+}

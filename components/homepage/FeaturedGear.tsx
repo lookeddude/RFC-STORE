@@ -1,20 +1,30 @@
 /**
  * RFC Store — Featured Gear Section
  *
- * 4-column product card grid showing the store's featured products.
- * Header with section title and "View All" link.
- * Each product rendered via the reusable ProductCard component.
+ * Phase 3+: Fetches is_featured=true products from Supabase.
+ * Falls back gracefully if DB is unavailable.
  *
- * Phase 2: Data from FEATURED_PRODUCTS seed in homepage.content.ts
- * Phase 3+: Will be fetched from Supabase (isFeatured=true products)
+ * Async Server Component — no client boundary needed.
  */
 import React from "react";
 import Link from "next/link";
-import { FEATURED_PRODUCTS } from "@/lib/content/homepage.content";
+import { getFeaturedProducts } from "@/lib/data/products";
 import { ProductCard } from "@/components/store/ProductCard";
 import styles from "./FeaturedGear.module.css";
 
-export function FeaturedGear() {
+export async function FeaturedGear() {
+  // Fetch featured products from Supabase (Phase 3+ live data)
+  let featuredProducts = await getFeaturedProducts(4).catch(() => []);
+
+  // Fallback: if DB has no featured products yet, show first 4 products
+  if (featuredProducts.length === 0) {
+    const { getProducts } = await import("@/lib/data/products");
+    const { products } = await getProducts({}, "newest", 1, 4).catch(() => ({ products: [] }));
+    featuredProducts = products;
+  }
+
+  if (featuredProducts.length === 0) return null;
+
   return (
     <section
       className={styles.section}
@@ -26,9 +36,9 @@ export function FeaturedGear() {
 
       {/* Product Grid */}
       <div className={styles.grid} role="list">
-        {FEATURED_PRODUCTS.map((product) => (
+        {featuredProducts.map((product, index) => (
           <div key={product.id} role="listitem">
-            <ProductCard product={product} />
+            <ProductCard product={product} priority={index < 2} />
           </div>
         ))}
       </div>

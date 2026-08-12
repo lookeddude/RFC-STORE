@@ -1,52 +1,88 @@
 /*
  * RFC Store — ProductCard Styles
- * Stitch spec: white card, 3:4 image, hover Quick Add overlay, red price
+ * Stitch design: white card, 3:4 image, category label, hover ADD TO CART
  */
 
+/* ── Card ───────────────────────────────────────────────── */
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: 0;
+  background-color: #ffffff;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
-/* ── Image Area ────────────────────────────────────────── */
+/* ── Image Area ─────────────────────────────────────────── */
 .imageWrapper {
   position: relative;
   aspect-ratio: 3 / 4;
-  background-color: var(--color-surface-dim, #f8f9ff);
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(0, 0, 0, 0.07);
+  background-color: #eff4ff;
   overflow: hidden;
   display: block;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .image {
-  object-fit: contain;
-  padding: 24px;
+  object-fit: cover;
   transition: transform 500ms ease;
 }
 
 .imageWrapper:hover .image {
-  transform: scale(1.08);
+  transform: scale(1.05);
 }
 
-/* Badge in top-left */
+/* Image placeholder */
+.imagePlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0b1c30 0%, #1a2a3a 100%);
+}
+
+.imagePlaceholder span {
+  font-family: var(--font-headline);
+  font-size: 48px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.08);
+  letter-spacing: -0.02em;
+}
+
+/* ── Badge ──────────────────────────────────────────────── */
 .badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 8px;
+  left: 8px;
   z-index: 2;
+  padding: 3px 8px;
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
 }
 
-/* Quick Add hover overlay */
-.quickAddOverlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 14px 16px;
+.badge[data-variant="badge"] {
   background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.badge[data-variant="sale"] {
+  background-color: var(--color-secondary);
+  color: var(--color-on-secondary);
+}
+
+/* ── Add To Cart Overlay ────────────────────────────────── */
+.addToCartOverlay {
+  position: absolute;
+  inset-x: 0;
+  bottom: 0;
+  padding: 14px 16px;
+  background-color: var(--color-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,64 +94,80 @@
   z-index: 2;
 }
 
-.imageWrapper:hover .quickAddOverlay {
+.imageWrapper:hover .addToCartOverlay {
   opacity: 1;
   transform: translateY(0);
 }
 
-.quickAddLabel {
+.addToCartLabel {
   font-family: var(--font-label);
   font-size: var(--font-label-bold-size);
   font-weight: var(--font-label-bold-weight);
   letter-spacing: var(--font-label-bold-letter-spacing);
   text-transform: uppercase;
-  color: var(--color-on-primary);
+  color: var(--color-on-secondary);
 }
 
 /* ── Product Info ───────────────────────────────────────── */
 .info {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--space-3);
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 4px 4px;
+  flex: 1;
 }
 
-.meta {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  min-width: 0;
+.categoryLabel {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(11, 28, 48, 0.45);
+  margin-bottom: 2px;
 }
 
 .name {
   font-family: var(--font-body);
   font-size: 15px;
   font-weight: 700;
+  line-height: 1.3;
   color: var(--color-primary);
   text-decoration: none;
   transition: color var(--transition-fast);
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .name:hover {
   color: var(--color-secondary);
 }
 
-.subtitle {
+.shortDesc {
   font-family: var(--font-body);
-  font-size: 13px;
-  color: rgba(11, 28, 48, 0.55);
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(11, 28, 48, 0.5);
+  display: none;
 }
 
+@media (min-width: 768px) {
+  .shortDesc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* ── Pricing ────────────────────────────────────────────── */
 .pricing {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 .price {
@@ -123,12 +175,14 @@
   font-size: var(--font-label-bold-size);
   font-weight: var(--font-label-bold-weight);
   letter-spacing: var(--font-label-bold-letter-spacing);
-  color: var(--color-secondary); /* Coral Red */
+  color: var(--color-secondary);
 }
 
 .compareAt {
-  font-family: var(--font-body);
+  font-family: var(--font-label);
   font-size: 12px;
-  color: rgba(11, 28, 48, 0.4);
+  font-weight: 600;
+  color: rgba(11, 28, 48, 0.35);
   text-decoration: line-through;
+  letter-spacing: 0.03em;
 }

@@ -76,6 +76,7 @@ export interface ProductCard {
   category: Pick<Category, "id" | "name" | "slug"> | null;
   isNew: boolean;
   isFeatured: boolean;
+  isBestseller: boolean;
   hasLowStock: boolean;
 }
 
