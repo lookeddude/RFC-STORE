@@ -22,7 +22,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   margin-bottom: 12px;
 }
 
@@ -30,7 +30,7 @@
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.5;
-  color: rgba(11, 28, 48, 0.55);
+  color: var(--rfc-text-muted);
   max-width: 400px;
   margin-bottom: 32px;
 }
@@ -47,8 +47,8 @@
   letter-spacing: var(--font-label-bold-letter-spacing);
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--color-primary);
-  border: 1.5px solid var(--color-primary);
+  color: var(--rfc-accent);
+  border: 1.5px solid var(--rfc-accent);
   border-radius: var(--radius-sm);
   transition:
     background-color var(--transition-fast),
@@ -56,6 +56,6 @@
 }
 
 .cta:hover {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
+  background-color: var(--rfc-accent);
+  color: var(--rfc-text-inv);
 }
