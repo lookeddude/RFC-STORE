@@ -49,7 +49,7 @@ export default function HomePage() {
       </div>
 
       {/* Offer Strip — separated from hero with a small gap */}
-      <div style={{ marginTop: "10px" }}>
+      <div style={{ marginTop: "4px" }}>
         <OfferStrip />
       </div>
 
