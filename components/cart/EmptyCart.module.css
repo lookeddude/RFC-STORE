@@ -20,7 +20,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   margin-bottom: 12px;
 }
 
@@ -28,7 +28,7 @@
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.6;
-  color: rgba(11, 28, 48, 0.55);
+  color: var(--rfc-text-muted);
   max-width: 380px;
   margin-bottom: 32px;
 }
@@ -45,10 +45,10 @@
   letter-spacing: 0.07em;
   text-transform: uppercase;
   text-decoration: none;
-  background-color: var(--color-secondary);
-  color: var(--color-on-secondary);
+  background-color: var(--rfc-accent);
+  color: var(--rfc-text-inv);
   border-radius: var(--radius-sm);
   transition: background-color var(--transition-fast);
 }
 
-.shopBtn:hover { background-color: var(--color-secondary-dark); }
+.shopBtn:hover { background-color: var(--rfc-accent-dark); }

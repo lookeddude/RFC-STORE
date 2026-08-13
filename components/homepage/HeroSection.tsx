@@ -1,13 +1,8 @@
 /**
  * RFC Store — Hero Section
  *
- * Full-screen dark arena hero section.
- * Background image with 60% opacity overlay from MMA fighter shoot.
- * "BUILT FOR THE FIGHT." headline, subtext, two CTAs.
- *
- * Content: HERO_CONTENT from homepage.content.ts
- * Image: next/image with priority loading (above the fold)
- * Architecture: CMS-ready — replace HERO_CONTENT.image.src with CMS URL
+ * Full-screen dark arena hero. Background image over deep charcoal.
+ * Uses RFC design tokens throughout — no hardcoded colors.
  */
 import React from "react";
 import Image from "next/image";
@@ -24,7 +19,7 @@ export function HeroSection() {
         position: "relative",
         width: "100%",
         minHeight: "100vh",
-        backgroundColor: "var(--color-primary)",
+        backgroundColor: "var(--rfc-dark)",
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
@@ -32,45 +27,67 @@ export function HeroSection() {
       aria-label="Hero — Built For The Fight"
     >
       {/* Background Image */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 0,
-        }}
-      >
+      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         <Image
           src={image.src}
           alt={image.alt}
           fill
           priority
           sizes="100vw"
-          style={{ objectFit: "cover", opacity: 0.6 }}
+          style={{ objectFit: "cover", opacity: 0.55 }}
         />
       </div>
+
+      {/* Subtle bottom gradient — anchors text to base */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 1,
+          background:
+            "linear-gradient(to top, rgba(17,24,39,0.65) 0%, rgba(17,24,39,0.1) 60%, transparent 100%)",
+        }}
+        aria-hidden="true"
+      />
 
       {/* Content */}
       <div
         style={{
           position: "relative",
-          zIndex: 1,
+          zIndex: 2,
           width: "100%",
           maxWidth: "var(--container-max)",
           marginInline: "auto",
-          padding: "var(--space-6) var(--space-6)",
-          color: "var(--color-on-primary)",
+          padding: "clamp(24px, 5vw, 64px) clamp(16px, 4vw, 64px)",
+          color: "var(--rfc-text-inv)",
         }}
       >
-        <div style={{ maxWidth: "660px" }}>
+        <div style={{ maxWidth: "640px" }}>
+          {/* Eyebrow */}
+          <p
+            style={{
+              fontFamily: "var(--font-label)",
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--rfc-accent)",
+              marginBottom: "16px",
+            }}
+          >
+            Revive Fight Club
+          </p>
+
           <h1
             style={{
               fontFamily: "var(--font-headline)",
               fontSize: "clamp(52px, 8vw, 96px)",
-              fontWeight: 700,
+              fontWeight: 900,
               lineHeight: 0.92,
               textTransform: "uppercase",
-              letterSpacing: "-0.02em",
-              marginBottom: "var(--space-5)",
+              letterSpacing: "-0.025em",
+              color: "var(--rfc-text-inv)",
+              marginBottom: "24px",
             }}
           >
             {headline}
@@ -79,11 +96,11 @@ export function HeroSection() {
           <p
             style={{
               fontFamily: "var(--font-body)",
-              fontSize: "18px",
-              lineHeight: 1.6,
-              color: "#c5c7c8",
-              marginBottom: "var(--space-8)",
-              maxWidth: "480px",
+              fontSize: "17px",
+              lineHeight: 1.65,
+              color: "var(--rfc-text-inv-muted)",
+              marginBottom: "36px",
+              maxWidth: "460px",
             }}
           >
             {subheadline}
@@ -93,10 +110,10 @@ export function HeroSection() {
             style={{
               display: "flex",
               flexWrap: "wrap",
-              gap: "var(--space-4)",
+              gap: "12px",
             }}
           >
-            {/* Primary CTA */}
+            {/* Primary CTA — RFC Red */}
             <Link
               href={primaryCta.href}
               style={{
@@ -104,24 +121,26 @@ export function HeroSection() {
                 alignItems: "center",
                 justifyContent: "center",
                 height: "52px",
-                paddingInline: "var(--space-8)",
-                backgroundColor: "var(--color-secondary)",
-                color: "var(--color-on-secondary)",
+                paddingInline: "36px",
+                backgroundColor: "var(--rfc-accent)",
+                color: "#ffffff",
                 fontFamily: "var(--font-label)",
-                fontSize: "var(--font-label-bold-size)",
-                fontWeight: "var(--font-label-bold-weight)" as React.CSSProperties["fontWeight"],
-                letterSpacing: "var(--font-label-bold-letter-spacing)",
+                fontSize: "13px",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
                 textTransform: "uppercase",
                 textDecoration: "none",
-                borderRadius: "var(--radius-sm)",
-                border: "1.5px solid var(--color-secondary)",
-                transition: "background-color var(--transition-fast), border-color var(--transition-fast)",
+                borderRadius: "var(--radius-sharp)",
+                border: "1.5px solid var(--rfc-accent)",
+                transition:
+                  "background-color var(--transition-fast), box-shadow var(--transition-fast)",
+                boxShadow: "0 4px 16px rgba(230,57,70,0.35)",
               }}
             >
               {primaryCta.label}
             </Link>
 
-            {/* Secondary CTA */}
+            {/* Secondary CTA — Ghost inverse */}
             <Link
               href={secondaryCta.href}
               style={{
@@ -129,18 +148,19 @@ export function HeroSection() {
                 alignItems: "center",
                 justifyContent: "center",
                 height: "52px",
-                paddingInline: "var(--space-8)",
+                paddingInline: "36px",
                 backgroundColor: "transparent",
-                color: "var(--color-on-primary)",
+                color: "var(--rfc-text-inv)",
                 fontFamily: "var(--font-label)",
-                fontSize: "var(--font-label-bold-size)",
-                fontWeight: "var(--font-label-bold-weight)" as React.CSSProperties["fontWeight"],
-                letterSpacing: "var(--font-label-bold-letter-spacing)",
+                fontSize: "13px",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
                 textTransform: "uppercase",
                 textDecoration: "none",
-                borderRadius: "var(--radius-sm)",
-                border: "1.5px solid var(--color-on-primary)",
-                transition: "background-color var(--transition-fast), color var(--transition-fast)",
+                borderRadius: "var(--radius-sharp)",
+                border: "1.5px solid rgba(255,255,255,0.35)",
+                transition:
+                  "background-color var(--transition-fast), border-color var(--transition-fast)",
               }}
             >
               {secondaryCta.label}

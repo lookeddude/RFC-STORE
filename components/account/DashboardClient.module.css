@@ -18,9 +18,9 @@
 
 /* ── Card ────────────────────────────────────────────────── */
 .card {
-  background: var(--color-surface-container-lowest);
-  border: 1px solid var(--color-outline-variant);
-  border-radius: var(--radius-default);
+  background: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
+  border-radius: var(--radius-md);
   padding: 24px;
   transition: box-shadow var(--transition-base);
 }
@@ -42,7 +42,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .cardLink {
@@ -51,7 +51,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-secondary);
+  color: var(--rfc-accent);
   text-decoration: none;
 }
 
@@ -63,7 +63,7 @@
 .orderMeta {
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
   margin-top: 2px;
 }
 
@@ -76,8 +76,8 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  background: var(--color-secondary);
-  color: var(--color-on-secondary);
+  background: var(--rfc-accent);
+  color: var(--rfc-text-inv);
 }
 
 .orderProduct {
@@ -85,21 +85,21 @@
   align-items: center;
   gap: 14px;
   padding: 16px 0;
-  border-top: 1px solid var(--color-outline-variant);
-  border-bottom: 1px solid var(--color-outline-variant);
+  border-top: 1px solid var(--rfc-border);
+  border-bottom: 1px solid var(--rfc-border);
   margin-bottom: 16px;
 }
 
 .orderProductIcon {
   width: 56px;
   height: 64px;
-  background: var(--color-surface-container);
+  background: var(--rfc-border);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
   font-size: 24px;
 }
 
@@ -107,21 +107,21 @@
   font-family: var(--font-label);
   font-size: 13px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   margin-bottom: 3px;
 }
 
 .orderProductMeta {
   font-family: var(--font-body);
   font-size: 13px;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
 }
 
 .orderProductPrice {
   font-family: var(--font-label);
   font-size: 14px;
   font-weight: 700;
-  color: var(--color-secondary);
+  color: var(--rfc-accent);
   margin-top: 4px;
 }
 
@@ -134,27 +134,27 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 .viewOrderLink:hover {
-  color: var(--color-secondary);
+  color: var(--rfc-accent);
 }
 
 /* ── Address Card ────────────────────────────────────────── */
 .address {
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
   font-style: normal;
   line-height: 1.7;
 }
 
 .addressName {
   font-weight: 600;
-  color: var(--color-on-surface);
+  color: var(--rfc-text);
   display: block;
 }
 
@@ -165,12 +165,12 @@
   gap: 8px;
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
   margin-bottom: 10px;
 }
 
 .profileIcon {
-  color: var(--color-outline);
+  color: var(--rfc-text-subtle);
   width: 18px;
   height: 18px;
   flex-shrink: 0;
@@ -185,12 +185,12 @@
   text-align: center;
   padding: 32px 24px;
   gap: 12px;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
 }
 
 .emptyText {
   font-size: 14px;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
 }
 
 .emptyBtn {
@@ -198,8 +198,8 @@
   align-items: center;
   gap: 6px;
   padding: 10px 20px;
-  background: var(--color-secondary);
-  color: var(--color-on-secondary);
+  background: var(--rfc-accent);
+  color: var(--rfc-text-inv);
   border: none;
   border-radius: var(--radius-sm);
   font-family: var(--font-label);
@@ -213,7 +213,7 @@
 }
 
 .emptyBtn:hover {
-  background: var(--color-secondary-dark);
+  background: var(--rfc-accent-dark);
 }
 
 /* ── Skeleton ────────────────────────────────────────────── */
@@ -225,9 +225,9 @@
 .skeleton {
   background: linear-gradient(
     90deg,
-    var(--color-surface-container-low) 25%,
-    var(--color-surface-container) 50%,
-    var(--color-surface-container-low) 75%
+    var(--rfc-bg) 25%,
+    var(--rfc-border) 50%,
+    var(--rfc-bg) 75%
   );
   background-size: 800px 100%;
   animation: shimmer 1.4s ease-in-out infinite;

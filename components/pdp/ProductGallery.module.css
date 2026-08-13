@@ -14,7 +14,7 @@
 .main {
   position: relative;
   aspect-ratio: 4 / 5;
-  background-color: #ffffff;
+  background-color: var(--rfc-surface);
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
@@ -40,13 +40,13 @@
 }
 
 .badge[data-variant="badge"] {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
+  background-color: var(--rfc-text);
+  color: var(--rfc-text-inv);
 }
 
 .badge[data-variant="sale"] {
-  background-color: var(--color-secondary);
-  color: var(--color-on-secondary);
+  background-color: var(--rfc-accent);
+  color: var(--rfc-text-inv);
 }
 
 /* ── Placeholder ────────────────────────────────────────── */
@@ -56,7 +56,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0b1c30 0%, #1a2a3a 100%);
+  background: linear-gradient(135deg, var(--rfc-dark) 0%, var(--rfc-dark-surface) 100%);
 }
 
 .placeholder span {
@@ -79,7 +79,7 @@
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.9);
-  color: var(--color-primary);
+  color: var(--rfc-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,7 +91,7 @@
 }
 
 .arrow:hover {
-  background: #ffffff;
+  background: var(--rfc-surface);
 }
 
 .arrow:disabled {
@@ -129,17 +129,17 @@
   overflow: hidden;
   border: 2px solid transparent;
   cursor: pointer;
-  background: #ffffff;
+  background: var(--rfc-surface);
   padding: 0;
   transition: border-color var(--transition-fast);
 }
 
 .thumb[data-active="true"] {
-  border-color: var(--color-secondary);
+  border-color: var(--rfc-accent);
 }
 
 .thumb:hover:not([data-active="true"]) {
-  border-color: rgba(11, 28, 48, 0.3);
+  border-color: var(--rfc-text-subtle);
 }
 
 .thumbImage {

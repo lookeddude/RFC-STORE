@@ -21,7 +21,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-on-surface);
+  color: var(--rfc-text);
 }
 
 .input {
@@ -29,9 +29,9 @@
   padding: 12px 14px;
   font-family: var(--font-body);
   font-size: 15px;
-  color: var(--color-on-surface);
-  background: var(--color-surface-container-low);
-  border: 1px solid var(--color-outline-variant);
+  color: var(--rfc-text);
+  background: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
   border-radius: var(--radius-default);
   outline: none;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
@@ -39,12 +39,12 @@
 }
 
 .input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(10, 14, 20, 0.08);
+  border-color: var(--rfc-accent);
+  box-shadow: 0 0 0 3px rgba(230,57,70,0.1);
 }
 
 .input[aria-invalid="true"] {
-  border-color: var(--color-error);
+  border-color: var(--rfc-error);
 }
 
 .input[aria-invalid="true"]:focus {
@@ -53,18 +53,18 @@
 
 .error {
   font-size: 13px;
-  color: var(--color-error);
+  color: var(--rfc-error);
   font-weight: 500;
 }
 
 /* ── Server Error ────────────────────────────────────────── */
 .serverError {
-  background: var(--color-error-container);
+  background: var(--rfc-error-bg);
   border: 1px solid rgba(186, 26, 26, 0.2);
   border-radius: var(--radius-default);
   padding: 12px 14px;
   font-size: 14px;
-  color: var(--color-on-error-container);
+  color: #7F1D1D;
   font-weight: 500;
 }
 
@@ -72,8 +72,8 @@
 .submitBtn {
   width: 100%;
   padding: 14px;
-  background: var(--color-secondary);
-  color: var(--color-on-secondary);
+  background: var(--rfc-accent);
+  color: var(--rfc-text-inv);
   font-family: var(--font-label);
   font-size: 14px;
   font-weight: 700;
@@ -91,7 +91,7 @@
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: var(--color-secondary-dark);
+  background: var(--rfc-accent-dark);
 }
 
 .submitBtn:active:not(:disabled) {

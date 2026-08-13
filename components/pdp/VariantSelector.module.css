@@ -26,7 +26,7 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .groupValue {
@@ -34,7 +34,7 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.05em;
-  color: rgba(11, 28, 48, 0.55);
+  color: var(--rfc-text-muted);
 }
 
 /* ── Pills ──────────────────────────────────────────────── */
@@ -52,10 +52,10 @@
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.04em;
-  border: 1.5px solid var(--color-outline-variant);
+  border: 1.5px solid var(--rfc-border);
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   cursor: pointer;
   transition:
     background-color var(--transition-fast),
@@ -65,14 +65,14 @@
 }
 
 .pill:hover:not(:disabled) {
-  border-color: var(--color-primary);
+  border-color: var(--rfc-accent);
 }
 
 /* Selected state */
 .pill[data-selected="true"] {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
-  border-color: var(--color-primary);
+  background-color: var(--rfc-accent-light);
+  color: var(--rfc-accent);
+  border-color: var(--rfc-accent);
 }
 
 /* Unavailable state */
@@ -80,7 +80,7 @@
 .pill:disabled {
   opacity: 0.45;
   cursor: not-allowed;
-  color: rgba(11, 28, 48, 0.45);
+  color: var(--rfc-text-subtle);
 }
 
 /* Diagonal strikethrough for unavailable */
@@ -90,7 +90,7 @@
   left: -4px;
   right: -4px;
   height: 1px;
-  background-color: rgba(11, 28, 48, 0.35);
+  background-color: var(--rfc-text-subtle);
   transform: rotate(-18deg);
   transform-origin: center;
   pointer-events: none;

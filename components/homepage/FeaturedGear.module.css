@@ -1,29 +1,39 @@
 /*
- * RFC Store — Featured Gear Section Styles
- * Light surface-bright background, centered heading, 4-col product grid
+ * RFC Store — Featured Gear Section
+ * Light section: warm neutral bg, clean product grid
  */
 
 .section {
-  padding-block: 120px;
+  padding-block: var(--space-24);
   padding-inline: var(--space-6);
-  background-color: #f8f9ff; /* surface-bright per Stitch design */
+  background-color: var(--rfc-bg);
 }
 
 @media (min-width: 768px) {
-  .section {
-    padding-inline: 64px;
-  }
+  .section { padding-inline: var(--space-16); }
+}
+
+.eyebrow {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rfc-accent);
+  text-align: center;
+  margin-bottom: var(--space-2);
 }
 
 .heading {
   font-family: var(--font-headline);
-  font-size: 24px;
-  font-weight: 600;
+  font-size: clamp(26px, 4vw, 42px);
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  color: var(--rfc-text);
   text-align: center;
-  margin-bottom: var(--space-12);
+  margin-bottom: var(--space-16);
+  line-height: 1.0;
 }
 
 /* ── Product Grid ───────────────────────────────────────── */
@@ -31,44 +41,47 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   column-gap: 16px;
-  row-gap: var(--space-10);
-  margin-bottom: var(--space-10);
+  row-gap: var(--space-8);
+  margin-bottom: var(--space-12);
 }
 
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(4, 1fr);
-    column-gap: 24px;
+    column-gap: 20px;
   }
 }
 
 /* ── View All ───────────────────────────────────────────── */
 .viewAllWrapper {
   text-align: center;
-  margin-top: var(--space-8);
+  margin-top: var(--space-4);
 }
 
 .viewAll {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 44px;
-  padding-inline: var(--space-8);
+  height: 48px;
+  padding-inline: var(--space-10);
   font-family: var(--font-label);
-  font-size: var(--font-label-bold-size);
-  font-weight: var(--font-label-bold-weight);
-  letter-spacing: var(--font-label-bold-letter-spacing);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--color-primary);
-  border: 1.5px solid var(--color-primary);
-  border-radius: var(--radius-sm);
+  color: var(--rfc-text);
+  border: 1.5px solid var(--rfc-border-strong, #D1D5DB);
+  border-radius: var(--radius-sharp);
+  background: var(--rfc-surface);
   transition:
     background-color var(--transition-fast),
+    border-color var(--transition-fast),
     color var(--transition-fast);
 }
 
 .viewAll:hover {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
+  background-color: var(--rfc-dark);
+  border-color: var(--rfc-dark);
+  color: var(--rfc-text-inv);
 }

@@ -1,186 +1,286 @@
 /*
- * RFC STORE — Global Design System
- * Based on Stitch Project: 6383426045060807708
- * "RFC Design System Foundation" by Revive Fight Club
+ * RFC STORE — Unified Design System
+ * Visual Identity: Premium · Aggressive · Modern · Combat Sports
  *
- * Design Philosophy: "Athlete's Discipline"
- *   The Arena (Dark) — hero sections, brand narratives
- *   The Lab (Light)  — product grids, checkout, clean data
+ * Design Philosophy:
+ *   - ONE accent color (RFC Red #E63946) used sparingly and intentionally
+ *   - Deep charcoal-blue dark (#111827) — premium, not pure-black-heavy
+ *   - Warm neutral light (#F5F6F8) — clean commerce, not blue-tinted
+ *   - Strong surface hierarchy: page → section → card → elevated
+ *   - Typography communicates strength through weight, not uppercase overload
  *
- * Structure:
- *   1. Google Fonts
- *   2. CSS Custom Properties (Design Tokens)
- *   3. CSS Reset
- *   4. Base Typography
- *   5. Utility Classes
+ * Token Naming Convention:
+ *   --rfc-*         New unified RFC tokens (use these going forward)
+ *   --color-*       Legacy tokens — kept for backward compatibility,
+ *                   now point to RFC values
  */
 
 /* ── 1. Google Fonts ──────────────────────────────────────
    Archivo Narrow: Headlines (H1–H3, uppercase, aggressive)
    Inter:          Body copy, labels, CTAs
    ──────────────────────────────────────────────────────── */
-@import url("https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap");
 
-/* ── 2. CSS Custom Properties (Design Tokens) ────────────
-   All values sourced from Stitch "RFC Design System Foundation"
-   Project ID: 6383426045060807708
-   ──────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   2. RFC DESIGN TOKENS
+   ═══════════════════════════════════════════════════════════ */
 :root {
-  /* ── Color Palette ──────────────────────────────────── */
 
-  /* Primary — Dark Navy (The Arena) */
-  --color-primary: #0a0e14;
-  --color-primary-container: #181c22;
-  --color-on-primary: #ffffff;
-  --color-on-primary-container: #80848c;
+  /* ─────────────────────────────────────────────────────────
+     LIGHT SURFACE SYSTEM (Commerce — The Lab)
+     ───────────────────────────────────────────────────────── */
 
-  /* Secondary — Coral Red (Energy, CTAs) */
-  --color-secondary: #ff3b30;
-  --color-secondary-dark: #bc000a;
-  --color-secondary-container: #e2241f;
-  --color-on-secondary: #ffffff;
-  --color-on-secondary-container: #fffbff;
+  /* Page background — warm neutral (NOT blue-tinted) */
+  --rfc-bg:               #F5F6F8;
+  /* Primary surface — cards, inputs, panels */
+  --rfc-surface:          #FFFFFF;
+  /* Elevated surface — modals, dropdowns */
+  --rfc-surface-elevated: #FFFFFF;
+  /* Subtle surface — alternate rows, table headers */
+  --rfc-surface-subtle:   #F0F1F3;
+  /* Border — light dividers */
+  --rfc-border:           #E5E7EB;
+  /* Border strong — emphasized dividers */
+  --rfc-border-strong:    #D1D5DB;
 
-  /* Surface — The Lab (Light) */
-  --color-surface: #f8f9ff;
-  --color-surface-bright: #f8f9ff;
-  --color-surface-dim: #cbdbf5;
-  --color-surface-container: #e5eeff;
-  --color-surface-container-low: #eff4ff;
-  --color-surface-container-lowest: #ffffff;
-  --color-surface-container-high: #dce9ff;
-  --color-surface-container-highest: #d3e4fe;
-  --color-surface-variant: #d3e4fe;
+  /* ─────────────────────────────────────────────────────────
+     DARK SURFACE SYSTEM (Brand — The Arena)
+     ───────────────────────────────────────────────────────── */
 
-  /* Background */
-  --color-background: #f8f9ff;
-  --color-on-background: #0b1c30;
+  /* Primary dark — page/section background */
+  --rfc-dark:             #111827;
+  /* Dark surface — panels, cards on dark */
+  --rfc-dark-surface:     #1F2937;
+  /* Dark card — elevated cards on dark */
+  --rfc-dark-card:        #374151;
+  /* Dark border */
+  --rfc-border-dark:      rgba(255, 255, 255, 0.08);
+  /* Dark border strong */
+  --rfc-border-dark-strong: rgba(255, 255, 255, 0.14);
 
-  /* On-Surface (text) */
-  --color-on-surface: #0b1c30;
-  --color-on-surface-variant: #45474b;
+  /* ─────────────────────────────────────────────────────────
+     TEXT SYSTEM
+     ───────────────────────────────────────────────────────── */
 
-  /* Inverse — for dark sections */
-  --color-inverse-surface: #213145;
-  --color-inverse-on-surface: #eaf1ff;
-  --color-inverse-primary: #c3c6cf;
+  /* On light backgrounds */
+  --rfc-text:             #0D1B2A;    /* Primary — maximum contrast */
+  --rfc-text-muted:       #4B5563;    /* Secondary — supporting text */
+  --rfc-text-subtle:      #9CA3AF;    /* Tertiary — metadata, hints */
+  --rfc-text-disabled:    #D1D5DB;    /* Disabled states */
 
-  /* Outline */
-  --color-outline: #76777b;
-  --color-outline-variant: #c6c6cb;
+  /* On dark backgrounds */
+  --rfc-text-inv:         #F9FAFB;    /* Primary inverse */
+  --rfc-text-inv-muted:   #9CA3AF;    /* Secondary inverse */
+  --rfc-text-inv-subtle:  rgba(255, 255, 255, 0.35); /* Tertiary inverse */
 
-  /* Error */
-  --color-error: #ba1a1a;
-  --color-error-container: #ffdad6;
-  --color-on-error: #ffffff;
-  --color-on-error-container: #93000a;
+  /* ─────────────────────────────────────────────────────────
+     ACCENT — ONE COLOR. USE SPARINGLY.
+     RFC Red: energetic, sporty, aggressive, premium
+     ───────────────────────────────────────────────────────── */
 
-  /* Tertiary */
-  --color-tertiary: #000000;
-  --color-tertiary-container: #191c1d;
-  --color-on-tertiary: #ffffff;
-  --color-on-tertiary-container: #828485;
+  --rfc-accent:           #E63946;    /* The one RFC red */
+  --rfc-accent-dark:      #C81D28;    /* Hover / pressed */
+  --rfc-accent-deeper:    #A01525;    /* Active / intense */
+  --rfc-accent-light:     #FEE2E4;    /* Light tint — bg for tags/chips */
+  --rfc-accent-muted:     rgba(230, 57, 70, 0.12); /* Ghost tint */
 
-  /* ── Semantic Aliases ───────────────────────────────── */
-  --color-brand-dark: var(--color-primary);        /* #0A0E14 */
-  --color-brand-red: var(--color-secondary);       /* #FF3B30 */
-  --color-page-bg: var(--color-background);        /* #F8F9FF */
-  --color-card-bg: var(--color-surface-container-lowest); /* #FFFFFF */
-  --color-border: var(--color-outline-variant);    /* #C6C6CB */
-  --color-text-primary: var(--color-on-surface);   /* #0B1C30 */
-  --color-text-secondary: var(--color-on-surface-variant); /* #45474B */
+  /* ─────────────────────────────────────────────────────────
+     SEMANTIC COLORS
+     ───────────────────────────────────────────────────────── */
 
-  /* ── Typography Scale ───────────────────────────────── */
-  /* Sourced directly from Stitch typography tokens */
+  --rfc-success:          #16A34A;
+  --rfc-success-bg:       #DCFCE7;
+  --rfc-warning:          #D97706;
+  --rfc-warning-bg:       #FEF3C7;
+  --rfc-error:            #DC2626;
+  --rfc-error-bg:         #FEE2E2;
+  --rfc-info:             #2563EB;
+  --rfc-info-bg:          #DBEAFE;
 
-  /* Display — hero headlines */
+  /* ─────────────────────────────────────────────────────────
+     TYPOGRAPHY
+     ───────────────────────────────────────────────────────── */
+
+  --font-headline:  "Archivo Narrow", "Arial Narrow", Arial, sans-serif;
+  --font-body:      "Inter", system-ui, -apple-system, sans-serif;
+  --font-label:     "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Type scale */
+  --text-display:   clamp(52px, 8vw, 96px);
+  --text-h1:        clamp(32px, 5vw, 72px);
+  --text-h2:        clamp(26px, 4vw, 48px);
+  --text-h3:        clamp(20px, 2.5vw, 28px);
+  --text-lg:        18px;
+  --text-base:      16px;
+  --text-sm:        14px;
+  --text-xs:        12px;
+  --text-2xs:       11px;
+
+  /* Deprecated scale (kept for backward compat) */
   --font-display-size: 80px;
   --font-display-weight: 700;
   --font-display-line-height: 1.0;
   --font-display-letter-spacing: -0.02em;
-
-  /* Headline Large — section titles desktop */
   --font-headline-lg-size: 48px;
   --font-headline-lg-weight: 700;
   --font-headline-lg-line-height: 1.1;
   --font-headline-lg-letter-spacing: -0.01em;
-
-  /* Headline Large — section titles mobile */
   --font-headline-lg-mobile-size: 32px;
   --font-headline-lg-mobile-weight: 700;
   --font-headline-lg-mobile-line-height: 1.1;
-
-  /* Headline Medium — card and component titles */
   --font-headline-md-size: 24px;
   --font-headline-md-weight: 600;
   --font-headline-md-line-height: 1.2;
-
-  /* Body Large — paragraph text */
   --font-body-lg-size: 18px;
   --font-body-lg-weight: 400;
   --font-body-lg-line-height: 1.6;
-
-  /* Body Medium — standard body */
   --font-body-md-size: 16px;
   --font-body-md-weight: 400;
   --font-body-md-line-height: 1.5;
-
-  /* Label Bold — CTAs, chips, navigation */
   --font-label-bold-size: 14px;
   --font-label-bold-weight: 600;
   --font-label-bold-line-height: 1.2;
   --font-label-bold-letter-spacing: 0.05em;
 
-  /* Font families */
-  --font-headline: "Archivo Narrow", "Arial Narrow", Arial, sans-serif;
-  --font-body: "Inter", system-ui, -apple-system, sans-serif;
-  --font-label: "Inter", system-ui, -apple-system, sans-serif;
+  /* ─────────────────────────────────────────────────────────
+     BORDER RADIUS
+     Sharp = sports precision. Avoid excessive rounding.
+     ───────────────────────────────────────────────────────── */
 
-  /* ── Border Radius ──────────────────────────────────── */
-  --radius-sm: 0.125rem;   /* 2px  — Buttons (sharp precision-cut) */
-  --radius-default: 0.25rem; /* 4px — Cards */
-  --radius-md: 0.375rem;   /* 6px */
-  --radius-lg: 0.5rem;     /* 8px */
-  --radius-xl: 0.75rem;    /* 12px */
-  --radius-full: 9999px;   /* Pills — avoid for most elements */
+  --radius-sharp:   2px;    /* Buttons, badges — precision-cut */
+  --radius-sm:      4px;    /* Cards, inputs */
+  --radius-md:      8px;    /* Panels, modals */
+  --radius-lg:      12px;   /* Large cards */
+  --radius-xl:      16px;   /* Feature cards */
+  --radius-full:    9999px; /* Pills — use very sparingly */
 
-  /* ── Spacing Scale (8px base) ───────────────────────── */
-  --space-unit: 4px;
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-16: 64px;
-  --space-20: 80px;
-  --space-24: 96px;
-  --space-30: 120px;       /* Section gap */
+  /* Legacy aliases */
+  --radius-default: var(--radius-sm);
 
-  --space-gutter: 24px;           /* Grid gutter */
-  --space-margin-mobile: 16px;    /* Mobile page margin */
-  --space-margin-desktop: 64px;   /* Desktop page margin */
-  --space-section-gap: 120px;     /* Between major sections */
+  /* ─────────────────────────────────────────────────────────
+     SPACING (8px base unit)
+     ───────────────────────────────────────────────────────── */
 
-  /* ── Shadows ────────────────────────────────────────── */
-  /* Stitch: avoid heavy shadows — use tonal layers + outlines */
-  --shadow-card-hover: 0px 10px 20px rgba(10, 14, 20, 0.05);
-  --shadow-modal: 0px 24px 48px rgba(10, 14, 20, 0.12);
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-16:  64px;
+  --space-20:  80px;
+  --space-24:  96px;
+  --space-30:  120px;
 
-  /* ── Transitions ────────────────────────────────────── */
-  --transition-fast: 150ms ease;
-  --transition-base: 250ms ease;
-  --transition-slow: 400ms ease;
+  --space-gutter:          24px;
+  --space-margin-mobile:   16px;
+  --space-margin-desktop:  64px;
+  --space-section:         96px;    /* Major section padding */
+  --space-section-sm:      64px;    /* Smaller sections */
+  --space-section-gap:     96px;    /* Legacy alias */
 
-  /* ── Layout ─────────────────────────────────────────── */
-  --container-max: 1440px;
-  --navbar-height: 64px;
+  /* ─────────────────────────────────────────────────────────
+     SHADOWS — minimal, purposeful
+     ───────────────────────────────────────────────────────── */
+
+  --shadow-xs:    0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:    0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:    0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg:    0 10px 24px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.05);
+  --shadow-card-hover: var(--shadow-md);
+  --shadow-modal: 0 24px 48px rgba(0,0,0,0.14);
+
+  /* ─────────────────────────────────────────────────────────
+     TRANSITIONS
+     ───────────────────────────────────────────────────────── */
+
+  --transition-fast:   150ms ease;
+  --transition-base:   250ms ease;
+  --transition-slow:   400ms ease;
+
+  /* ─────────────────────────────────────────────────────────
+     LAYOUT
+     ───────────────────────────────────────────────────────── */
+
+  --container-max:  1400px;
+  --navbar-height:  72px;
+
+  /* ─────────────────────────────────────────────────────────
+     LEGACY TOKEN ALIASES
+     Maps old --color-* names to new RFC values.
+     Existing components that use var(--color-secondary) etc.
+     automatically inherit the correct new values.
+     ───────────────────────────────────────────────────────── */
+
+  /* Primary = dark charcoal */
+  --color-primary:                  var(--rfc-dark);
+  --color-primary-container:        var(--rfc-dark-surface);
+  --color-on-primary:               var(--rfc-text-inv);
+  --color-on-primary-container:     var(--rfc-text-inv-muted);
+
+  /* Secondary = THE ONE RFC RED */
+  --color-secondary:                var(--rfc-accent);
+  --color-secondary-dark:           var(--rfc-accent-dark);
+  --color-secondary-container:      var(--rfc-accent-dark);
+  --color-on-secondary:             #ffffff;
+  --color-on-secondary-container:   #ffffff;
+
+  /* Surface = light lab */
+  --color-surface:                  var(--rfc-surface);
+  --color-surface-bright:           var(--rfc-surface);
+  --color-surface-dim:              var(--rfc-surface-subtle);
+  --color-surface-container:        var(--rfc-surface-subtle);
+  --color-surface-container-low:    #F8F9FA;
+  --color-surface-container-lowest: var(--rfc-surface);
+  --color-surface-container-high:   var(--rfc-border);
+  --color-surface-container-highest: var(--rfc-border-strong);
+  --color-surface-variant:          var(--rfc-surface-subtle);
+
+  /* Background */
+  --color-background:               var(--rfc-bg);
+  --color-on-background:            var(--rfc-text);
+
+  /* Text */
+  --color-on-surface:               var(--rfc-text);
+  --color-on-surface-variant:       var(--rfc-text-muted);
+
+  /* Inverse (dark) */
+  --color-inverse-surface:          var(--rfc-dark-surface);
+  --color-inverse-on-surface:       var(--rfc-text-inv);
+  --color-inverse-primary:          var(--rfc-text-inv-muted);
+
+  /* Outline */
+  --color-outline:                  var(--rfc-text-muted);
+  --color-outline-variant:          var(--rfc-border);
+
+  /* Error */
+  --color-error:                    var(--rfc-error);
+  --color-error-container:          var(--rfc-error-bg);
+  --color-on-error:                 #ffffff;
+  --color-on-error-container:       #7F1D1D;
+
+  /* Tertiary */
+  --color-tertiary:                 var(--rfc-dark);
+  --color-tertiary-container:       var(--rfc-dark-surface);
+  --color-on-tertiary:              var(--rfc-text-inv);
+  --color-on-tertiary-container:    var(--rfc-text-inv-muted);
+
+  /* Semantic aliases */
+  --color-brand-dark:               var(--rfc-dark);
+  --color-brand-red:                var(--rfc-accent);
+  --color-page-bg:                  var(--rfc-bg);
+  --color-card-bg:                  var(--rfc-surface);
+  --color-border:                   var(--rfc-border);
+  --color-text-primary:             var(--rfc-text);
+  --color-text-secondary:           var(--rfc-text-muted);
 }
 
-/* ── 3. CSS Reset ──────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   3. CSS RESET
+   ══════════════════════════════════════════════════════════ */
 *,
 *::before,
 *::after {
@@ -199,11 +299,11 @@ html {
 
 body {
   font-family: var(--font-body);
-  font-size: var(--font-body-md-size);
-  font-weight: var(--font-body-md-weight);
-  line-height: var(--font-body-md-line-height);
-  color: var(--color-text-primary);
-  background-color: var(--color-page-bg);
+  font-size: var(--text-base);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--rfc-text);
+  background-color: var(--rfc-bg);
   min-height: 100dvh;
 }
 
@@ -238,119 +338,54 @@ select {
   font-size: inherit;
 }
 
-/* ── 4. Base Typography ────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   4. BASE TYPOGRAPHY
+   ══════════════════════════════════════════════════════════ */
 
-/* Headlines use Archivo Narrow, always uppercase for H1-H3 */
+/*
+ * Headlines: Archivo Narrow
+ * H1/H2: uppercase — reserved for hero + section titles only
+ * H3+: sentence case — used for component/card titles
+ */
 h1,
-h2,
-h3 {
+h2 {
   font-family: var(--font-headline);
-  font-weight: 700;
-  line-height: 1.1;
+  font-weight: 800;
+  line-height: 1.0;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  color: var(--rfc-text);
 }
 
+h3,
 h4,
 h5,
 h6 {
   font-family: var(--font-headline);
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--color-text-primary);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--rfc-text);
 }
 
-h1 { font-size: clamp(var(--font-headline-lg-mobile-size), 5vw, var(--font-display-size)); letter-spacing: var(--font-display-letter-spacing); }
-h2 { font-size: clamp(var(--font-headline-lg-mobile-size), 4vw, var(--font-headline-lg-size)); }
-h3 { font-size: clamp(20px, 2.5vw, var(--font-headline-md-size)); text-transform: none; }
+h1 { font-size: var(--text-h1); }
+h2 { font-size: var(--text-h2); }
+h3 { font-size: var(--text-h3); font-weight: 700; }
+h4 { font-size: var(--text-lg); }
+h5 { font-size: var(--text-base); }
+h6 { font-size: var(--text-sm); }
 
 p {
   font-family: var(--font-body);
-  line-height: 1.6;
-  color: var(--color-text-primary);
+  line-height: 1.65;
+  color: var(--rfc-text);
 }
 
-/* ── 5. Utility Classes ────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   5. LAYOUT UTILITIES
+   ══════════════════════════════════════════════════════════ */
 
-/* ── Card ───────────────────────────────────────────────── */
-/* Stitch: white bg, 4px radius, 1px border, hover shadow */
-.rfc-card {
-  background-color: var(--color-card-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-default);
-  padding: var(--card-padding, var(--space-6));
-  overflow: hidden;
-}
-
-.rfc-card--interactive {
-  cursor: pointer;
-  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
-}
-
-.rfc-card--interactive:hover {
-  box-shadow: var(--shadow-card-hover);
-  transform: translateY(-2px);
-}
-
-.rfc-card__header {
-  margin-bottom: var(--space-4);
-  padding-bottom: var(--space-4);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.rfc-card__body {
-  /* pass-through */
-}
-
-.rfc-card__footer {
-  margin-top: var(--space-4);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-border);
-}
-
-/* ── Badge ──────────────────────────────────────────────── */
-/* Stitch: square-edged, tiny uppercase Inter Bold text */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 8px;
-  border-radius: 0; /* square-edged per Stitch spec */
-  font-family: var(--font-label);
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
-  border: 1px solid transparent;
-}
-
-/* ── Animations ─────────────────────────────────────────── */
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes skeleton-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideDown {
-  from { transform: translateY(-8px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-/* ── 6. Utility Classes ────────────────────────────────── */
-
-/* Container — max-width, centred, responsive padding */
+/* Container */
 .container {
   width: 100%;
   max-width: var(--container-max);
@@ -372,31 +407,175 @@ p {
 
 /* Section spacing */
 .section {
-  padding-block: var(--space-section-gap);
+  padding-block: var(--space-section);
 }
 
 .section--sm {
-  padding-block: calc(var(--space-section-gap) / 2);
+  padding-block: var(--space-section-sm);
 }
 
-/* The Arena — dark brand sections */
+/* ── Surface Sections ───────────────────────────────────── */
+
+/* Dark brand section — hero, editorial, footer */
+.rfc-dark-section {
+  background-color: var(--rfc-dark);
+  color: var(--rfc-text-inv);
+}
+
+.rfc-dark-section h1,
+.rfc-dark-section h2,
+.rfc-dark-section h3,
+.rfc-dark-section h4,
+.rfc-dark-section p {
+  color: var(--rfc-text-inv);
+}
+
+/* Light lab section — shop, product, checkout */
+.rfc-light-section {
+  background-color: var(--rfc-bg);
+  color: var(--rfc-text);
+}
+
+/* Legacy aliases */
 .arena {
-  background-color: var(--color-brand-dark);
-  color: var(--color-on-primary);
+  background-color: var(--rfc-dark);
+  color: var(--rfc-text-inv);
 }
 
 .arena h1,
 .arena h2,
 .arena h3,
 .arena p {
-  color: var(--color-on-primary);
+  color: var(--rfc-text-inv);
 }
 
-/* The Lab — light product sections */
 .lab {
-  background-color: var(--color-page-bg);
-  color: var(--color-text-primary);
+  background-color: var(--rfc-bg);
+  color: var(--rfc-text);
 }
+
+/* ══════════════════════════════════════════════════════════
+   6. COMPONENT UTILITIES
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Card ───────────────────────────────────────────────── */
+.rfc-card {
+  background-color: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
+  border-radius: var(--radius-sm);
+  padding: var(--card-padding, var(--space-6));
+  overflow: hidden;
+}
+
+.rfc-card--interactive {
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.rfc-card--interactive:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.rfc-card__header {
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--rfc-border);
+}
+
+.rfc-card__footer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--rfc-border);
+}
+
+/* ── Badge ──────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: var(--radius-sharp);
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background-color: var(--rfc-dark);
+  color: var(--rfc-text-inv);
+  border: 1px solid transparent;
+}
+
+.badge--accent {
+  background-color: var(--rfc-accent);
+  color: #ffffff;
+}
+
+.badge--success {
+  background-color: var(--rfc-success-bg);
+  color: var(--rfc-success);
+}
+
+.badge--warning {
+  background-color: var(--rfc-warning-bg);
+  color: var(--rfc-warning);
+}
+
+.badge--error {
+  background-color: var(--rfc-error-bg);
+  color: var(--rfc-error);
+}
+
+/* ── Divider ────────────────────────────────────────────── */
+.rfc-divider {
+  height: 1px;
+  background-color: var(--rfc-border);
+  border: none;
+  margin-block: var(--space-6);
+}
+
+/* ── Eyebrow label ──────────────────────────────────────── */
+.rfc-eyebrow {
+  font-family: var(--font-label);
+  font-size: var(--text-2xs);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rfc-accent);
+}
+
+/* ══════════════════════════════════════════════════════════
+   7. ANIMATIONS
+   ══════════════════════════════════════════════════════════ */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(8px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   8. ACCESSIBILITY
+   ══════════════════════════════════════════════════════════ */
 
 /* Screen reader only */
 .sr-only {
@@ -411,21 +590,21 @@ p {
   border-width: 0;
 }
 
-/* Skip to content — CSS-only focus pattern (keyboard accessibility) */
+/* Skip to content */
 .skip-to-content {
   position: absolute;
   top: -100px;
   left: 16px;
   z-index: 9999;
   padding: 8px 16px;
-  background-color: var(--color-secondary);
-  color: var(--color-on-secondary);
+  background-color: var(--rfc-accent);
+  color: #ffffff;
   font-family: var(--font-label);
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-radius: 0 0 4px 4px;
+  letter-spacing: 0.06em;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   text-decoration: none;
   transition: top 0.15s ease;
 }
@@ -434,8 +613,8 @@ p {
   top: 0;
 }
 
-/* Focus visible — accessibility */
+/* Focus visible */
 :focus-visible {
-  outline: 2px solid var(--color-secondary);
+  outline: 2px solid var(--rfc-accent);
   outline-offset: 2px;
 }

@@ -22,21 +22,21 @@
 }
 
 .breadcrumbLink {
-  color: rgba(11, 28, 48, 0.45);
+  color: var(--rfc-text-subtle);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 .breadcrumbLink:hover {
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .breadcrumbSep {
-  color: rgba(11, 28, 48, 0.25);
+  color: var(--rfc-border);
 }
 
 .breadcrumbCurrent {
-  color: var(--color-primary);
+  color: var(--rfc-text);
   /* Truncate long names on mobile */
   max-width: 200px;
   overflow: hidden;
@@ -97,6 +97,6 @@
 /* ── Divider ────────────────────────────────────────────── */
 .divider {
   height: 1px;
-  background-color: var(--color-outline-variant);
+  background-color: var(--rfc-border);
   margin-block: 0;
 }

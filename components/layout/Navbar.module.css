@@ -1,18 +1,7 @@
 /*
- * RFC Store — Navbar (Light Premium Redesign)
- *
- * Inspired by Nike, Gymshark, Under Armour — top-tier sports brands.
- *
- * Design:
- *   ✦ Pure white background with a very refined bottom shadow
- *   ✦ RFC red square monogram badge (keeps brand punch on white)
- *   ✦ Brand name: deep navy/charcoal — strong, legible
- *   ✦ Nav links: medium grey → full charcoal on hover with
- *     a sliding red underline animation
- *   ✦ Search: rounded pill with light grey bg, darkens on focus
- *   ✦ Cart + Account: dark icons, red badge
- *   ✦ Mobile menu: white panel, large dark typography
- *   ✦ Scroll-spy: thin red top border appears after 60px scroll
+ * RFC Store — Navbar
+ * Light premium navbar — white bg, charcoal text, ONE RFC red accent.
+ * Now fully token-based: var(--rfc-accent), var(--rfc-dark), var(--rfc-text).
  */
 
 /* ── Navbar Base ─────────────────────────────────────────── */
@@ -23,14 +12,11 @@
   top: 0;
   z-index: 100;
   height: 72px;
-  background: #ffffff;
-  border-bottom: 1px solid #f0f0f0;
-
-  /* Subtle layered shadow — gives depth without looking heavy */
+  background: var(--rfc-surface);
+  border-bottom: 1px solid var(--rfc-border);
   box-shadow:
-    0 1px 0 rgba(0,0,0,0.04),
-    0 4px 16px rgba(0,0,0,0.06);
-
+    0 1px 0 rgba(0,0,0,0.03),
+    0 2px 12px rgba(0,0,0,0.04);
   transition:
     transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.3s ease;
@@ -39,8 +25,8 @@
 /* Scrolled state — slightly stronger shadow */
 .navbar--scrolled {
   box-shadow:
-    0 1px 0 rgba(0,0,0,0.06),
-    0 8px 24px rgba(0,0,0,0.1);
+    0 1px 0 rgba(0,0,0,0.05),
+    0 6px 20px rgba(0,0,0,0.08);
 }
 
 /* Auto-hide when scrolling down */
@@ -53,7 +39,7 @@
   display: flex;
   align-items: center;
   height: 100%;
-  max-width: 1320px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 28px;
   gap: 0;
@@ -76,23 +62,23 @@
 .brandMonogram {
   width: 36px;
   height: 36px;
-  background: #E63946;
+  background: var(--rfc-accent);
   border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 3px 10px rgba(230,57,70,0.35);
+  box-shadow: 0 3px 10px rgba(230,57,70,0.3);
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .brand:hover .brandMonogram {
-  box-shadow: 0 5px 18px rgba(230,57,70,0.5);
+  box-shadow: 0 5px 18px rgba(230,57,70,0.45);
   transform: scale(1.05);
 }
 
 .brandMonogramText {
-  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-family: var(--font-headline);
   font-size: 13px;
   font-weight: 900;
   color: #fff;
@@ -108,22 +94,22 @@
 }
 
 .brandText {
-  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-family: var(--font-headline);
   font-size: 15px;
   font-weight: 900;
   letter-spacing: 0.03em;
-  color: #111827;
+  color: var(--rfc-dark);
   text-transform: uppercase;
   white-space: nowrap;
   line-height: 1;
 }
 
 .brandSub {
-  font-family: var(--font-label, 'Inter', sans-serif);
+  font-family: var(--font-label);
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.12em;
-  color: #9ca3af;
+  color: var(--rfc-text-subtle);
   text-transform: uppercase;
   line-height: 1;
 }
@@ -155,13 +141,13 @@
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 0 18px;
-  font-family: var(--font-label, 'Inter', sans-serif);
+  padding: 0 16px;
+  font-family: var(--font-label);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #6b7280;
+  color: var(--rfc-text-muted);
   text-decoration: none;
   white-space: nowrap;
   transition: color 0.2s ease;
@@ -172,10 +158,10 @@
   content: '';
   position: absolute;
   bottom: 0;
-  left: 18px;
-  right: 18px;
-  height: 2.5px;
-  background: #E63946;
+  left: 16px;
+  right: 16px;
+  height: 2px;
+  background: var(--rfc-accent);
   border-radius: 2px 2px 0 0;
   transform: scaleX(0);
   transform-origin: left center;
@@ -183,7 +169,7 @@
 }
 
 .navLink:hover {
-  color: #111827;
+  color: var(--rfc-dark);
 }
 
 .navLink:hover::after {
@@ -192,7 +178,7 @@
 
 /* Active page */
 .navLinkActive {
-  color: #E63946 !important;
+  color: var(--rfc-accent) !important;
   font-weight: 800;
 }
 
@@ -214,27 +200,25 @@
   display: none;
   align-items: center;
   gap: 8px;
-  background: #f3f4f6;
+  background: var(--rfc-surface-subtle, #F0F1F3);
   border: 1.5px solid transparent;
   border-radius: 100px;
   padding: 0 14px;
-  height: 38px;
-  width: 190px;
-  color: #9ca3af;
+  height: 36px;
+  width: 180px;
+  color: var(--rfc-text-subtle);
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
-    width 0.28s ease,
-    color 0.2s ease;
+    width 0.28s ease;
   cursor: text;
 }
 
 .searchBar:focus-within {
-  background: #fff;
-  border-color: #E63946;
-  width: 230px;
-  color: #374151;
-  box-shadow: 0 0 0 3px rgba(230,57,70,0.1);
+  background: var(--rfc-surface);
+  border-color: var(--rfc-accent);
+  width: 220px;
+  box-shadow: 0 0 0 3px rgba(230,57,70,0.08);
 }
 
 @media (min-width: 960px) {
@@ -245,16 +229,16 @@
   background: transparent;
   border: none;
   outline: none;
-  font-family: var(--font-body, 'Inter', sans-serif);
+  font-family: var(--font-body);
   font-size: 13px;
-  color: #111827;
+  color: var(--rfc-text);
   width: 100%;
   padding: 0;
   height: 100%;
 }
 
 .searchInput::placeholder {
-  color: #9ca3af;
+  color: var(--rfc-text-subtle);
   font-size: 12.5px;
 }
 
@@ -267,8 +251,8 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 10px;
-  color: #374151;
+  border-radius: 8px;
+  color: var(--rfc-text-muted);
   background: transparent;
   border: 1.5px solid transparent;
   cursor: pointer;
@@ -282,23 +266,23 @@
 }
 
 .iconBtn:hover {
-  color: #111827;
-  background: #f3f4f6;
-  border-color: #e5e7eb;
+  color: var(--rfc-dark);
+  background: var(--rfc-surface-subtle, #F0F1F3);
+  border-color: var(--rfc-border);
   transform: translateY(-1px);
 }
 
 .iconBtn:active { transform: translateY(0); }
 
-/* Account — red when logged in */
+/* Account — accent when logged in */
 .iconBtn--active {
-  color: #E63946;
+  color: var(--rfc-accent);
 }
 
 .iconBtn--active:hover {
-  color: #E63946;
-  background: #fff1f2;
-  border-color: #fecdd3;
+  color: var(--rfc-accent);
+  background: var(--rfc-accent-light);
+  border-color: rgba(230,57,70,0.2);
 }
 
 /* Cart count badge */
@@ -310,18 +294,18 @@
   right: 2px;
   min-width: 18px;
   height: 18px;
-  background: #E63946;
+  background: var(--rfc-accent);
   color: #fff;
   font-size: 9px;
   font-weight: 800;
-  font-family: var(--font-label, 'Inter', sans-serif);
+  font-family: var(--font-label);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 3px;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 6px rgba(230,57,70,0.4);
+  border: 2px solid var(--rfc-surface);
+  box-shadow: 0 2px 6px rgba(230,57,70,0.35);
   animation: badgePop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   line-height: 1;
 }
@@ -331,21 +315,21 @@
   to   { transform: scale(1); }
 }
 
-/* ── Shop Now CTA pill (premium touch) ───────────────────── */
+/* ── Shop Now CTA ────────────────────────────────────────── */
 .shopCta {
   display: none;
   align-items: center;
-  height: 38px;
-  padding: 0 20px;
-  background: #111827;
-  color: #fff;
-  font-family: var(--font-label, 'Inter', sans-serif);
+  height: 36px;
+  padding: 0 18px;
+  background: var(--rfc-dark);
+  color: var(--rfc-text-inv);
+  font-family: var(--font-label);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: none;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.15s ease;
@@ -354,7 +338,7 @@
 }
 
 .shopCta:hover {
-  background: #E63946;
+  background: var(--rfc-accent);
   transform: translateY(-1px);
 }
 
@@ -362,7 +346,7 @@
   .shopCta { display: flex; }
 }
 
-/* Mobile toggle — visible mobile only */
+/* Mobile toggle */
 .menuToggle { display: flex; }
 
 @media (min-width: 768px) {
@@ -374,8 +358,8 @@
   position: fixed;
   inset: 0;
   z-index: 99;
-  background: rgba(17, 24, 39, 0.55);
-  backdrop-filter: blur(6px);
+  background: rgba(17, 24, 39, 0.5);
+  backdrop-filter: blur(4px);
   animation: overlayIn 0.22s ease;
 }
 
@@ -390,9 +374,9 @@
   top: 0;
   left: 0;
   right: 0;
-  background: #ffffff;
-  border-bottom: 1px solid #f0f0f0;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  background: var(--rfc-surface);
+  border-bottom: 1px solid var(--rfc-border);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.1);
   padding: 8px 0 24px;
   animation: menuIn 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -412,15 +396,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 28px;
-  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
-  font-size: 22px;
+  padding: 15px 28px;
+  font-family: var(--font-headline);
+  font-size: 20px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.01em;
-  color: #111827;
+  color: var(--rfc-dark);
   text-decoration: none;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--rfc-border);
   position: relative;
   overflow: hidden;
   transition: color 0.18s ease, background 0.18s ease, padding-left 0.2s ease;
@@ -433,14 +417,14 @@
   left: 0;
   top: 0; bottom: 0;
   width: 0;
-  background: #E63946;
+  background: var(--rfc-accent);
   border-radius: 0 3px 3px 0;
   transition: width 0.2s ease;
 }
 
 .mobileNavLink:hover {
-  color: #E63946;
-  background: #fff8f8;
+  color: var(--rfc-accent);
+  background: var(--rfc-accent-light);
   padding-left: 36px;
 }
 
@@ -452,12 +436,12 @@
 .mobileNavArrow {
   width: 20px;
   height: 20px;
-  color: #d1d5db;
+  color: var(--rfc-border-strong, #D1D5DB);
   flex-shrink: 0;
   transition: color 0.18s, transform 0.18s;
 }
 
 .mobileNavLink:hover .mobileNavArrow {
-  color: #E63946;
+  color: var(--rfc-accent);
   transform: translateX(3px);
 }

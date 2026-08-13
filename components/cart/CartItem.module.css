@@ -9,7 +9,7 @@
   align-items: center;
   gap: 20px;
   padding: 20px 0;
-  border-bottom: 1px solid var(--color-outline-variant);
+  border-bottom: 1px solid var(--rfc-border);
 }
 
 @media (max-width: 640px) {
@@ -30,10 +30,10 @@
   position: relative;
   width: 96px;
   height: 120px; /* 4:5 ratio */
-  background: #ffffff;
+  background: var(--rfc-surface);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  border: 1px solid var(--color-outline-variant);
+  border: 1px solid var(--rfc-border);
   flex-shrink: 0;
 }
 
@@ -49,7 +49,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0b1c30 0%, #1a2a3a 100%);
+  background: linear-gradient(135deg, var(--rfc-dark) 0%, var(--rfc-dark-surface) 100%);
 }
 
 .imagePlaceholder span {
@@ -73,7 +73,7 @@
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   text-decoration: none;
   white-space: nowrap;
   overflow: hidden;
@@ -81,25 +81,25 @@
   transition: color var(--transition-fast);
 }
 
-.productName:hover { color: var(--color-secondary); }
+.productName:hover { color: var(--rfc-accent); }
 
 .variant {
   font-family: var(--font-body);
   font-size: 13px;
-  color: rgba(11, 28, 48, 0.55);
+  color: var(--rfc-text-muted);
 }
 
 .sku {
   font-family: var(--font-label);
   font-size: 11px;
-  color: rgba(11, 28, 48, 0.4);
+  color: var(--rfc-text-subtle);
 }
 
 .unitPrice {
   font-family: var(--font-label);
   font-size: 13px;
   font-weight: 600;
-  color: rgba(11, 28, 48, 0.55);
+  color: var(--rfc-text-muted);
 }
 
 /* ── Quantity Control ───────────────────────────────────── */
@@ -119,10 +119,10 @@
 .qtyControl {
   display: inline-flex;
   align-items: center;
-  border: 1.5px solid var(--color-outline-variant);
+  border: 1.5px solid var(--rfc-border);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  background: #ffffff;
+  background: var(--rfc-surface);
 }
 
 .qtyBtn {
@@ -133,17 +133,17 @@
   height: 36px;
   border: none;
   background: transparent;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   cursor: pointer;
   transition: background-color var(--transition-fast);
 }
 
 .qtyBtn:hover:not(:disabled) {
-  background-color: var(--color-surface-container-low);
+  background-color: var(--rfc-bg);
 }
 
 .qtyBtn:disabled {
-  color: rgba(11, 28, 48, 0.25);
+  color: var(--rfc-border);
   cursor: not-allowed;
 }
 
@@ -153,9 +153,9 @@
   font-family: var(--font-label);
   font-size: 14px;
   font-weight: 700;
-  color: var(--color-primary);
-  border-left: 1px solid var(--color-outline-variant);
-  border-right: 1px solid var(--color-outline-variant);
+  color: var(--rfc-text);
+  border-left: 1px solid var(--rfc-border);
+  border-right: 1px solid var(--rfc-border);
   line-height: 36px;
   user-select: none;
 }
@@ -165,7 +165,7 @@
   font-family: var(--font-label);
   font-size: 15px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   text-align: right;
   white-space: nowrap;
   min-width: 80px;
@@ -187,7 +187,7 @@
   height: 36px;
   border: none;
   background: transparent;
-  color: rgba(11, 28, 48, 0.3);
+  color: var(--rfc-text-subtle);
   cursor: pointer;
   border-radius: var(--radius-sm);
   transition: color var(--transition-fast), background-color var(--transition-fast);
@@ -195,8 +195,8 @@
 }
 
 .removeBtn:hover {
-  color: var(--color-error);
-  background-color: var(--color-error-container);
+  color: var(--rfc-error);
+  background-color: transparent;
 }
 
 @media (max-width: 640px) {

@@ -16,32 +16,34 @@
   justify-content: space-between;
   gap: 8px;
   padding: 12px 16px;
-  border-radius: var(--radius-default);
+  border-radius: var(--radius-md);
   font-family: var(--font-label);
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
   text-decoration: none;
   transition: color var(--transition-fast), background var(--transition-fast);
 }
 
 .navLink:hover {
-  color: var(--color-primary);
-  background: var(--color-surface-container);
+  color: var(--rfc-text);
+  background: var(--rfc-border);
 }
 
 .navLink[aria-current="page"],
 .navLinkActive {
-  background: var(--color-secondary);
-  color: var(--color-on-secondary);
+  background: transparent;
+  color: var(--rfc-accent);
+  border-left: 3px solid var(--rfc-accent);
+  color: var(--rfc-accent);
 }
 
 .navLink[aria-current="page"]:hover,
 .navLinkActive:hover {
-  background: var(--color-secondary-dark);
-  color: var(--color-on-secondary);
+  background: var(--rfc-bg);
+  color: var(--rfc-accent);
 }
 
 .chevron {
@@ -54,7 +56,7 @@
 .adminSeparator {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid var(--color-outline-variant);
+  border-top: 1px solid var(--rfc-border);
 }
 
 .adminBtn {
@@ -63,30 +65,30 @@
   gap: 10px;
   width: 100%;
   padding: 12px 16px;
-  border-radius: var(--radius-default);
+  border-radius: var(--radius-md);
   font-family: var(--font-label);
   font-size: 13px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: #fff;
-  background: #0a0e14;
+  color: var(--rfc-surface);
+  background: var(--rfc-dark);
   text-decoration: none;
   transition: background 0.15s ease, box-shadow 0.15s ease;
   box-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
 
 .adminBtn:hover {
-  background: #1a2030;
+  background: var(--rfc-dark-surface);
   box-shadow: 0 4px 16px rgba(230, 57, 70, 0.25);
-  color: #fff;
+  color: var(--rfc-surface);
 }
 
 /* ── Separator ───────────────────────────────────────────── */
 .separator {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid var(--color-outline-variant);
+  border-top: 1px solid var(--rfc-border);
 }
 
 /* ── Logout Form ─────────────────────────────────────────── */
@@ -100,13 +102,13 @@
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
-  border-radius: var(--radius-default);
+  border-radius: var(--radius-md);
   font-family: var(--font-label);
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -115,8 +117,8 @@
 }
 
 .logoutBtn:hover {
-  color: var(--color-secondary);
-  background: var(--color-surface-container);
+  color: var(--rfc-accent);
+  background: var(--rfc-border);
 }
 
 /* ── Mobile Nav ──────────────────────────────────────────── */
@@ -144,22 +146,24 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
   text-decoration: none;
   white-space: nowrap;
-  background: var(--color-surface-container-low);
+  background: var(--rfc-bg);
   transition: color var(--transition-fast), background var(--transition-fast);
 }
 
 .mobileNavLink:hover {
-  color: var(--color-primary);
-  background: var(--color-surface-container);
+  color: var(--rfc-text);
+  background: var(--rfc-border);
 }
 
 .mobileNavLink[aria-current="page"],
 .mobileNavLinkActive {
-  background: var(--color-secondary);
-  color: var(--color-on-secondary);
+  background: transparent;
+  color: var(--rfc-accent);
+  border-left: 3px solid var(--rfc-accent);
+  color: var(--rfc-accent);
 }
 
 /* ── Admin Panel Button (mobile strip) ───────────────────── */
@@ -174,9 +178,9 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #fff;
+  color: var(--rfc-surface);
   white-space: nowrap;
-  background: #0a0e14;
+  background: var(--rfc-dark);
   text-decoration: none;
   border: none;
   cursor: pointer;
@@ -185,7 +189,7 @@
 }
 
 .mobileAdminBtn:hover {
-  background: #1a2030;
+  background: var(--rfc-dark-surface);
   box-shadow: 0 2px 10px rgba(230, 57, 70, 0.3);
 }
 
@@ -200,15 +204,15 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
   white-space: nowrap;
-  background: var(--color-surface-container-low);
+  background: var(--rfc-bg);
   border: none;
   cursor: pointer;
   transition: color var(--transition-fast), background var(--transition-fast);
 }
 
 .mobileLogoutBtn:hover {
-  color: var(--color-secondary);
-  background: var(--color-surface-container);
+  color: var(--rfc-accent);
+  background: var(--rfc-border);
 }

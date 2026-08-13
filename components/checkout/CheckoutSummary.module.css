@@ -24,9 +24,9 @@
 .skeletonTotal  { height: 24px; width: 60%; margin-top: 8px; margin-left: auto; }
 
 .panel {
-  background: var(--color-surface-container-lowest);
-  border: 1px solid var(--color-outline-variant);
-  border-radius: var(--radius-default);
+  background: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
+  border-radius: var(--radius-md);
   padding: 28px;
   position: sticky;
   top: 120px;
@@ -38,7 +38,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   margin-bottom: 20px;
 }
 
@@ -65,7 +65,7 @@
   height: 72px;
   border-radius: var(--radius-sm);
   overflow: hidden;
-  border: 1px solid var(--color-outline-variant);
+  border: 1px solid var(--rfc-border);
   flex-shrink: 0;
   background: #f0f0f0;
 }
@@ -78,7 +78,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0b1c30 0%, #1a2a3a 100%);
+  background: linear-gradient(135deg, var(--rfc-dark) 0%, var(--rfc-dark-surface) 100%);
   font-family: var(--font-headline);
   font-size: 10px;
   font-weight: 700;
@@ -92,15 +92,15 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--color-primary);
-  color: #fff;
+  background: var(--rfc-text);
+  color: var(--rfc-surface);
   font-family: var(--font-label);
   font-size: 11px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #fff;
+  border: 2px solid var(--rfc-surface);
   z-index: 1;
 }
 
@@ -114,7 +114,7 @@
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -124,7 +124,7 @@
 .itemVariant {
   font-family: var(--font-body);
   font-size: 12px;
-  color: rgba(11, 28, 48, 0.5);
+  color: var(--rfc-text-muted);
   margin-top: 3px;
 }
 
@@ -132,14 +132,14 @@
   font-family: var(--font-label);
   font-size: 13px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   white-space: nowrap;
 }
 
 /* ── Divider ────────────────────────────────────────────── */
 .divider {
   height: 1px;
-  background-color: var(--color-outline-variant);
+  background-color: var(--rfc-border);
   margin-block: 16px;
 }
 
@@ -156,13 +156,13 @@
   align-items: center;
   font-family: var(--font-body);
   font-size: 14px;
-  color: rgba(11, 28, 48, 0.6);
+  color: var(--rfc-text-muted);
 }
 
 .row span:last-child {
   font-family: var(--font-label);
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .row span[data-free="true"] {
@@ -182,20 +182,20 @@
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .totalValue {
   font-family: var(--font-label);
   font-size: 22px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .priceNote {
   font-family: var(--font-body);
   font-size: 11px;
-  color: rgba(11, 28, 48, 0.35);
+  color: var(--rfc-text-subtle);
   text-align: center;
   margin-top: 8px;
   line-height: 1.5;
@@ -216,7 +216,7 @@
   gap: 4px;
   font-family: var(--font-body);
   font-size: 11px;
-  color: rgba(11, 28, 48, 0.45);
+  color: var(--rfc-text-subtle);
   text-align: center;
   flex: 1;
 }

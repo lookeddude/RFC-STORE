@@ -1,12 +1,12 @@
 .page {
   min-height: 100vh;
-  background: #080b12;
+  background: var(--rfc-bg);
 }
 
 /* ── Hero ───────────────────────────────────── */
 .hero {
-  background: linear-gradient(135deg, #0a0e18 0%, #0f1520 50%, #0a0e18 100%);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: var(--rfc-dark);
+  border-bottom: 1px solid var(--rfc-border-dark);
   padding: 72px 24px 64px;
   text-align: center;
   position: relative;
@@ -17,7 +17,7 @@
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(230,57,70,0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, color-mix(in srgb, var(--rfc-accent) 12%, transparent) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -27,7 +27,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #E63946;
+  color: var(--rfc-accent);
   margin-bottom: 16px;
 }
 
@@ -37,14 +37,14 @@
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: var(--rfc-text-inv);
   line-height: 0.95;
   margin-bottom: 20px;
 }
 
 .heroSub {
   font-size: 16px;
-  color: rgba(255,255,255,0.45);
+  color: var(--rfc-text-inv-muted);
   max-width: 520px;
   margin: 0 auto;
   line-height: 1.6;
@@ -70,25 +70,25 @@
   align-items: center;
   gap: 20px;
   padding: 28px 24px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 16px;
+  background: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
+  border-radius: var(--radius-md);
   text-decoration: none;
   overflow: hidden;
   transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  background: rgba(255,255,255,0.055);
-  border-color: var(--accent, #E63946);
+  transform: translateY(-3px);
+  background: var(--rfc-surface);
+  border-color: var(--accent, var(--rfc-accent));
 }
 
 /* Glow behind card on hover */
 .cardGlow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 70% 60% at 20% 50%, var(--accent, #E63946), transparent);
+  background: radial-gradient(ellipse 70% 60% at 20% 50%, var(--accent, var(--rfc-accent)), transparent);
   opacity: 0;
   transition: opacity 0.35s ease;
   pointer-events: none;
@@ -103,8 +103,8 @@
   flex-shrink: 0;
   width: 64px;
   height: 64px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 12px;
+  background: #F0F1F3;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,7 +112,7 @@
 }
 
 .card:hover .cardIcon {
-  background: color-mix(in srgb, var(--accent, #E63946) 15%, transparent);
+  background: color-mix(in srgb, var(--accent, var(--rfc-accent)) 15%, transparent);
 }
 
 .cardBody { flex: 1; min-width: 0; }
@@ -123,13 +123,13 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  color: #fff;
+  color: var(--rfc-text);
   margin-bottom: 6px;
 }
 
 .cardDesc {
   font-size: 13px;
-  color: rgba(255,255,255,0.38);
+  color: var(--rfc-text-muted);
   line-height: 1.5;
   overflow: hidden;
   display: -webkit-box;
@@ -138,12 +138,12 @@
 }
 
 .cardArrow {
-  color: rgba(255,255,255,0.25);
+  color: var(--rfc-text-subtle);
   flex-shrink: 0;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .card:hover .cardArrow {
-  color: var(--accent, #E63946);
+  color: var(--accent, var(--rfc-accent));
   transform: translateX(4px);
 }

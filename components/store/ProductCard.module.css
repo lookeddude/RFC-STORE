@@ -1,23 +1,29 @@
 /*
- * RFC Store — ProductCard Styles
- * Stitch design: white card, 3:4 image, category label, hover ADD TO CART
+ * RFC Store — Product Card
+ * Premium sports retail card. Product imagery is the hero.
  */
 
 /* ── Card ───────────────────────────────────────────────── */
 .card {
   display: flex;
   flex-direction: column;
-  gap: 0;
-  background-color: #ffffff;
+  background-color: var(--rfc-surface);
   border-radius: var(--radius-sm);
   overflow: hidden;
+  border: 1px solid var(--rfc-border);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 /* ── Image Area ─────────────────────────────────────────── */
 .imageWrapper {
   position: relative;
   aspect-ratio: 3 / 4;
-  background-color: #eff4ff;
+  background-color: var(--rfc-surface-subtle, #F0F1F3);
   overflow: hidden;
   display: block;
   cursor: pointer;
@@ -26,11 +32,11 @@
 
 .image {
   object-fit: cover;
-  transition: transform 500ms ease;
+  transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .imageWrapper:hover .image {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 /* Image placeholder */
@@ -40,40 +46,40 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0b1c30 0%, #1a2a3a 100%);
+  background-color: var(--rfc-dark-surface);
 }
 
 .imagePlaceholder span {
   font-family: var(--font-headline);
   font-size: 48px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.08);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.06);
   letter-spacing: -0.02em;
 }
 
 /* ── Badge ──────────────────────────────────────────────── */
 .badge {
   position: absolute;
-  top: 8px;
-  left: 8px;
+  top: 10px;
+  left: 10px;
   z-index: 2;
   padding: 3px 8px;
   font-family: var(--font-label);
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-sharp);
 }
 
 .badge[data-variant="badge"] {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
+  background-color: var(--rfc-dark);
+  color: var(--rfc-text-inv);
 }
 
 .badge[data-variant="sale"] {
-  background-color: var(--color-secondary);
-  color: var(--color-on-secondary);
+  background-color: var(--rfc-accent);
+  color: #ffffff;
 }
 
 /* ── Add To Cart Overlay ────────────────────────────────── */
@@ -82,15 +88,15 @@
   inset-x: 0;
   bottom: 0;
   padding: 14px 16px;
-  background-color: var(--color-secondary);
+  background-color: var(--rfc-accent);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   transform: translateY(100%);
   transition:
-    opacity 250ms ease,
-    transform 250ms ease;
+    opacity 220ms ease,
+    transform 220ms ease;
   z-index: 2;
 }
 
@@ -101,11 +107,11 @@
 
 .addToCartLabel {
   font-family: var(--font-label);
-  font-size: var(--font-label-bold-size);
-  font-weight: var(--font-label-bold-weight);
-  letter-spacing: var(--font-label-bold-letter-spacing);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--color-on-secondary);
+  color: #ffffff;
 }
 
 /* ── Product Info ───────────────────────────────────────── */
@@ -113,26 +119,27 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 12px 4px 4px;
+  padding: 14px 12px 12px;
   flex: 1;
+  background: var(--rfc-surface);
 }
 
 .categoryLabel {
   font-family: var(--font-label);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(11, 28, 48, 0.45);
+  color: var(--rfc-text-subtle);
   margin-bottom: 2px;
 }
 
 .name {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.3;
-  color: var(--color-primary);
+  line-height: 1.35;
+  color: var(--rfc-text);
   text-decoration: none;
   transition: color var(--transition-fast);
   display: -webkit-box;
@@ -142,14 +149,14 @@
 }
 
 .name:hover {
-  color: var(--color-secondary);
+  color: var(--rfc-accent);
 }
 
 .shortDesc {
   font-family: var(--font-body);
   font-size: 12px;
   line-height: 1.4;
-  color: rgba(11, 28, 48, 0.5);
+  color: var(--rfc-text-muted);
   display: none;
 }
 
@@ -167,22 +174,33 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .price {
   font-family: var(--font-label);
-  font-size: var(--font-label-bold-size);
-  font-weight: var(--font-label-bold-weight);
-  letter-spacing: var(--font-label-bold-letter-spacing);
-  color: var(--color-secondary);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--rfc-text);
 }
 
 .compareAt {
   font-family: var(--font-label);
   font-size: 12px;
-  font-weight: 600;
-  color: rgba(11, 28, 48, 0.35);
+  font-weight: 500;
+  color: var(--rfc-text-subtle);
   text-decoration: line-through;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.01em;
+}
+
+.discount {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--rfc-accent);
+  background: var(--rfc-accent-light);
+  padding: 2px 5px;
+  border-radius: var(--radius-sharp);
 }

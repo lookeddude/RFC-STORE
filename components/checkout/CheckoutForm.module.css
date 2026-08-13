@@ -11,10 +11,10 @@
 
 /* ── Section ────────────────────────────────────────────── */
 .section {
-  border: 1.5px solid var(--color-outline-variant);
-  border-radius: var(--radius-default);
+  border: 1.5px solid var(--rfc-border);
+  border-radius: var(--radius-md);
   padding: 28px;
-  background: var(--color-surface-container-lowest);
+  background: var(--rfc-surface);
 }
 
 .section:disabled { opacity: 0.6; }
@@ -28,7 +28,7 @@
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   margin-bottom: 24px;
   padding: 0;
   border: none;
@@ -41,8 +41,8 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: var(--color-secondary);
-  color: #fff;
+  background-color: var(--rfc-accent);
+  color: var(--rfc-surface);
   font-size: 12px;
   font-weight: 700;
   flex-shrink: 0;
@@ -72,8 +72,8 @@
 .fieldGroupError .input,
 .fieldGroupError .select,
 .fieldGroupError .textarea {
-  border-color: var(--color-error);
-  background-color: #fff9f9;
+  border-color: var(--rfc-error);
+  background-color: var(--rfc-surface)9f9;
 }
 
 /* ── Label ──────────────────────────────────────────────── */
@@ -83,10 +83,10 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(11, 28, 48, 0.6);
+  color: var(--rfc-text-muted);
 }
 
-.required { color: var(--color-error); }
+.required { color: var(--rfc-error); }
 
 /* ── Inputs ─────────────────────────────────────────────── */
 .input,
@@ -95,25 +95,25 @@
   width: 100%;
   height: 44px;
   padding: 0 14px;
-  border: 1.5px solid var(--color-outline-variant);
+  border: 1.5px solid var(--rfc-border);
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-primary);
-  background: #fff;
+  color: var(--rfc-text);
+  background: var(--rfc-surface);
   outline: none;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   appearance: none;
 }
 
 .input::placeholder,
-.textarea::placeholder { color: rgba(11, 28, 48, 0.3); }
+.textarea::placeholder { color: var(--rfc-text-subtle); }
 
 .input:focus,
 .select:focus,
 .textarea:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(10, 14, 20, 0.08);
+  border-color: var(--rfc-text);
+  box-shadow: 0 0 0 3px rgba(230,57,70,0.1);
 }
 
 .input:disabled,
@@ -142,7 +142,7 @@
 .hint {
   font-family: var(--font-body);
   font-size: 12px;
-  color: rgba(11, 28, 48, 0.45);
+  color: var(--rfc-text-subtle);
 }
 
 .error {
@@ -151,7 +151,7 @@
   gap: 5px;
   font-family: var(--font-body);
   font-size: 12px;
-  color: var(--color-error);
+  color: var(--rfc-error);
   font-weight: 500;
 }
 
@@ -161,8 +161,8 @@
   align-items: flex-start;
   gap: 10px;
   padding: 14px 16px;
-  background-color: var(--color-error-container);
-  color: var(--color-on-error-container);
+  background-color: var(--rfc-error-bg);
+  color: var(--rfc-error);
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: 14px;
@@ -175,12 +175,12 @@
   align-items: flex-start;
   gap: 10px;
   padding: 14px 16px;
-  background-color: #fffbeb;
-  border: 1px solid #f59e0b;
+  background-color: var(--rfc-warning-bg);
+  border: 1px solid var(--rfc-warning);
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: 13px;
-  color: #92400e;
+  color: var(--rfc-warning);
   line-height: 1.5;
 }
 
@@ -199,14 +199,14 @@
   text-transform: uppercase;
   border: none;
   border-radius: var(--radius-sm);
-  background-color: var(--color-primary);
-  color: #fff;
+  background-color: var(--rfc-accent);
+  color: var(--rfc-surface);
   cursor: pointer;
   transition: background-color var(--transition-fast), opacity var(--transition-fast);
 }
 
 .placeOrderBtn:hover:not(:disabled) {
-  background-color: #1a2030;
+  background-color: var(--rfc-accent-dark);
 }
 
 .placeOrderBtn:disabled {
@@ -225,6 +225,6 @@
 .secureNote {
   font-family: var(--font-body);
   font-size: 12px;
-  color: rgba(11, 28, 48, 0.4);
+  color: var(--rfc-text-subtle);
   text-align: center;
 }

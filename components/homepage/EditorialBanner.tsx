@@ -1,12 +1,8 @@
 /**
- * RFC Store — Dark Editorial Banner
+ * RFC Store — Editorial Banner
  *
- * Full-width dark arena section: "ENGINEERED FOR IMPACT."
- * Background image with cinematic opacity overlay.
- * Single CTA button — white on dark.
- *
- * Stitch design: section between Featured Gear and Footer.
- * Content from EDITORIAL_CONTENT in homepage.content.ts.
+ * Dark cinematic section. Full-width image, centered headline, RFC red CTA.
+ * Fully token-based — no hardcoded colors.
  */
 import React from "react";
 import Image from "next/image";
@@ -21,8 +17,8 @@ export function EditorialBanner() {
       style={{
         position: "relative",
         width: "100%",
-        padding: "160px 24px",
-        backgroundColor: "var(--color-primary)",
+        padding: "clamp(80px, 12vw, 160px) 24px",
+        backgroundColor: "var(--rfc-dark)",
         overflow: "hidden",
         display: "flex",
         alignItems: "center",
@@ -31,43 +27,64 @@ export function EditorialBanner() {
       }}
       aria-label="Editorial — Engineered For Impact"
     >
-      {/* Background Image at 40% opacity */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 0,
-        }}
-      >
+      {/* Background Image */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         <Image
           src={image.src}
           alt={image.alt}
           fill
           sizes="100vw"
-          style={{ objectFit: "cover", opacity: 0.4 }}
+          style={{ objectFit: "cover", opacity: 0.35 }}
           loading="lazy"
         />
       </div>
+
+      {/* Dark gradient overlay for text readability */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 1,
+          background:
+            "radial-gradient(ellipse at center, rgba(17,24,39,0.3) 0%, rgba(17,24,39,0.7) 100%)",
+        }}
+        aria-hidden="true"
+      />
 
       {/* Content */}
       <div
         style={{
           position: "relative",
-          zIndex: 1,
-          maxWidth: "720px",
+          zIndex: 2,
+          maxWidth: "680px",
           paddingInline: "var(--space-6)",
         }}
       >
+        {/* Eyebrow */}
+        <p
+          style={{
+            fontFamily: "var(--font-label)",
+            fontSize: "10px",
+            fontWeight: 700,
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+            color: "var(--rfc-accent)",
+            marginBottom: "16px",
+          }}
+        >
+          RFC Store
+        </p>
+
         <h2
           style={{
             fontFamily: "var(--font-headline)",
-            fontSize: "clamp(40px, 7vw, 80px)",
-            fontWeight: 700,
-            lineHeight: 1,
+            fontSize: "clamp(38px, 7vw, 76px)",
+            fontWeight: 900,
+            lineHeight: 0.95,
             textTransform: "uppercase",
-            letterSpacing: "-0.02em",
-            color: "var(--color-on-primary)",
-            marginBottom: "var(--space-6)",
+            letterSpacing: "-0.025em",
+            color: "var(--rfc-text-inv)",
+            marginBottom: "20px",
           }}
         >
           {headline}
@@ -76,17 +93,18 @@ export function EditorialBanner() {
         <p
           style={{
             fontFamily: "var(--font-body)",
-            fontSize: "18px",
-            lineHeight: 1.6,
-            color: "#c5c7c8",
-            marginBottom: "var(--space-10)",
-            maxWidth: "560px",
+            fontSize: "17px",
+            lineHeight: 1.65,
+            color: "var(--rfc-text-inv-muted)",
+            marginBottom: "36px",
+            maxWidth: "520px",
             marginInline: "auto",
           }}
         >
           {subtext}
         </p>
 
+        {/* RFC Red CTA */}
         <Link
           href={cta.href}
           style={{
@@ -94,17 +112,19 @@ export function EditorialBanner() {
             alignItems: "center",
             justifyContent: "center",
             height: "52px",
-            paddingInline: "var(--space-8)",
-            backgroundColor: "var(--color-on-primary)",
-            color: "var(--color-primary)",
+            paddingInline: "40px",
+            backgroundColor: "var(--rfc-accent)",
+            color: "#ffffff",
             fontFamily: "var(--font-label)",
-            fontSize: "var(--font-label-bold-size)",
-            fontWeight: "var(--font-label-bold-weight)" as React.CSSProperties["fontWeight"],
-            letterSpacing: "var(--font-label-bold-letter-spacing)",
+            fontSize: "13px",
+            fontWeight: 700,
+            letterSpacing: "0.09em",
             textTransform: "uppercase",
             textDecoration: "none",
-            borderRadius: "var(--radius-sm)",
-            transition: "background-color var(--transition-fast), color var(--transition-fast)",
+            borderRadius: "var(--radius-sharp)",
+            transition:
+              "background-color var(--transition-fast), box-shadow var(--transition-fast)",
+            boxShadow: "0 4px 18px rgba(230,57,70,0.4)",
           }}
         >
           {cta.label}

@@ -1,6 +1,6 @@
 /*
- * RFC Store — Button Component Styles
- * Follows Stitch spec: 2px radius, label-bold typography, no pill shapes
+ * RFC Store — Button System
+ * ONE unified button hierarchy. No deviations.
  */
 
 /* ── Base ─────────────────────────────────────────────── */
@@ -9,23 +9,25 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border-radius: var(--radius-sm); /* 2px — sharp precision-cut */
+  border-radius: var(--radius-sharp);
   font-family: var(--font-label);
-  font-weight: var(--font-label-bold-weight);
-  font-size: var(--font-label-bold-size);
-  line-height: var(--font-label-bold-line-height);
-  letter-spacing: var(--font-label-bold-letter-spacing);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  line-height: 1.2;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   transition:
     background-color var(--transition-fast),
     color var(--transition-fast),
     border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
     transform var(--transition-fast);
   cursor: pointer;
   border: 1.5px solid transparent;
   white-space: nowrap;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
 }
 
 .btn:disabled {
@@ -41,8 +43,9 @@
 /* ── Sizes ───────────────────────────────────────────── */
 .btn--sm {
   height: 32px;
-  padding-inline: 16px;
-  font-size: 12px;
+  padding-inline: 14px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
 }
 
 .btn--md {
@@ -52,8 +55,8 @@
 
 .btn--lg {
   height: 52px;
-  padding-inline: 32px;
-  font-size: 15px;
+  padding-inline: 36px;
+  font-size: 13px;
 }
 
 .btn--full {
@@ -62,52 +65,71 @@
 
 /* ── Variants ─────────────────────────────────────────── */
 
-/* Primary — Coral Red, White text */
+/* PRIMARY — RFC Red. Main CTAs: Add to Cart, Shop Now, etc. */
 .btn--primary {
-  background-color: var(--color-secondary);
-  color: var(--color-on-secondary);
-  border-color: var(--color-secondary);
+  background-color: var(--rfc-accent);
+  color: #ffffff;
+  border-color: var(--rfc-accent);
 }
-
 .btn--primary:hover:not(:disabled) {
-  background-color: var(--color-secondary-dark);
-  border-color: var(--color-secondary-dark);
+  background-color: var(--rfc-accent-dark);
+  border-color: var(--rfc-accent-dark);
+  box-shadow: 0 4px 12px rgba(230,57,70,0.25);
 }
 
-/* Secondary — Dark Navy, White text */
+/* SECONDARY — Dark charcoal. Supporting CTAs */
 .btn--secondary {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
-  border-color: var(--color-primary);
+  background-color: var(--rfc-dark);
+  color: var(--rfc-text-inv);
+  border-color: var(--rfc-dark);
 }
-
 .btn--secondary:hover:not(:disabled) {
-  background-color: #1a2030;
-  border-color: #1a2030;
+  background-color: var(--rfc-dark-surface);
+  border-color: var(--rfc-dark-surface);
 }
 
-/* Ghost — transparent, Dark Navy border */
+/* GHOST — Outline only. Tertiary actions */
 .btn--ghost {
   background-color: transparent;
-  color: var(--color-primary);
-  border-color: var(--color-primary);
+  color: var(--rfc-text);
+  border-color: var(--rfc-border-strong, #D1D5DB);
 }
-
 .btn--ghost:hover:not(:disabled) {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
+  background-color: var(--rfc-surface-subtle, #F0F1F3);
+  border-color: var(--rfc-text-muted);
 }
 
-/* Danger — Error red */
+/* GHOST ACCENT — Outline with red color */
+.btn--ghost-accent {
+  background-color: transparent;
+  color: var(--rfc-accent);
+  border-color: var(--rfc-accent);
+}
+.btn--ghost-accent:hover:not(:disabled) {
+  background-color: var(--rfc-accent);
+  color: #ffffff;
+}
+
+/* GHOST INVERSE — For use on dark backgrounds */
+.btn--ghost-inv {
+  background-color: transparent;
+  color: var(--rfc-text-inv);
+  border-color: rgba(255,255,255,0.3);
+}
+.btn--ghost-inv:hover:not(:disabled) {
+  background-color: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.5);
+}
+
+/* DANGER — Destructive actions */
 .btn--danger {
-  background-color: var(--color-error);
-  color: var(--color-on-error);
-  border-color: var(--color-error);
+  background-color: var(--rfc-error);
+  color: #ffffff;
+  border-color: var(--rfc-error);
 }
-
 .btn--danger:hover:not(:disabled) {
-  background-color: #9c0f0f;
-  border-color: #9c0f0f;
+  background-color: #B91C1C;
+  border-color: #B91C1C;
 }
 
 /* ── Loading State ────────────────────────────────────── */
@@ -123,6 +145,7 @@
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
   flex-shrink: 0;
+  opacity: 0.7;
 }
 
 .btn__label--loading {

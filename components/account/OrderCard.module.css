@@ -4,9 +4,9 @@
  */
 
 .card {
-  background: var(--color-surface-container-lowest);
-  border: 1px solid var(--color-outline-variant);
-  border-radius: var(--radius-default);
+  background: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
+  border-radius: var(--radius-md);
   padding: 20px 24px;
   transition: box-shadow var(--transition-base);
   text-decoration: none;
@@ -34,13 +34,13 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .orderDate {
   font-family: var(--font-body);
   font-size: 13px;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
   margin-top: 2px;
 }
 
@@ -66,21 +66,21 @@
 }
 
 .badge--pending,
-.badge--confirmed { background: var(--color-surface-container); color: var(--color-on-surface); }
+.badge--confirmed { background: var(--rfc-border); color: var(--rfc-text); }
 .badge--processing { background: #e8f4fd; color: #0369a1; }
-.badge--shipped    { background: var(--color-secondary); color: var(--color-on-secondary); }
+.badge--shipped    { background: var(--rfc-accent); color: var(--rfc-text-inv); }
 .badge--delivered  { background: #dcfce7; color: #166534; }
 .badge--cancelled,
-.badge--refunded   { background: var(--color-error-container); color: var(--color-on-error-container); }
+.badge--refunded   { background: var(--rfc-error-bg); color: var(--rfc-error); }
 
 .paymentBadge {
-  background: var(--color-surface-container-low);
-  color: var(--color-on-surface-variant);
-  border: 1px solid var(--color-outline-variant);
+  background: var(--rfc-bg);
+  color: var(--rfc-text-muted);
+  border: 1px solid var(--rfc-border);
 }
 
 .paymentBadge--paid { background: #dcfce7; color: #166534; border-color: transparent; }
-.paymentBadge--failed { background: var(--color-error-container); color: var(--color-on-error-container); border-color: transparent; }
+.paymentBadge--failed { background: var(--rfc-error-bg); color: var(--rfc-error); border-color: transparent; }
 
 /* ── Meta Row ────────────────────────────────────────────── */
 .metaRow {
@@ -94,14 +94,14 @@
 .meta {
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-on-surface-variant);
+  color: var(--rfc-text-muted);
 }
 
 .total {
   font-family: var(--font-label);
   font-size: 18px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .viewLink {
@@ -113,7 +113,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-secondary);
+  color: var(--rfc-accent);
   text-decoration: none;
   transition: opacity var(--transition-fast);
 }

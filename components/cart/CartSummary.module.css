@@ -4,8 +4,8 @@
  */
 
 .summary {
-  background: var(--color-surface-container-lowest);
-  border: 1px solid var(--color-outline-variant);
+  background: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
   border-radius: var(--radius-sm);
   padding: 28px;
   position: sticky;
@@ -18,7 +18,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   margin-bottom: 20px;
 }
 
@@ -40,14 +40,14 @@
 .label {
   font-family: var(--font-body);
   font-size: 14px;
-  color: rgba(11, 28, 48, 0.6);
+  color: var(--rfc-text-muted);
 }
 
 .value {
   font-family: var(--font-label);
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .value[data-free="true"] {
@@ -58,7 +58,7 @@
 /* ── Divider ────────────────────────────────────────────── */
 .divider {
   height: 1px;
-  background-color: var(--color-outline-variant);
+  background-color: var(--rfc-border);
   margin-block: 16px;
 }
 
@@ -66,7 +66,7 @@
 .shippingNote {
   font-family: var(--font-body);
   font-size: 13px;
-  color: rgba(11, 28, 48, 0.55);
+  color: var(--rfc-text-muted);
   text-align: center;
   margin-bottom: 12px;
   font-style: italic;
@@ -95,20 +95,20 @@
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .totalValue {
   font-family: var(--font-label);
   font-size: 22px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .taxNote {
   font-family: var(--font-body);
   font-size: 12px;
-  color: rgba(11, 28, 48, 0.4);
+  color: var(--rfc-text-subtle);
   text-align: center;
   margin-bottom: 20px;
 }
@@ -133,14 +133,14 @@
   letter-spacing: 0.07em;
   text-transform: uppercase;
   text-decoration: none;
-  background-color: var(--color-secondary);
-  color: var(--color-on-secondary);
+  background-color: var(--rfc-accent);
+  color: var(--rfc-text-inv);
   border-radius: var(--radius-sm);
   transition: background-color var(--transition-fast);
 }
 
 .checkoutBtn:hover {
-  background-color: var(--color-secondary-dark);
+  background-color: var(--rfc-accent-dark);
 }
 
 .continueBtn {
@@ -153,12 +153,12 @@
   font-weight: 600;
   letter-spacing: 0.05em;
   text-decoration: none;
-  color: rgba(11, 28, 48, 0.55);
+  color: var(--rfc-text-muted);
   transition: color var(--transition-fast);
 }
 
 .continueBtn:hover {
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 /* ── Trust ──────────────────────────────────────────────── */
@@ -168,5 +168,5 @@
   gap: 16px;
   font-family: var(--font-body);
   font-size: 12px;
-  color: rgba(11, 28, 48, 0.45);
+  color: var(--rfc-text-subtle);
 }
