@@ -10,6 +10,12 @@
   gap: 20px;
   padding: 20px 0;
   border-bottom: 1px solid var(--rfc-border);
+  transition: opacity 0.2s ease;
+}
+
+/* Out-of-stock row: dim entire row */
+.rowOutOfStock {
+  opacity: 0.65;
 }
 
 @media (max-width: 640px) {
@@ -42,6 +48,35 @@
 }
 
 .image { object-fit: cover; }
+
+/* Out-of-stock image grayscale */
+.imageGrayscale {
+  filter: grayscale(1);
+}
+
+/* Sold Out overlay on image */
+.soldOutOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.soldOutOverlay span {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+  padding: 4px 8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+  white-space: nowrap;
+}
 
 .imagePlaceholder {
   position: absolute;
@@ -102,6 +137,37 @@
   color: var(--rfc-text-muted);
 }
 
+/* ── Stock Status Badges ─────────────────────────────── */
+.outOfStockBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #dc2626;
+}
+
+.soldOutDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #dc2626;
+  flex-shrink: 0;
+}
+
+.lowStockBadge {
+  margin-top: 4px;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #d97706;
+}
+
 /* ── Quantity Control ───────────────────────────────────── */
 .qtyCell {
   display: flex;
@@ -123,6 +189,13 @@
   border-radius: var(--radius-sm);
   overflow: hidden;
   background: var(--rfc-surface);
+}
+
+/* Disabled qty control for out-of-stock */
+.qtyDisabled {
+  opacity: 0.4;
+  pointer-events: none;
+  user-select: none;
 }
 
 .qtyBtn {
@@ -169,6 +242,12 @@
   text-align: right;
   white-space: nowrap;
   min-width: 80px;
+}
+
+/* Muted price for out-of-stock items */
+.lineTotalMuted {
+  color: var(--rfc-text-subtle);
+  text-decoration: line-through;
 }
 
 @media (max-width: 640px) {

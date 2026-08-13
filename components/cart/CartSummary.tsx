@@ -21,7 +21,11 @@ import styles from "./CartSummary.module.css";
 
 const FREE_SHIPPING_THRESHOLD = 5000;
 
-export function CartSummary() {
+interface CartSummaryProps {
+  hasOutOfStockItems?: boolean;
+}
+
+export function CartSummary({ hasOutOfStockItems = false }: CartSummaryProps) {
   const { state } = useCart();
   const { subtotal, itemCount } = state;
 
@@ -78,14 +82,29 @@ export function CartSummary() {
 
       {/* CTAs */}
       <div className={styles.actions}>
-        {/* Phase 6 integration point: replace with real checkout route */}
-        <Link
-          href={ROUTES.checkout}
-          className={styles.checkoutBtn}
-          aria-label="Proceed to checkout"
-        >
-          PROCEED TO CHECKOUT
-        </Link>
+        {hasOutOfStockItems ? (
+          <>
+            <button
+              disabled
+              className={styles.checkoutBtnDisabled}
+              aria-disabled="true"
+              aria-describedby="oos-notice"
+            >
+              PROCEED TO CHECKOUT
+            </button>
+            <p id="oos-notice" className={styles.oosNotice}>
+              ⚠️ Remove sold-out items to proceed
+            </p>
+          </>
+        ) : (
+          <Link
+            href={ROUTES.checkout}
+            className={styles.checkoutBtn}
+            aria-label="Proceed to checkout"
+          >
+            PROCEED TO CHECKOUT
+          </Link>
+        )}
 
         <Link href={ROUTES.shop} className={styles.continueBtn}>
           ← Continue Shopping

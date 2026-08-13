@@ -10,9 +10,9 @@
 /* ── Header ─────────────────────────────────────────────── */
 .header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 16px;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
@@ -31,6 +31,31 @@
   font-weight: 600;
   color: rgba(11, 28, 48, 0.45);
   letter-spacing: 0.04em;
+}
+
+.validatingNote {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(11, 28, 48, 0.4);
+  letter-spacing: 0.05em;
+  margin-left: auto;
+}
+
+/* ── Stock Warning Banner ───────────────────────────────── */
+.stockWarningBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 14px 18px;
+  background: #fff8f0;
+  border: 1.5px solid #f59e0b;
+  border-radius: var(--radius-sm);
+  color: #92400e;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 /* ── Layout Grid ────────────────────────────────────────── */
