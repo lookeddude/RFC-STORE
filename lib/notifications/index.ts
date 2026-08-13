@@ -28,6 +28,11 @@
  * All secrets stay server-side.
  */
 
+import { getBrevoClient, BREVO_SENDER } from './brevo';
+import { getOrderConfirmationSubject, renderOrderConfirmationHtml, renderOrderConfirmationText } from './templates/order-confirmation';
+import { getOrderStatusSubject, renderOrderStatusHtml } from './templates/order-status';
+
+
 // ── Order Event Types ──────────────────────────────────────
 
 export interface OrderCreatedEvent {
@@ -38,6 +43,8 @@ export interface OrderCreatedEvent {
   customerPhone?: string;
   totalAmount: number;
   currency: string;
+  paymentMethod: string;   // 'cod' | 'razorpay' etc.
+  codFee?: number;         // ₹ COD fee if applicable
   items: Array<{
     productName: string;
     variantName?: string | null;
@@ -78,11 +85,7 @@ export interface PaymentEvent {
 
 // ── Notification Channel Status ────────────────────────────
 
-const EMAIL_CONFIGURED = !!(
-  process.env.RESEND_API_KEY ||
-  process.env.SENDGRID_API_KEY ||
-  process.env.SMTP_HOST
-);
+const EMAIL_CONFIGURED = !!process.env.BREVO_API_KEY;
 
 const SMS_CONFIGURED = !!(
   process.env.MSG91_API_KEY ||
@@ -91,24 +94,45 @@ const SMS_CONFIGURED = !!(
 
 // ── Internal helpers ───────────────────────────────────────
 
-async function sendEmail(_event: string, _to: string, _payload: unknown): Promise<void> {
+async function sendEmail(_event: string, to: string, payload: unknown): Promise<void> {
   if (!EMAIL_CONFIGURED) {
-    // Email provider not yet configured — log and skip
-    console.info(`[RFC Notifications] EMAIL NOT CONFIGURED — skipping event: ${_event} → ${_to}`);
+    console.info(`[RFC Notifications] EMAIL NOT CONFIGURED — skipping event: ${_event} → ${to}`);
     return;
   }
 
-  // TODO: Implement email sending with your configured provider
-  // Example with Resend:
-  // const resend = new Resend(process.env.RESEND_API_KEY);
-  // await resend.emails.send({
-  //   from: 'orders@revivefightclub.com',
-  //   to: _to,
-  //   subject: getSubject(_event),
-  //   html: renderTemplate(_event, _payload),
-  // });
+  try {
+    const client = getBrevoClient();
+    const sendSmtpEmail = new (await import('@getbrevo/brevo')).SendSmtpEmail();
 
-  console.info(`[RFC Notifications] Email sent: ${_event} → ${_to}`);
+    sendSmtpEmail.sender = BREVO_SENDER;
+    sendSmtpEmail.to = [{ email: to }];
+
+    // Route event to correct template
+    if (_event === 'order_created') {
+      const data = payload as Parameters<typeof renderOrderConfirmationHtml>[0];
+      sendSmtpEmail.subject = getOrderConfirmationSubject(data.orderNumber);
+      sendSmtpEmail.htmlContent = renderOrderConfirmationHtml(data);
+      sendSmtpEmail.textContent = renderOrderConfirmationText(data);
+    } else if (_event === 'order_created_admin') {
+      const data = payload as { orderNumber: string; customerName: string; customerEmail: string; totalAmount: number };
+      sendSmtpEmail.subject = `🛒 New COD Order: ${data.orderNumber}`;
+      sendSmtpEmail.htmlContent = `<p>New order from <b>${data.customerName}</b> (${data.customerEmail}). Total: ₹${data.totalAmount.toLocaleString('en-IN')}. Order: ${data.orderNumber}</p>`;
+      sendSmtpEmail.textContent = `New order ${data.orderNumber} from ${data.customerName}. Total: ₹${data.totalAmount}`;
+    } else if (_event === 'order_status_changed') {
+      const data = payload as Parameters<typeof renderOrderStatusHtml>[0];
+      sendSmtpEmail.subject = getOrderStatusSubject(data.orderNumber, data.newStatus);
+      sendSmtpEmail.htmlContent = renderOrderStatusHtml(data);
+    } else {
+      sendSmtpEmail.subject = `RFC Store — ${_event}`;
+      sendSmtpEmail.htmlContent = `<pre>${JSON.stringify(payload, null, 2)}</pre>`;
+    }
+
+    await client.sendTransacEmail(sendSmtpEmail);
+    console.info(`[RFC Notifications] Email sent: ${_event} → ${to}`);
+  } catch (err) {
+    console.error(`[RFC Notifications] Brevo send failed: ${_event} → ${to}`, err);
+    throw err;
+  }
 }
 
 async function sendSMS(_event: string, _to: string, _message: string): Promise<void> {
@@ -131,7 +155,15 @@ async function sendSMS(_event: string, _to: string, _message: string): Promise<v
 export async function notifyOrderCreated(event: OrderCreatedEvent): Promise<void> {
   try {
     // Customer confirmation
-    await sendEmail('order_created', event.customerEmail, event);
+    await sendEmail('order_created', event.customerEmail, {
+      orderNumber: event.orderNumber,
+      customerName: event.customerName,
+      totalAmount: event.totalAmount,
+      paymentMethod: event.paymentMethod,
+      codFee: event.codFee,
+      items: event.items,
+      shippingAddress: event.shippingAddress,
+    });
 
     // Admin alert (use store contact email from store_settings or env)
     const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
@@ -182,8 +214,8 @@ export async function notifyPaymentEvent(event: PaymentEvent): Promise<void> {
 export function getNotificationStatus() {
   return {
     email: EMAIL_CONFIGURED
-      ? { configured: true, provider: process.env.RESEND_API_KEY ? 'Resend' : process.env.SENDGRID_API_KEY ? 'SendGrid' : 'SMTP' }
-      : { configured: false, message: 'Set RESEND_API_KEY, SENDGRID_API_KEY, or SMTP_HOST to enable' },
+      ? { configured: true, provider: 'Brevo' }
+      : { configured: false, message: 'Set BREVO_API_KEY to enable' },
     sms: SMS_CONFIGURED
       ? { configured: true, provider: process.env.MSG91_API_KEY ? 'MSG91' : 'Twilio' }
       : { configured: false, message: 'Set MSG91_API_KEY or TWILIO_ACCOUNT_SID to enable' },

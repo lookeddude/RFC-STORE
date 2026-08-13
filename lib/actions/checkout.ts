@@ -10,24 +10,25 @@
  *   - Idempotency key prevents duplicate orders on double-submit
  *   - No payment amount is set from client
  *
+ * Payment Methods:
+ *   - COD (Cash on Delivery): ₹99 handling fee, pay on delivery
+ *   - Razorpay: Integration point ready (uncomment when ready)
+ *
  * Flow:
  *   1. Client calls placeOrderAction with { cartItems, formData, idempotencyKey }
  *   2. Server validates form fields
  *   3. Server re-fetches all products/variants from DB (re-validates price + stock)
- *   4. Server calculates authoritative totals
+ *   4. Server calculates authoritative totals including COD fee
  *   5. Server calls create_order_atomic() RPC
- *   6. Returns { success, orderNumber, orderId, totalAmount } to client
- *   7. Client clears cart and redirects to /order-confirmation/[orderNumber]
- *
- * Phase 7 integration points (marked with TODO):
- *   - Razorpay payment initialization after order creation
- *   - Email notification on order creation
- *   - Auth user cart_items cleanup
+ *   6. Notification fired (non-blocking)
+ *   7. Returns { success, orderNumber, orderId, totalAmount } to client
+ *   8. Client clears cart and redirects to /order-confirmation/[orderNumber]
  */
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import {
   calculateShipping,
+  calculateCodFee,
   calculateTax,
   calculateTotal,
 } from "@/lib/config/shipping";
@@ -57,14 +58,12 @@ const INDIAN_STATES = new Set([
 function validateForm(data: CheckoutFormData): CheckoutFormErrors {
   const errors: CheckoutFormErrors = {};
 
-  // Full name
   if (!data.fullName.trim()) {
     errors.fullName = "Full name is required.";
   } else if (data.fullName.trim().length < 2) {
     errors.fullName = "Full name must be at least 2 characters.";
   }
 
-  // Email
   const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!data.email.trim()) {
     errors.email = "Email address is required.";
@@ -72,7 +71,6 @@ function validateForm(data: CheckoutFormData): CheckoutFormErrors {
     errors.email = "Please enter a valid email address.";
   }
 
-  // Phone — 10-digit Indian mobile or international with +
   const phoneRx = /^(\+?\d{7,15}|[6-9]\d{9})$/;
   const cleanPhone = data.phone.replace(/[\s\-()]/g, "");
   if (!cleanPhone) {
@@ -81,26 +79,22 @@ function validateForm(data: CheckoutFormData): CheckoutFormErrors {
     errors.phone = "Please enter a valid 10-digit mobile number.";
   }
 
-  // Address line 1
   if (!data.line1.trim()) {
     errors.line1 = "Address is required.";
   } else if (data.line1.trim().length < 5) {
     errors.line1 = "Please enter your full address.";
   }
 
-  // City
   if (!data.city.trim()) {
     errors.city = "City is required.";
   }
 
-  // State
   if (!data.state.trim()) {
     errors.state = "State is required.";
   } else if (data.country === "IN" && !INDIAN_STATES.has(data.state.trim())) {
     errors.state = "Please select a valid Indian state.";
   }
 
-  // Postal code
   if (!data.postalCode.trim()) {
     errors.postalCode = "PIN code is required.";
   } else if (data.country === "IN" && !/^\d{6}$/.test(data.postalCode.trim())) {
@@ -118,13 +112,14 @@ function validateForm(data: CheckoutFormData): CheckoutFormErrors {
  * Validates everything server-side, then calls the atomic PostgreSQL
  * function to create the order in a single transaction.
  *
- * The idempotencyKey prevents duplicate orders on double-submit.
- * Generate it on the client: crypto.randomUUID() before submitting.
+ * paymentMethod: 'cod' (default) | 'razorpay' (future)
+ * idempotencyKey: generate on client with crypto.randomUUID()
  */
 export async function placeOrderAction(
   cartItems: CartItemData[],
   formData: CheckoutFormData,
-  idempotencyKey: string
+  idempotencyKey: string,
+  paymentMethod: string = "cod"
 ): Promise<PlaceOrderResult> {
 
   // ── 1. Guard: empty cart ─────────────────────────────────
@@ -136,15 +131,20 @@ export async function placeOrderAction(
     return { success: false, error: "Invalid request. Please refresh the page and try again." };
   }
 
-  // ── 2. Validate form fields (server-side) ────────────────
+  // ── 2. Validate payment method ───────────────────────────
+  const allowedPaymentMethods = ["cod"];
+  if (!allowedPaymentMethods.includes(paymentMethod)) {
+    return { success: false, error: "Invalid payment method. Please select Cash on Delivery." };
+  }
+
+  // ── 3. Validate form fields (server-side) ────────────────
   const fieldErrors = validateForm(formData);
   if (Object.keys(fieldErrors).length > 0) {
     return { success: false, error: "Please fix the form errors below.", fieldErrors };
   }
 
-  // ── 3. Re-validate all cart items from DB ────────────────
+  // ── 4. Re-validate all cart items from DB ────────────────
   // CRITICAL: We do NOT trust prices or stock from the client.
-  // Re-fetch every item from the database.
   const supabase = await createClient();
   const admin = createAdminClient();
 
@@ -152,7 +152,6 @@ export async function placeOrderAction(
   let serverSubtotal = 0;
 
   for (const clientItem of cartItems) {
-    // Fetch product
     const { data: productRaw } = await supabase
       .from("products")
       .select("id, name, slug, base_price, is_active")
@@ -176,7 +175,6 @@ export async function placeOrderAction(
     let variantName: string | null = null;
     let sku: string | null = null;
 
-    // Validate variant (if present)
     if (clientItem.variantId) {
       const { data: variantRaw } = await supabase
         .from("product_variants")
@@ -196,8 +194,6 @@ export async function placeOrderAction(
       const variant = variantRaw as {
         id: string; name: string; sku: string; price: number;
         is_available: boolean;
-        // Supabase returns one-to-many joins as arrays.
-        // inventory has a unique constraint on variant_id so it's always 0 or 1 record.
         inventory: Array<{ quantity: number; reserved: number }>;
       };
 
@@ -231,13 +227,14 @@ export async function placeOrderAction(
     });
   }
 
-  // ── 4. Calculate server-authoritative totals ─────────────
+  // ── 5. Calculate server-authoritative totals ─────────────
   const shippingAmount = calculateShipping(serverSubtotal);
+  const codFee = calculateCodFee(paymentMethod);
   const taxAmount = calculateTax(serverSubtotal);
-  const discountAmount = 0; // Phase 7: coupon engine
-  const totalAmount = calculateTotal(serverSubtotal, shippingAmount, taxAmount, discountAmount);
+  const discountAmount = 0; // Future: coupon engine
+  const totalAmount = calculateTotal(serverSubtotal, shippingAmount, taxAmount, discountAmount, codFee);
 
-  // ── 5. Get authenticated user (null for guest) ───────────
+  // ── 6. Get authenticated user (null for guest) ───────────
   let userId: string | null = null;
   try {
     const { data: { session } } = await supabase.auth.getSession();
@@ -246,7 +243,7 @@ export async function placeOrderAction(
     // Guest checkout — no session
   }
 
-  // ── 6. Build address snapshot ────────────────────────────
+  // ── 7. Build address snapshot ────────────────────────────
   const shippingAddressSnapshot = {
     fullName: formData.fullName.trim(),
     phone: formData.phone.trim(),
@@ -258,11 +255,7 @@ export async function placeOrderAction(
     country: formData.country || "IN",
   };
 
-  // ── 7. Call atomic PostgreSQL function ───────────────────
-  // Uses admin client — SECURITY DEFINER function handles all
-  // inventory reservation and order creation atomically.
-  // Type cast required because Database type stubs don't include
-  // create_order_atomic yet (will be resolved when types are regenerated).
+  // ── 8. Call atomic PostgreSQL function ───────────────────
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const adminAny = admin as any;
   const { data: rpcResult, error: rpcError } = await adminAny.rpc(
@@ -280,9 +273,10 @@ export async function placeOrderAction(
       p_total_amount: totalAmount,
       p_currency: "INR",
       p_idempotency_key: idempotencyKey,
+      p_payment_method: paymentMethod,
+      p_cod_fee: codFee,
     }
   ) as { data: unknown; error: { message: string } | null };
-
 
   if (rpcError) {
     console.error("[RFC Store] Order RPC error:", rpcError.message);
@@ -311,9 +305,7 @@ export async function placeOrderAction(
     return { success: false, error: "Order creation failed. Please try again." };
   }
 
-  // ── 8. Fire notification (non-blocking) ─────────────────
-  // notifyOrderCreated is safe to fire-and-forget: it catches its own errors.
-  // Email/SMS will activate once provider credentials are configured in .env.
+  // ── 9. Fire notification (non-blocking) ──────────────────
   void notifyOrderCreated({
     orderNumber: result.order_number!,
     orderId: result.order_id!,
@@ -322,6 +314,8 @@ export async function placeOrderAction(
     customerPhone: formData.phone.trim() || undefined,
     totalAmount,
     currency: "INR",
+    paymentMethod,
+    codFee,
     items: validatedItems.map((i) => ({
       productName: i.productName,
       variantName: i.variantName,
@@ -331,24 +325,12 @@ export async function placeOrderAction(
     shippingAddress: shippingAddressSnapshot,
   });
 
-  // ── 9. Payment-ready state ───────────────────────────────
-  // PAYMENT GATEWAY: NOT YET CONNECTED.
-  // Integration point: Initialize Razorpay/Cashfree here after order creation.
-  //
-  // Example (Razorpay):
-  //   const razorpayOrder = await razorpay.orders.create({
-  //     amount: Math.round(totalAmount * 100), // paise
-  //     currency: 'INR',
-  //     receipt: result.order_number,
-  //   });
-  //   return { success: true, orderId: result.order_id, razorpayOrderId: razorpayOrder.id, ... };
-  //
-  // Order is created in 'pending' state until payment is confirmed.
-
   return {
     success: true,
     orderNumber: result.order_number,
     orderId: result.order_id,
     totalAmount,
+    paymentMethod,
+    codFee,
   };
 }

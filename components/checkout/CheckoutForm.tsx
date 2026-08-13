@@ -285,14 +285,33 @@ export function CheckoutForm({
         </div>
       )}
 
-      {/* ── Payment Notice ───────────────────────────────── */}
-      <div className={styles.paymentNotice}>
-        <LockIcon />
-        <span>
-          <strong>Payment gateway coming soon.</strong>{" "}
-          Placing this order saves your order details securely.
-          You will be contacted for payment confirmation.
-        </span>
+      {/* ── Payment Method: Cash on Delivery ─────────── */}
+      <div className={styles.codBlock}>
+        <div className={styles.codHeader}>
+          <span className={styles.codIcon}>💵</span>
+          <div>
+            <p className={styles.codTitle}>Cash on Delivery</p>
+            <p className={styles.codSubtitle}>Pay when your order arrives. No advance required.</p>
+          </div>
+          <span className={styles.codBadge}>✓ Available</span>
+        </div>
+        <div className={styles.codDetails}>
+          <div className={styles.codRow}>
+            <span className={styles.codLabel}>COD Handling Fee</span>
+            <span className={styles.codValue}>₹99</span>
+          </div>
+          <div className={styles.codRow}>
+            <span className={styles.codLabel}>Free Shipping on orders above</span>
+            <span className={styles.codValue}>₹999</span>
+          </div>
+          <div className={styles.codRow}>
+            <span className={styles.codLabel}>Standard Shipping</span>
+            <span className={styles.codValue}>₹99</span>
+          </div>
+        </div>
+        <p className={styles.codNote}>
+          Keep exact change ready at the time of delivery. Our delivery partner will collect payment.
+        </p>
       </div>
 
       {/* ── Submit ───────────────────────────────────────── */}

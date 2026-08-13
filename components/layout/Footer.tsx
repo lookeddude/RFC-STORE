@@ -72,9 +72,9 @@ export function Footer() {
 /* ── Static Data ─────────────────────────────────────────── */
 
 const SUPPORT_LINKS = [
-  { label: "Terms of Service", href: "/terms" },
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Shipping & Returns", href: "/shipping" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms & Conditions", href: "/terms" },
+  { label: "Returns", href: "/returns" },
+  { label: "Shipping", href: "/shipping-policy" },
   { label: "Contact Us", href: "/contact" },
-  { label: "Wholesale", href: "/wholesale" },
 ] as const;

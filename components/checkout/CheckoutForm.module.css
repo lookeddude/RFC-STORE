@@ -228,3 +228,93 @@
   color: var(--rfc-text-subtle);
   text-align: center;
 }
+
+/* ── COD Payment Block ────────────────────────────────── */
+.codBlock {
+  border: 1.5px solid #22c55e;
+  border-radius: var(--radius-md, 8px);
+  background: #f0fdf4;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.codHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.codIcon {
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.codTitle {
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 700;
+  color: #15803d;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.codSubtitle {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: #166534;
+  margin-top: 2px;
+}
+
+.codBadge {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 3px 10px;
+  background: #22c55e;
+  color: #fff;
+  border-radius: 20px;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.codDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 0;
+  border-top: 1px solid #bbf7d0;
+  border-bottom: 1px solid #bbf7d0;
+}
+
+.codRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.codLabel {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: #166534;
+}
+
+.codValue {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.codNote {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #166534;
+  line-height: 1.5;
+}

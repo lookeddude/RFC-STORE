@@ -255,17 +255,28 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
                 <div className={styles.statusItem}>
                   <span className={styles.statusLabel}>Payment</span>
                   <span className={`${styles.statusBadge} ${styles[`pay_${order.payment_status}`]}`}>
-                    {order.payment_status === "pending" ? "Awaiting Payment" : order.payment_status}
+                    {order.payment_status === "pending" ? "Pay on Delivery" : order.payment_status}
                   </span>
                 </div>
               </div>
 
-              {/* Payment notice */}
-              <div className={styles.paymentNote}>
-                <span>💳</span>
-                <span>
-                  Payment gateway integration coming soon. Our team will reach out to process payment for order <strong>{order.order_number}</strong>.
-                </span>
+              {/* COD Payment Info */}
+              <div className={styles.codPaymentBlock}>
+                <div className={styles.codPaymentHeader}>
+                  <span className={styles.codPaymentIcon}>💵</span>
+                  <div>
+                    <p className={styles.codPaymentTitle}>Cash on Delivery</p>
+                    <p className={styles.codPaymentText}>
+                      Keep <strong>₹{Number(order.total_amount).toLocaleString('en-IN')}</strong> ready when your order arrives.
+                    </p>
+                  </div>
+                </div>
+                <ul className={styles.codSteps}>
+                  <li>✓ Order placed &amp; confirmed</li>
+                  <li>⏳ Processing &amp; dispatch (2–3 days)</li>
+                  <li>🚚 Out for delivery</li>
+                  <li>💵 Pay on delivery &amp; receive</li>
+                </ul>
               </div>
             </section>
 

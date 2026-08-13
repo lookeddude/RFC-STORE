@@ -69,6 +69,17 @@ export default async function AdminOrderDetailPage({
           <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
             <AdminBadge label={oStatus.label} variant={oStatus.variant} size="md" />
             <AdminBadge label={pStatus.label} variant={pStatus.variant} size="md" />
+            {order.payment_method === 'cod' && (
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: '4px',
+                padding: '3px 10px', background: '#f0fdf4', color: '#15803d',
+                border: '1px solid #22c55e', borderRadius: '4px',
+                fontFamily: 'var(--font-label)', fontSize: '11px', fontWeight: 700,
+                textTransform: 'uppercase', letterSpacing: '0.05em',
+              }}>
+                💵 Cash on Delivery
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -149,6 +160,19 @@ export default async function AdminOrderDetailPage({
             <div style={{ marginTop: 14 }}>
               <p className={detailStyles.fieldLabel}>Payment Status</p>
               <AdminBadge label={pStatus.label} variant={pStatus.variant} size="md" />
+              {order.payment_method === 'cod' && order.payment_status === 'pending' && (
+                <form action={`/api/admin/orders/${order.id}/mark-paid`} method="POST" style={{display:'inline', marginLeft: '12px'}}>
+                  <button type="submit" style={{
+                    padding: '8px 16px',
+                    background: '#15803d', color: '#fff', border: 'none',
+                    borderRadius: '6px', fontFamily: 'var(--font-label)',
+                    fontSize: '12px', fontWeight: 700, textTransform: 'uppercase',
+                    letterSpacing: '0.05em', cursor: 'pointer',
+                  }}>
+                    ✓ Mark as Paid (COD)
+                  </button>
+                </form>
+              )}
               <p className={detailStyles.readonlyHint}>
                 Payment status is set by the payment provider and cannot be manually changed.
               </p>

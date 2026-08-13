@@ -1,20 +1,18 @@
 /**
- * RFC Store — Shipping Configuration
+ * RFC Store — Shipping & Payment Configuration
  *
- * Isolated shipping rate config.
- * Replace this entire file with a proper shipping engine in Phase 7.
- *
- * Current model: flat-rate based on order subtotal.
- *   FREE shipping above FREE_SHIPPING_THRESHOLD
- *   STANDARD_RATE below threshold
- *
- * This matches the CartSummary promise made in Phase 5.
+ * Single source of truth for:
+ *   - Free shipping threshold
+ *   - Standard shipping rate
+ *   - COD (Cash on Delivery) fee
+ *   - Tax rate (pending GST registration)
+ *   - Estimated delivery times
  */
 
 export const SHIPPING_CONFIG = {
   /** Subtotal above which shipping is free (in INR) */
-  FREE_SHIPPING_THRESHOLD: 5000,
-  /** Standard flat shipping rate (in INR) */
+  FREE_SHIPPING_THRESHOLD: 999,
+  /** Standard flat shipping rate below threshold (in INR) */
   STANDARD_RATE: 99,
   /** Currency */
   CURRENCY: "INR",
@@ -24,15 +22,27 @@ export const SHIPPING_CONFIG = {
 } as const;
 
 /**
+ * COD (Cash on Delivery) Configuration
+ *
+ * COD_FEE is added to the order total for COD orders.
+ * Set to 0 to offer free COD.
+ * Displayed clearly to customer on checkout.
+ */
+export const COD_CONFIG = {
+  /** COD handling fee (in INR). Added to order total for COD orders. */
+  FEE: 99,
+  /** Display label shown to customer */
+  FEE_LABEL: "COD Handling Fee",
+  /** Whether COD is currently available */
+  ENABLED: true,
+} as const;
+
+/**
  * Tax Configuration
  *
- * TODO Phase 7: Replace with proper GST calculation based on product HSN codes.
- * Current: 0% tax pending business confirmation of:
- *   - GST registration status
- *   - Product HSN code (determines slab: 5%/12%/18%/28%)
- *   - B2C vs B2B distinction
- *
- * DO NOT change this value without business/legal confirmation.
+ * TODO: Replace with proper GST calculation based on product HSN codes
+ * once GST registration is confirmed.
+ * DO NOT change RATE without business/legal confirmation.
  */
 export const TAX_CONFIG = {
   /** Tax rate as decimal (0 = 0%, 0.18 = 18% GST) */
@@ -54,6 +64,15 @@ export function calculateShipping(subtotal: number): number {
 }
 
 /**
+ * Calculates COD fee for an order.
+ * Returns 0 for non-COD payment methods.
+ */
+export function calculateCodFee(paymentMethod: string): number {
+  if (!COD_CONFIG.ENABLED) return 0;
+  return paymentMethod === "cod" ? COD_CONFIG.FEE : 0;
+}
+
+/**
  * Calculates tax amount for a given subtotal.
  */
 export function calculateTax(subtotal: number): number {
@@ -61,13 +80,14 @@ export function calculateTax(subtotal: number): number {
 }
 
 /**
- * Calculates the final order total.
+ * Calculates the final order total including COD fee.
  */
 export function calculateTotal(
   subtotal: number,
   shippingAmount: number,
   taxAmount: number,
-  discountAmount: number
+  discountAmount: number,
+  codFee: number = 0
 ): number {
-  return Math.max(0, subtotal + shippingAmount + taxAmount - discountAmount);
+  return Math.max(0, subtotal + shippingAmount + taxAmount + codFee - discountAmount);
 }

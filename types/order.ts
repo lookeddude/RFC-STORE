@@ -17,6 +17,7 @@ export type OrderStatus =
   | "refunded";
 
 export type PaymentStatus = "pending" | "paid" | "failed" | "refunded";
+export type PaymentMethod = "cod" | "razorpay" | "cashfree" | "stripe" | "manual";
 
 // ── Checkout Form Data ─────────────────────────────────────
 
@@ -81,8 +82,10 @@ export interface OrderSummary {
   shippingAmount: number;
   taxAmount: number;
   discountAmount: number;
+  codFee: number;
   totalAmount: number;
   currency: string;
+  paymentMethod: PaymentMethod;
 }
 
 // ── Server Action Input/Output ─────────────────────────────
@@ -112,6 +115,8 @@ export interface PlaceOrderResult {
   orderNumber?: string;
   orderId?: string;
   totalAmount?: number;
+  paymentMethod?: string;
+  codFee?: number;
   /** Human-readable error for display */
   error?: string;
   /** Field-level validation errors */
@@ -125,6 +130,7 @@ export interface OrderRecord {
   orderNumber: string;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
+  paymentMethod: PaymentMethod;
   customerName: string;
   customerEmail: string;
   customerPhone: string;
@@ -133,8 +139,11 @@ export interface OrderRecord {
   shippingAmount: number;
   taxAmount: number;
   discountAmount: number;
+  codFee: number;
   totalAmount: number;
   currency: string;
+  trackingNumber: string | null;
+  trackingCourier: string | null;
   createdAt: string;
   items: OrderItemRecord[];
 }
