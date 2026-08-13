@@ -21,7 +21,7 @@
  */
 import type { Metadata } from "next";
 import {
-  HeroSection,
+  HeroSlideshow,
   OfferStrip,
   CategoryRail,
   BestDeals,
@@ -50,10 +50,9 @@ export default function HomePage() {
       {/*
        * Hero is full-viewport — it sits flush against navbar.
        * Negative margin = navbar height (64px mobile, 72px desktop).
-       * Mobile: 75vh | Desktop: 100vh (controlled inside HeroSection)
        */}
       <div style={{ marginTop: "calc(-1 * var(--navbar-height, 64px))" }}>
-        <HeroSection />
+        <HeroSlideshow />
       </div>
 
       {/* Offer Strip — 4px gap from hero */}

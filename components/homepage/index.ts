@@ -1,5 +1,6 @@
 export { AnnouncementBar } from "./AnnouncementBar";
 export { HeroSection } from "./HeroSection";
+export { HeroSlideshow } from "./HeroSlideshow";
 export { OfferStrip } from "./OfferStrip";
 export { DisciplineGrid } from "./DisciplineGrid";
 export { FeaturedGear } from "./FeaturedGear";

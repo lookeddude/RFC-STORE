@@ -1,0 +1,307 @@
+/*
+ * RFC Store — Hero Slideshow Client CSS Module
+ */
+
+.slideshow {
+  position: relative;
+  width: 100%;
+  min-height: var(--hero-min-height, 60vh);
+  background-color: var(--rfc-dark, #111827);
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .slideshow {
+    min-height: var(--hero-min-height, 100vh);
+  }
+}
+
+/* ── Track & Slide ───────────────────────────────────────── */
+.slideTrack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s ease;
+}
+
+.slideActive {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* Transition Styles */
+.style-fade.slide {
+  transition: opacity var(--trans-speed, 600ms) ease;
+}
+
+.style-slide.slide {
+  transform: translateX(100%);
+  transition: transform var(--trans-speed, 600ms) cubic-bezier(0.4, 0, 0.2, 1), opacity var(--trans-speed, 600ms) ease;
+}
+
+.style-slide.slideActive {
+  transform: translateX(0);
+}
+
+.style-zoom.slide {
+  transform: scale(1.06);
+  transition: transform var(--trans-speed, 600ms) ease, opacity var(--trans-speed, 600ms) ease;
+}
+
+.style-zoom.slideActive {
+  transform: scale(1);
+}
+
+.style-crossfade.slide {
+  transition: opacity var(--trans-speed, 600ms) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.style-none.slide {
+  transition: none !important;
+}
+
+/* ── Picture / Image ─────────────────────────────────────── */
+.pictureWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.slideImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ── Overlay ─────────────────────────────────────────────── */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.overlay-none {
+  background: transparent;
+}
+
+.overlay-low {
+  background: linear-gradient(
+    to right,
+    rgba(17, 24, 39, 0.55) 0%,
+    rgba(17, 24, 39, 0.2) 60%,
+    transparent 100%
+  );
+}
+
+.overlay-medium {
+  background: linear-gradient(
+    to right,
+    rgba(17, 24, 39, 0.85) 0%,
+    rgba(17, 24, 39, 0.5) 50%,
+    rgba(17, 24, 39, 0.15) 80%,
+    transparent 100%
+  );
+}
+
+.overlay-high {
+  background: linear-gradient(
+    to right,
+    rgba(17, 24, 39, 0.95) 0%,
+    rgba(17, 24, 39, 0.75) 60%,
+    rgba(17, 24, 39, 0.4) 100%
+  );
+}
+
+/* ── Content ─────────────────────────────────────────────── */
+.contentContainer {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: var(--container-max, 1400px);
+  margin-inline: auto;
+  padding: clamp(24px, 5vw, 64px) clamp(16px, 4vw, 64px);
+  color: var(--rfc-text-inv, #F9FAFB);
+  display: flex;
+}
+
+.pos-left { justify-content: flex-start; }
+.pos-center { justify-content: center; }
+.pos-right { justify-content: flex-end; }
+
+.contentBox {
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+}
+
+.align-left { align-items: flex-start; text-align: left; }
+.align-center { align-items: center; text-align: center; }
+.align-right { align-items: flex-end; text-align: right; }
+
+.eyebrow {
+  font-family: var(--font-label, 'Inter');
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rfc-accent, #E63946);
+  margin-bottom: 14px;
+}
+
+.heading {
+  font-family: var(--font-headline, 'Archivo Narrow');
+  font-size: clamp(38px, 7.5vw, 92px);
+  font-weight: 900;
+  line-height: 0.92;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  color: var(--rfc-text-inv, #F9FAFB);
+  margin-bottom: 20px;
+}
+
+.description {
+  font-family: var(--font-body, 'Inter');
+  font-size: clamp(14px, 1.8vw, 17px);
+  line-height: 1.6;
+  color: var(--rfc-text-inv-muted, #9CA3AF);
+  margin-bottom: 32px;
+  max-width: 480px;
+}
+
+.btnGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding-inline: 32px;
+  background-color: var(--rfc-accent, #E63946);
+  color: #ffffff;
+  font-family: var(--font-label, 'Inter');
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-sharp, 2px);
+  box-shadow: 0 4px 16px rgba(230, 57, 70, 0.35);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.btnPrimary:hover {
+  background-color: var(--rfc-accent-dark, #C81D28);
+  transform: translateY(-1px);
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding-inline: 32px;
+  background-color: transparent;
+  color: var(--rfc-text-inv, #F9FAFB);
+  font-family: var(--font-label, 'Inter');
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-sharp, 2px);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btnSecondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+}
+
+/* ── Navigation Controls ─────────────────────────────────── */
+.navArrows {
+  position: absolute;
+  inset-inline: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.arrowBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.arrowBtn:hover {
+  background: var(--rfc-accent, #E63946);
+  border-color: var(--rfc-accent, #E63946);
+  transform: scale(1.05);
+}
+
+/* Dots */
+.dotsContainer {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.25s ease;
+}
+
+.dotActive {
+  width: 28px;
+  border-radius: 6px;
+  background: var(--rfc-accent, #E63946);
+}

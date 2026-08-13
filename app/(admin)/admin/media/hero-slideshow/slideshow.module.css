@@ -1,0 +1,272 @@
+/*
+ * RFC Store — Admin Hero Slideshow CSS Module
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-family: var(--font-headline);
+  font-size: 24px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #111827;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-primary, #0A0E14);
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.addBtn:hover {
+  background: #1F2937;
+  transform: translateY(-1px);
+}
+
+.slideList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.slideCard {
+  display: grid;
+  grid-template-columns: 36px 100px 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 14px 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.slideCard:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.slideCard.dragging {
+  opacity: 0.5;
+  border-style: dashed;
+  background: #f9fafb;
+}
+
+.dragHandle {
+  cursor: grab;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.dragHandle:hover {
+  color: #374151;
+  background: #f3f4f6;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.thumbWrap {
+  position: relative;
+  width: 100px;
+  height: 56px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #1f2937;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.thumbImg {
+  object-fit: cover;
+}
+
+.thumbPlaceholder {
+  font-size: 20px;
+}
+
+.slideMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.slideName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.slideDetails {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #6b7280;
+  flex-wrap: wrap;
+}
+
+.deviceBadges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.deviceBadge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.deviceActive {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.deviceMissing {
+  background: #f3f4f6;
+  color: #9ca3af;
+}
+
+.statusWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editBtn {
+  padding: 6px 14px;
+  background: #f3f4f6;
+  color: #374151;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.editBtn:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.iconBtn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #111827;
+}
+
+.dangerBtn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  background: #ffffff;
+  border: 2px dashed #e5e7eb;
+  border-radius: 12px;
+  text-align: center;
+  gap: 12px;
+}
+
+.emptyIcon {
+  color: #9ca3af;
+}
+
+.emptyTitle {
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.emptyDesc {
+  font-size: 14px;
+  color: #6b7280;
+  max-width: 400px;
+}
