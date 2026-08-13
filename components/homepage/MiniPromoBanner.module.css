@@ -1,0 +1,108 @@
+/*
+ * RFC Store — Mini Promo Banner
+ * Compact dark strip. Not a hero. Quick brand moment.
+ */
+
+.banner {
+  position: relative;
+  background-color: var(--rfc-dark);
+  overflow: hidden;
+  padding-block: clamp(24px, 3vw, 36px);
+}
+
+/* Subtle diagonal stripe texture */
+.pattern {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255,255,255,0.015) 0px,
+    rgba(255,255,255,0.015) 1px,
+    transparent 1px,
+    transparent 12px
+  );
+  pointer-events: none;
+}
+
+/* ── Inner layout ────────────────────────────────────── */
+.inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+  padding-inline: clamp(20px, 5vw, 80px);
+  max-width: var(--container-max, 1400px);
+  margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+  }
+}
+
+/* ── Content (left side) ─────────────────────────────── */
+.content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.accentBar {
+  display: block;
+  width: 4px;
+  height: 40px;
+  background: var(--rfc-accent);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.headline {
+  font-family: var(--font-headline);
+  font-size: clamp(18px, 3vw, 28px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--rfc-text-inv);
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.subtext {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--rfc-text-inv-muted);
+  line-height: 1.5;
+}
+
+/* ── CTA ─────────────────────────────────────────────── */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding-inline: 28px;
+  background-color: var(--rfc-accent);
+  color: #ffffff;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-sharp);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.cta:hover {
+  background-color: var(--rfc-accent-dark);
+  box-shadow: 0 4px 12px rgba(230,57,70,0.35);
+}

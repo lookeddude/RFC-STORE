@@ -18,7 +18,7 @@ export function HeroSection() {
       style={{
         position: "relative",
         width: "100%",
-        minHeight: "100vh",
+        minHeight: "var(--hero-min-height, 100vh)",
         backgroundColor: "var(--rfc-dark)",
         display: "flex",
         alignItems: "center",
@@ -26,6 +26,11 @@ export function HeroSection() {
       }}
       aria-label="Hero — Built For The Fight"
     >
+      {/* Responsive hero height: 75vh on mobile, 100vh on desktop */}
+      <style>{`
+        :root { --hero-min-height: 75vh; }
+        @media (min-width: 768px) { :root { --hero-min-height: 100vh; } }
+      `}</style>
       {/* Background Image */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         <Image
@@ -183,6 +188,39 @@ export function HeroSection() {
             </Link>
           </div>
         </div>
+      </div>
+
+      {/* Scroll hint chevron — mobile only */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "24px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 3,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "4px",
+          animation: "hero-bounce 2s ease-in-out infinite",
+        }}
+        aria-hidden="true"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" opacity="0.6">
+          <path d="M5 8l5 5 5-5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        <style>{`
+          @keyframes hero-bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(5px); }
+          }
+          @media (min-width: 768px) {
+            [aria-label="Hero — Built For The Fight"] > div:last-child { display: none; }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            @keyframes hero-bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } }
+          }
+        `}</style>
       </div>
     </section>
   );

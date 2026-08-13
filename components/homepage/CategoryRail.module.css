@@ -1,0 +1,156 @@
+/*
+ * RFC Store — Category Rail
+ * Mobile: horizontal scroll circles. Desktop: card row.
+ */
+
+.section {
+  background-color: var(--rfc-surface);
+  padding-block: 32px 36px;
+  border-bottom: 1px solid var(--rfc-border);
+}
+
+/* ── Header ─────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: clamp(16px, 4vw, 64px);
+  margin-bottom: 20px;
+}
+
+.heading {
+  font-family: var(--font-headline);
+  font-size: clamp(17px, 2.5vw, 22px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--rfc-text);
+  line-height: 1;
+}
+
+.viewAll {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rfc-accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.viewAll:hover { gap: 8px; }
+
+/* ── Rail Outer (scroll wrapper) ────────────────────── */
+.railOuter {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-inline: clamp(16px, 4vw, 64px);
+  padding-bottom: 8px;
+}
+
+.railOuter::-webkit-scrollbar { display: none; }
+
+/* ── Rail (flex row) ────────────────────────────────── */
+.rail {
+  display: flex;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* Let it be wider than viewport on mobile */
+  width: max-content;
+}
+
+@media (min-width: 768px) {
+  .rail {
+    width: 100%;
+    flex-wrap: nowrap;
+    gap: 16px;
+  }
+}
+
+/* ── Item ───────────────────────────────────────────── */
+.item {
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .item { flex: 1; }
+}
+
+/* ── Card (link wrapper) ────────────────────────────── */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ── Circle ─────────────────────────────────────────── */
+.circle {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--rfc-dark-surface, #1F2937);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  border: 2px solid transparent;
+}
+
+.card:hover .circle {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  border-color: var(--rfc-accent);
+}
+
+@media (min-width: 768px) {
+  /* Desktop: larger circles */
+  .circle {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* ── Emoji fallback ─────────────────────────────────── */
+.emoji {
+  font-size: 28px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Name ───────────────────────────────────────────── */
+.name {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rfc-text);
+  text-align: center;
+  line-height: 1.2;
+  max-width: 76px;
+  white-space: normal;
+  transition: color var(--transition-fast);
+}
+
+.card:hover .name { color: var(--rfc-accent); }
+
+@media (min-width: 768px) {
+  .name { font-size: 11px; max-width: 90px; }
+}

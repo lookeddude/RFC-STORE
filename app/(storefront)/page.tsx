@@ -1,17 +1,21 @@
 /**
  * RFC Store — Homepage
  *
- * Production implementation of the RFC Storefront Homepage.
- * Faithfully translates the approved Stitch design (Project 6383426045060807708).
+ * Commerce-first homepage inspired by serious sports-retail UX.
  *
- * Section order (matches Stitch):
- *   1. HeroSection       — Full-screen dark arena, "BUILT FOR THE FIGHT."
- *   2. DisciplineGrid    — Shop by Discipline bento grid
- *   3. FeaturedGear      — 4 featured product cards
- *   4. EditorialBanner   — "ENGINEERED FOR IMPACT." dark campaign section
+ * Section order:
+ *   1. HeroSection       — 75vh mobile / 100vh desktop fighter image
+ *   2. OfferStrip        — animated marquee benefits
+ *   3. CategoryRail      — swipeable circles mobile / card row desktop
+ *   4. BestDeals         — products with compare_at_price (discounted)
+ *   5. MiniPromoBanner   — compact dark promo strip
+ *   6. BestSellers       — is_bestseller products
+ *   7. NewArrivals       — is_new_arrival products (newest fallback)
+ *   8. TrustBar          — 4 value propositions
+ *   9. EditorialBanner   — brand story + fighter image
  *
- * All content is driven from lib/content/homepage.content.ts.
- * SEO metadata from config/site.ts.
+ * All product data fetched in parallel with Promise.all.
+ * Each section gracefully hides if its data is empty.
  *
  * Server Component — no "use client" required.
  */
@@ -19,8 +23,12 @@ import type { Metadata } from "next";
 import {
   HeroSection,
   OfferStrip,
-  DisciplineGrid,
-  FeaturedGear,
+  CategoryRail,
+  BestDeals,
+  MiniPromoBanner,
+  BestSellers,
+  NewArrivals,
+  TrustBar,
   EditorialBanner,
 } from "@/components/homepage";
 
@@ -43,23 +51,41 @@ export default function HomePage() {
        * Hero is full-viewport — it sits flush against navbar.
        * The -80px margin cancels the storefront layout's padding-top
        * so the hero fills edge-to-edge behind the navbar.
+       * Mobile: 75vh | Desktop: 100vh (controlled inside HeroSection)
        */}
       <div style={{ marginTop: "-80px" }}>
         <HeroSection />
       </div>
 
-      {/* Offer Strip — separated from hero with a small gap */}
+      {/* Offer Strip — 4px gap from hero */}
       <div style={{ marginTop: "4px" }}>
         <OfferStrip />
       </div>
 
-      {/* Shop by Discipline — Bento Grid */}
-      <DisciplineGrid />
+      {/* Category Rail — swipeable circles on mobile */}
+      <CategoryRail />
 
-      {/* Featured Gear — Product Card Grid */}
-      <FeaturedGear />
+      {/* Best Deals — discounted products */}
+      <BestDeals />
 
-      {/* Dark Editorial Campaign Section */}
+      {/* Mini Promo Banner — compact dark strip */}
+      <MiniPromoBanner
+        headline="TRAIN HARD. GEAR HARDER."
+        subtext="Professional combat sports gear engineered for those who refuse to quit."
+        ctaLabel="SHOP ALL GEAR"
+        ctaHref="/shop"
+      />
+
+      {/* Best Sellers — flagship products */}
+      <BestSellers />
+
+      {/* New Arrivals — freshest products */}
+      <NewArrivals />
+
+      {/* Trust Bar — value propositions */}
+      <TrustBar />
+
+      {/* Brand Editorial + campaign image */}
       <EditorialBanner />
     </>
   );

@@ -376,3 +376,98 @@ export async function getFeaturedProducts(
   const { products } = await getProducts({}, "featured", 1, limit);
   return products.filter((p) => p.isFeatured).slice(0, limit);
 }
+
+/**
+ * Fetches products on sale (compare_at_price is set) for the Best Deals section.
+ * Sorted by biggest discount percentage descending.
+ */
+export async function getBestDeals(
+  limit = 8
+): Promise<ProductCardType[]> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("products")
+      .select(PRODUCT_CARD_SELECT)
+      .eq("is_active", true)
+      .not("compare_at_price", "is", null)
+      .order("compare_at_price", { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.error("[getBestDeals] Supabase error:", error.message);
+      return [];
+    }
+
+    return (data as unknown as DBProduct[]).map(mapProductCard);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Fetches bestselling products (is_bestseller = true) for the Best Sellers section.
+ * Falls back to featured products if none are flagged.
+ */
+export async function getBestsellers(
+  limit = 4
+): Promise<ProductCardType[]> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("products")
+      .select(PRODUCT_CARD_SELECT)
+      .eq("is_active", true)
+      .eq("is_bestseller", true)
+      .order("created_at", { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.error("[getBestsellers] Supabase error:", error.message);
+      return [];
+    }
+
+    // Fallback to featured products if none flagged as bestseller
+    if (!data || data.length === 0) {
+      return getFeaturedProducts(limit);
+    }
+
+    return (data as unknown as DBProduct[]).map(mapProductCard);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Fetches new arrival products (is_new_arrival = true) for the New Arrivals section.
+ * Falls back to most recently created products if none are flagged.
+ */
+export async function getNewArrivals(
+  limit = 6
+): Promise<ProductCardType[]> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("products")
+      .select(PRODUCT_CARD_SELECT)
+      .eq("is_active", true)
+      .eq("is_new_arrival", true)
+      .order("created_at", { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.error("[getNewArrivals] Supabase error:", error.message);
+      return [];
+    }
+
+    // Fallback: return most recently added active products
+    if (!data || data.length === 0) {
+      const { products } = await getProducts({}, "newest", 1, limit);
+      return products;
+    }
+
+    return (data as unknown as DBProduct[]).map(mapProductCard);
+  } catch {
+    return [];
+  }
+}

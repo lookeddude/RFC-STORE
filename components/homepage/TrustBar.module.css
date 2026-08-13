@@ -1,0 +1,69 @@
+/*
+ * RFC Store — Trust Bar
+ * Light white row. Compact. 4-col desktop, 2-col mobile.
+ */
+
+.bar {
+  background-color: var(--rfc-surface);
+  border-top: 1px solid var(--rfc-border);
+  border-bottom: 1px solid var(--rfc-border);
+  padding-block: 24px;
+  padding-inline: clamp(16px, 4vw, 64px);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: var(--container-max, 1400px);
+  margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .list { grid-template-columns: repeat(4, 1fr); gap: 0; }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .item {
+    justify-content: center;
+    border-right: 1px solid var(--rfc-border);
+    padding-inline: 12px;
+  }
+  .item:last-child { border-right: none; }
+}
+
+.icon {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--rfc-text);
+  line-height: 1.2;
+}
+
+.desc {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--rfc-text-muted);
+  line-height: 1.3;
+}
