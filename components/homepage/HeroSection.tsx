@@ -34,18 +34,34 @@ export function HeroSection() {
           fill
           priority
           sizes="100vw"
-          style={{ objectFit: "cover", opacity: 0.55 }}
+          style={{
+            objectFit: "cover",
+            objectPosition: "right center",
+            opacity: 0.72,
+          }}
         />
       </div>
 
-      {/* Subtle bottom gradient — anchors text to base */}
+      {/* Directional gradient — heavy left for text, lighter right for fighter */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           zIndex: 1,
-          background:
-            "linear-gradient(to top, rgba(17,24,39,0.65) 0%, rgba(17,24,39,0.1) 60%, transparent 100%)",
+          background: `
+            linear-gradient(
+              to right,
+              rgba(17,24,39,0.88) 0%,
+              rgba(17,24,39,0.55) 42%,
+              rgba(17,24,39,0.15) 72%,
+              transparent 100%
+            ),
+            linear-gradient(
+              to top,
+              rgba(17,24,39,0.5) 0%,
+              transparent 40%
+            )
+          `,
         }}
         aria-hidden="true"
       />

@@ -38,8 +38,8 @@ export const HERO_CONTENT: HeroContent = {
   primaryCta: { label: "SHOP NOW", href: "/shop" },
   secondaryCta: { label: "EXPLORE COLLECTION", href: "/categories" },
   image: {
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDt-kRal9mweE9dqDRHvai8qz4gII8WL8MqIpzIsCCrNZkxZFgFmlnWODUc8mqckRvxU2UkgbYIT2aMtVu3oIctGeOwDzQs4Dof2vg8mT7GmzD1Qf20ItupSRp-lwqMgLxxLzIalxEeECK5ddzuo7hX1N_RjrkVSNwySZvtp216glbSRqyeOxUQN9E9kKQdfneLlOEABp0eFZjDBN7vfePGoBufzMXzB6_NDRLW3L2p6Kofhzzq4K-G",
-    alt: "A high-contrast, dramatic shot of an MMA fighter wrapping their hands in a dimly lit, authentic training gym. Strong directional lighting highlights the muscle definition and the texture of the hand wraps. The mood is intense, focused, and gritty.",
+    src: "/hero-fighter.jpg",
+    alt: "Professional boxer in a powerful fighting stance inside an authentic boxing gym with hanging heavy bags and brick walls — RFC Store premium combat sports campaign.",
   },
 };
 
