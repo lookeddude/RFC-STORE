@@ -1,179 +1,178 @@
 /*
- * RFC Store — Dashboard Client Styles (Phase 7)
- * Bento grid layout matching Stitch "RFC Account Dashboard" design.
+ * RFC Store — Account Dashboard Client Styles (Redesigned)
+ * Two-column editorial layout
  */
 
-/* ── Bento Grid ──────────────────────────────────────────── */
+/* ── Main grid ───────────────────────────────────────────── */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 24px;
 }
 
 @media (min-width: 900px) {
   .grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 320px;
+    gap: 28px;
   }
 }
 
-/* ── Card ────────────────────────────────────────────────── */
-.card {
-  background: var(--rfc-surface);
-  border: 1px solid var(--rfc-border);
-  border-radius: var(--radius-md);
-  padding: 24px;
-  transition: box-shadow var(--transition-base);
-}
-
-.card:hover {
-  box-shadow: var(--shadow-card-hover);
-}
-
-.cardHeader {
+/* ── Section Header ──────────────────────────────────────── */
+.sectionHead {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
-.cardTitle {
-  font-family: var(--font-headline);
-  font-size: 18px;
-  font-weight: 700;
+.sectionTitle {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: var(--rfc-text);
+  letter-spacing: 0.09em;
+  color: var(--rfc-text-subtle);
 }
 
-.cardLink {
+.sectionLink {
   font-family: var(--font-label);
   font-size: 12px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--rfc-accent);
+  color: var(--rfc-text-muted);
   text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color var(--transition-fast);
 }
 
-.cardLink:hover {
-  text-decoration: underline;
+.sectionLink:hover {
+  color: var(--rfc-accent);
 }
 
-/* ── Recent Order Card ───────────────────────────────────── */
-.orderMeta {
-  font-family: var(--font-body);
+/* ── Order Card ──────────────────────────────────────────── */
+.orderSection {}
+
+.orderCard {
+  background: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: box-shadow var(--transition-fast);
+}
+
+.orderCard:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.orderTopRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--rfc-border);
+  gap: 12px;
+}
+
+.orderNumber {
+  font-family: var(--font-label);
   font-size: 14px;
+  font-weight: 700;
+  color: var(--rfc-text);
+  letter-spacing: 0.02em;
+}
+
+.orderDate {
+  font-family: var(--font-body);
+  font-size: 12px;
   color: var(--rfc-text-muted);
   margin-top: 2px;
 }
 
-.statusBadge {
+/* ── Status Pills ────────────────────────────────────────── */
+.statusPill {
   display: inline-flex;
+  align-items: center;
   padding: 3px 10px;
-  border-radius: var(--radius-sm);
+  border-radius: 20px;
   font-family: var(--font-label);
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  background: var(--rfc-accent);
-  color: var(--rfc-text-inv);
+  white-space: nowrap;
 }
 
-.orderProduct {
+.status_pending    { background: #fef9c3; color: #854d0e; }
+.status_confirmed  { background: #dbeafe; color: #1e40af; }
+.status_processing { background: #ede9fe; color: #5b21b6; }
+.status_shipped    { background: #dcfce7; color: #166534; }
+.status_delivered  { background: #d1fae5; color: #065f46; }
+.status_cancelled  { background: #fee2e2; color: #991b1b; }
+
+/* ── Order Body ──────────────────────────────────────────── */
+.orderBody {
+  padding: 16px 20px;
+}
+
+.orderIconRow {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 16px 0;
-  border-top: 1px solid var(--rfc-border);
-  border-bottom: 1px solid var(--rfc-border);
-  margin-bottom: 16px;
 }
 
-.orderProductIcon {
+.orderIconThumb {
   width: 56px;
-  height: 64px;
-  background: var(--rfc-border);
+  height: 56px;
+  background: var(--rfc-bg);
+  border: 1px solid var(--rfc-border);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--rfc-text-subtle);
   flex-shrink: 0;
-  color: var(--rfc-text-muted);
-  font-size: 24px;
 }
 
-.orderProductName {
+.orderDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.orderItemCount {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--rfc-text-muted);
+}
+
+.orderTotal {
   font-family: var(--font-label);
-  font-size: 13px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--rfc-text);
-  margin-bottom: 3px;
+  letter-spacing: -0.01em;
 }
 
-.orderProductMeta {
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--rfc-text-muted);
-}
-
-.orderProductPrice {
-  font-family: var(--font-label);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--rfc-accent);
-  margin-top: 4px;
-}
-
-.viewOrderLink {
+/* ── Order CTA ───────────────────────────────────────────── */
+.viewOrderBtn {
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid var(--rfc-border);
   font-family: var(--font-label);
   font-size: 13px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   color: var(--rfc-text);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  background: transparent;
 }
 
-.viewOrderLink:hover {
+.viewOrderBtn:hover {
+  background: var(--rfc-bg);
   color: var(--rfc-accent);
-}
-
-/* ── Address Card ────────────────────────────────────────── */
-.address {
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--rfc-text-muted);
-  font-style: normal;
-  line-height: 1.7;
-}
-
-.addressName {
-  font-weight: 600;
-  color: var(--rfc-text);
-  display: block;
-}
-
-/* ── Profile Card ────────────────────────────────────────── */
-.profileRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--rfc-text-muted);
-  margin-bottom: 10px;
-}
-
-.profileIcon {
-  color: var(--rfc-text-subtle);
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
 }
 
 /* ── Empty States ────────────────────────────────────────── */
@@ -182,60 +181,207 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+  padding: 48px 24px;
+  background: var(--rfc-surface);
+  border: 1px dashed var(--rfc-border);
+  border-radius: var(--radius-md);
   text-align: center;
-  padding: 32px 24px;
-  gap: 12px;
-  color: var(--rfc-text-muted);
+}
+
+.emptyIcon {
+  color: var(--rfc-border);
+  margin-bottom: 4px;
+}
+
+.emptyTitle {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--rfc-text);
 }
 
 .emptyText {
+  font-family: var(--font-body);
   font-size: 14px;
   color: var(--rfc-text-muted);
+  max-width: 260px;
+  line-height: 1.5;
 }
 
 .emptyBtn {
+  margin-top: 8px;
+  padding: 10px 24px;
+  background: var(--rfc-dark);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+
+.emptyBtn:hover {
+  background: var(--rfc-accent);
+}
+
+/* ── Right Column ────────────────────────────────────────── */
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Address Card ────────────────────────────────────────── */
+.addressSection {}
+
+.addressCard {
+  background: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+}
+
+.addressLabelRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.addressLabelPill {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rfc-text-muted);
+  padding: 2px 8px;
+  background: var(--rfc-bg);
+  border: 1px solid var(--rfc-border);
+  border-radius: 3px;
+}
+
+.defaultBadge {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--rfc-accent);
+  padding: 2px 7px;
+  background: rgba(230, 57, 70, 0.08);
+  border-radius: 3px;
+}
+
+.addressBody {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--rfc-text-muted);
+  font-style: normal;
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+
+.addressName {
+  font-weight: 600;
+  color: var(--rfc-text);
+}
+
+.editAddressBtn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px 20px;
-  background: var(--rfc-accent);
-  color: var(--rfc-text-inv);
-  border: none;
-  border-radius: var(--radius-sm);
   font-family: var(--font-label);
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: var(--rfc-text-muted);
   text-decoration: none;
-  cursor: pointer;
-  transition: background var(--transition-fast);
-}
-
-.emptyBtn:hover {
-  background: var(--rfc-accent-dark);
-}
-
-/* ── Skeleton ────────────────────────────────────────────── */
-@keyframes shimmer {
-  0%   { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
-}
-
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--rfc-bg) 25%,
-    var(--rfc-border) 50%,
-    var(--rfc-bg) 75%
-  );
-  background-size: 800px 100%;
-  animation: shimmer 1.4s ease-in-out infinite;
+  border: 1px solid var(--rfc-border);
+  padding: 6px 14px;
   border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
 }
 
-.skeletonLine {
-  height: 16px;
-  margin-bottom: 10px;
+.editAddressBtn:hover {
+  border-color: var(--rfc-text);
+  color: var(--rfc-text);
+}
+
+.emptyAddressCard {
+  background: var(--rfc-surface);
+  border: 1px dashed var(--rfc-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.emptyAddressText {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--rfc-text-muted);
+  line-height: 1.5;
+}
+
+.addAddressBtn {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rfc-text);
+  text-decoration: none;
+  border: 1px solid var(--rfc-border);
+  padding: 8px 14px;
   border-radius: var(--radius-sm);
+  width: fit-content;
+  transition: all var(--transition-fast);
+}
+
+.addAddressBtn:hover {
+  background: var(--rfc-dark);
+  border-color: var(--rfc-dark);
+  color: #fff;
+}
+
+/* ── Quick Links ─────────────────────────────────────────── */
+.supportSection {}
+
+.quickLinks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.quickLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--rfc-text-muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: all var(--transition-fast);
+}
+
+.quickLink:hover {
+  border-color: var(--rfc-dark);
+  color: var(--rfc-text);
+  background: var(--rfc-bg);
 }

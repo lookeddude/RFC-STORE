@@ -37,7 +37,7 @@ export default async function EditAddressPage({ params }: EditAddressPageProps) 
   if (!address) notFound();
 
   return (
-    <AccountShell greeting="Edit Address">
+    <AccountShell pageTitle="Edit Address">
       <AddressForm mode="edit" address={address as AddressRow} />
     </AccountShell>
   );

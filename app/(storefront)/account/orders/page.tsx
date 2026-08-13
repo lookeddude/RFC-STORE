@@ -74,10 +74,7 @@ export default async function MyOrdersPage({ searchParams }: MyOrdersPageProps) 
   }));
 
   return (
-    <AccountShell
-      greeting="My Orders"
-      subheading={count ? `${count} order${count === 1 ? "" : "s"} total` : undefined}
-    >
+    <AccountShell pageTitle="My Orders">
       <div className={styles.page}>
         {orderItems.length === 0 ? (
           <div className={styles.empty}>

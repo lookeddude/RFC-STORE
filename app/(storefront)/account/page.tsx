@@ -1,13 +1,14 @@
 /**
- * RFC Store — Account Dashboard Page (Phase 7)
+ * RFC Store — Account Dashboard Page (Redesigned)
  *
  * Fetches:
  *  - authenticated user (session)
- *  - profile row (full_name, phone)
- *  - most recent order (1 row, minimal columns)
+ *  - profile row
+ *  - most recent order WITH real item count
  *  - default address
  *
- * All fetched server-side. User ID is derived from session — never trusted from URL.
+ * AccountShell independently fetches profile + counts for the identity bar.
+ * This page fetches the richer dashboard data for DashboardClient.
  */
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -23,7 +24,6 @@ export const metadata: Metadata = {
 
 export default async function AccountDashboardPage() {
   const supabase = await createClient();
-
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?redirect=/account");
 
@@ -53,23 +53,29 @@ export default async function AccountDashboardPage() {
   const profile = profileRes.data as ProfileRow | null;
   const defaultAddress = addressRes.data as AddressRow | null;
 
-  // Build OrderListItem for the most recent order (no item_count join needed here)
+  // Build recent order with REAL item count
   let recentOrder: OrderListItem | null = null;
   if (ordersRes.data && ordersRes.data.length > 0) {
     const o = ordersRes.data[0] as {
       id: string; order_number: string; status: string;
       payment_status: string; total_amount: number; currency: string; created_at: string;
     };
-    recentOrder = { ...o, item_count: 0 };
+
+    // Fetch real item count for this order
+    const { data: itemRows } = await supabase
+      .from("order_items")
+      .select("quantity")
+      .eq("order_id", o.id);
+
+    const itemCount = (itemRows ?? []).reduce(
+      (sum: number, r: { quantity: number }) => sum + r.quantity, 0
+    );
+
+    recentOrder = { ...o, item_count: itemCount };
   }
 
-  const displayName = profile?.full_name ?? user.email?.split("@")[0] ?? "Fighter";
-
   return (
-    <AccountShell
-      greeting={`Welcome Back, ${displayName}`}
-      subheading="Manage your gear, orders, and training preferences."
-    >
+    <AccountShell>
       <DashboardClient
         profile={profile}
         recentOrder={recentOrder}

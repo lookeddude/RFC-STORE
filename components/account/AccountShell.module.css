@@ -1,54 +1,17 @@
 /*
- * RFC Store — Account Shell Styles (Phase 7)
- * Two-column layout: sidebar + main content
+ * RFC Store — Account Shell Styles (Redesigned)
+ * Identity bar + two-column layout
  */
 
 /* ── Page Container ──────────────────────────────────────── */
 .page {
   background: var(--rfc-bg);
-  min-height: calc(100dvh - 116px);
-  padding: 0 var(--space-margin-mobile);
-  padding-bottom: var(--space-20);
-}
-
-@media (min-width: 768px) {
-  .page {
-    padding-left: var(--space-margin-desktop);
-    padding-right: var(--space-margin-desktop);
-  }
-}
-
-/* ── Page Header ─────────────────────────────────────────── */
-.header {
-  padding-top: 48px;
-  padding-bottom: 36px;
-}
-
-.greeting {
-  font-family: var(--font-headline);
-  font-size: 36px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: var(--rfc-text);
-  margin-bottom: 6px;
-}
-
-@media (min-width: 768px) {
-  .greeting {
-    font-size: 48px;
-  }
-}
-
-.subheading {
-  font-family: var(--font-body);
-  font-size: 16px;
-  color: var(--rfc-text-muted);
+  min-height: calc(100dvh - 76px);
 }
 
 /* ── Mobile Nav Strip ────────────────────────────────────── */
 .mobileNavWrapper {
-  margin-bottom: 28px;
+  /* visible on mobile only */
 }
 
 @media (min-width: 768px) {
@@ -60,13 +23,25 @@
 /* ── Two-column Layout ───────────────────────────────────── */
 .layout {
   display: block;
+  padding: 0 var(--space-margin-mobile);
+  padding-bottom: 80px;
 }
 
 @media (min-width: 768px) {
   .layout {
-    display: flex;
-    gap: var(--space-8);
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 32px;
+    padding-left: var(--space-margin-desktop);
+    padding-right: var(--space-margin-desktop);
+    padding-top: 32px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .layout {
+    grid-template-columns: 220px 1fr;
+    gap: 48px;
   }
 }
 
@@ -78,15 +53,36 @@
 @media (min-width: 768px) {
   .sidebar {
     display: block;
-    width: 220px;
-    flex-shrink: 0;
     position: sticky;
-    top: 132px; /* 116px header offset + 16px breathing room */
+    top: 96px;
+    align-self: start;
   }
 }
 
 /* ── Main Content ────────────────────────────────────────── */
 .content {
-  flex: 1;
-  min-width: 0; /* prevent flex overflow */
+  min-width: 0;
+  padding-top: 24px;
+}
+
+@media (min-width: 768px) {
+  .content {
+    padding-top: 0;
+  }
+}
+
+/* ── Optional Page Header (sub-pages) ───────────────────── */
+.pageHeader {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rfc-border);
+}
+
+.pageTitle {
+  font-family: var(--font-headline);
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--rfc-text);
 }

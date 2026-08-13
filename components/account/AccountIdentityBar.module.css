@@ -1,0 +1,292 @@
+/*
+ * RFC Store — Account Identity Bar Styles
+ * Compact header bar shown at the top of every account page.
+ */
+
+.bar {
+  background: var(--rfc-surface);
+  border-bottom: 1px solid var(--rfc-border);
+  padding: 20px var(--space-margin-mobile);
+}
+
+@media (min-width: 768px) {
+  .bar {
+    padding-left: var(--space-margin-desktop);
+    padding-right: var(--space-margin-desktop);
+  }
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1200px;
+}
+
+/* ── Identity ─────────────────────────────────────────────── */
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+.avatarWrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--rfc-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid rgba(11, 28, 48, 0.12);
+}
+
+.avatarImg {
+  object-fit: cover;
+}
+
+.avatarInitials {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.name {
+  font-family: var(--font-headline);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--rfc-text);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adminBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  background: var(--rfc-dark);
+  color: #fff;
+  font-family: var(--font-label);
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 3px;
+}
+
+.email {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--rfc-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.memberSince {
+  font-family: var(--font-label);
+  font-size: 11px;
+  color: var(--rfc-text-subtle);
+  letter-spacing: 0.02em;
+}
+
+/* ── Right Column: Completion + Stats ─────────────────────── */
+.rightCol {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* ── Profile Completion ───────────────────────────────────── */
+.completionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.completionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.completionLabel {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rfc-text-subtle);
+}
+
+.completionPct {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--rfc-text-muted);
+}
+
+.progressTrack {
+  width: 100%;
+  height: 4px;
+  background: var(--rfc-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--rfc-accent);
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+.completeLink {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--rfc-accent);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: opacity var(--transition-fast);
+}
+
+.completeLink:hover {
+  opacity: 0.75;
+}
+
+.completePill {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  color: #16a34a;
+  letter-spacing: 0.03em;
+}
+
+/* ── Quick Stats ─────────────────────────────────────────── */
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: var(--rfc-bg);
+  border: 1px solid var(--rfc-border);
+  border-radius: var(--radius-sm);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  text-decoration: none;
+  min-width: 48px;
+  transition: opacity var(--transition-fast);
+}
+
+.stat:hover {
+  opacity: 0.7;
+}
+
+.statNumber {
+  font-family: var(--font-headline);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--rfc-text);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.statLabel {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--rfc-text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.statDivider {
+  width: 1px;
+  height: 32px;
+  background: var(--rfc-border);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .bar {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .inner {
+    gap: 16px;
+  }
+
+  .name {
+    font-size: 17px;
+  }
+
+  .avatarWrap {
+    width: 44px;
+    height: 44px;
+  }
+
+  .avatarInitials {
+    font-size: 15px;
+  }
+
+  .rightCol {
+    width: 100%;
+    gap: 16px;
+    justify-content: space-between;
+  }
+
+  .completionBlock {
+    min-width: 120px;
+    flex: 1;
+  }
+
+  .stats {
+    gap: 12px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .rightCol {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -25,13 +25,11 @@ export default async function ProfilePage() {
     .maybeSingle();
 
   return (
-    <AccountShell
-      greeting="My Profile"
-      subheading="Manage your personal information."
-    >
+    <AccountShell pageTitle="My Profile">
       <ProfileForm
         profile={profile as ProfileRow | null}
         email={user.email ?? ""}
+        emailVerified={!!user.email_confirmed_at}
       />
     </AccountShell>
   );

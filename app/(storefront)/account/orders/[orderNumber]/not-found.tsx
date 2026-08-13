@@ -4,11 +4,11 @@ import { AccountShell } from "@/components/account/AccountShell";
 
 export default function OrderNotFound() {
   return (
-    <AccountShell greeting="Order Not Found">
+    <AccountShell pageTitle="Order Not Found">
       <div style={{
-        background: "var(--color-surface-container-lowest)",
-        border: "1px solid var(--color-outline-variant)",
-        borderRadius: "var(--radius-default)",
+        background: "var(--rfc-surface)",
+        border: "1px solid var(--rfc-border)",
+        borderRadius: "var(--radius-md)",
         padding: "64px 32px",
         textAlign: "center",
       }}>
@@ -17,14 +17,14 @@ export default function OrderNotFound() {
           fontSize: "22px",
           fontWeight: 700,
           textTransform: "uppercase",
-          color: "var(--color-primary)",
+          color: "var(--rfc-text)",
           marginBottom: "12px",
         }}>
           Order Not Found
         </p>
         <p style={{
           fontSize: "15px",
-          color: "var(--color-on-surface-variant)",
+          color: "var(--rfc-text-muted)",
           marginBottom: "24px",
         }}>
           This order doesn&apos;t exist or doesn&apos;t belong to your account.
@@ -34,8 +34,8 @@ export default function OrderNotFound() {
           style={{
             display: "inline-flex",
             padding: "12px 24px",
-            background: "var(--color-secondary)",
-            color: "var(--color-on-secondary)",
+            background: "var(--rfc-dark)",
+            color: "#fff",
             borderRadius: "var(--radius-sm)",
             fontFamily: "var(--font-label)",
             fontSize: "13px",

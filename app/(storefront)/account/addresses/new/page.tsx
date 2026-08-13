@@ -18,7 +18,7 @@ export default async function NewAddressPage() {
   if (!user) redirect("/login?redirect=/account/addresses/new");
 
   return (
-    <AccountShell greeting="Add Address">
+    <AccountShell pageTitle="Add Address">
       <AddressForm mode="add" />
     </AccountShell>
   );

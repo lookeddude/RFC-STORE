@@ -121,7 +121,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
   const hasTax = parseFloat(String(order.tax_amount ?? 0)) > 0;
 
   return (
-    <AccountShell greeting={`Order ${order.order_number}`}>
+    <AccountShell pageTitle={`Order ${order.order_number}`}>
       <div className={styles.page}>
         {/* Back link */}
         <Link href={ROUTES.account.orders} className={styles.backLink}>

@@ -1,10 +1,12 @@
 "use client";
 /**
- * RFC Store — Profile Form (Phase 7)
+ * RFC Store — Profile Form (Redesigned)
  *
- * Updates: full_name, phone only.
- * Email is displayed read-only (managed by Supabase Auth — changing email
- * triggers a verification flow; not implemented in Phase 7 UI).
+ * Shows:
+ *  - Email (read-only + verified/unverified indicator)
+ *  - Full name (editable)
+ *  - Phone (editable)
+ *  - Account security section (sign out)
  */
 import React, { useState, useTransition } from "react";
 import { updateProfileAction } from "@/lib/actions/profile";
@@ -14,9 +16,10 @@ import styles from "./ProfileForm.module.css";
 interface ProfileFormProps {
   profile: ProfileRow | null;
   email: string;
+  emailVerified?: boolean;
 }
 
-export function ProfileForm({ profile, email }: ProfileFormProps) {
+export function ProfileForm({ profile, email, emailVerified = false }: ProfileFormProps) {
   const [fullName, setFullName] = useState(profile?.full_name ?? "");
   const [phone, setPhone] = useState(profile?.phone ?? "");
   const [fieldErrors, setFieldErrors] = useState<UpdateProfileErrors>({});
@@ -55,91 +58,159 @@ export function ProfileForm({ profile, email }: ProfileFormProps) {
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} noValidate>
-      {serverError && (
-        <div className={styles.serverError} role="alert">{serverError}</div>
-      )}
-      {successMsg && (
-        <div className={styles.successMsg} role="status">{successMsg}</div>
-      )}
+    <div className={styles.wrap}>
+      {/* ── Personal Information ──────────────────────────── */}
+      <section className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>Personal Information</h2>
+          <p className={styles.sectionDesc}>
+            Update your name and contact details.
+          </p>
+        </div>
 
-      {/* Email — read only */}
-      <div className={styles.field}>
-        <label htmlFor="profile-email" className={styles.label}>
-          Email Address
-        </label>
-        <input
-          id="profile-email"
-          type="email"
-          value={email}
-          disabled
-          readOnly
-          className={styles.input}
-          aria-describedby="profile-email-note"
-        />
-        <p id="profile-email-note" className={styles.hint}>
-          Email is managed by your account. Contact support to change it.
-        </p>
-      </div>
+        <form className={styles.form} onSubmit={handleSubmit} noValidate>
+          {serverError && (
+            <div className={styles.serverError} role="alert">
+              {serverError}
+            </div>
+          )}
+          {successMsg && (
+            <div className={styles.successMsg} role="status">
+              ✓ {successMsg}
+            </div>
+          )}
 
-      {/* Full Name */}
-      <div className={styles.field}>
-        <label htmlFor="profile-name" className={styles.label}>
-          Full Name
-        </label>
-        <input
-          id="profile-name"
-          type="text"
-          autoComplete="name"
-          className={styles.input}
-          value={fullName}
-          onChange={(e) => handleChange("fullName", e.target.value)}
-          aria-required="true"
-          aria-invalid={!!fieldErrors.fullName}
-          aria-describedby={fieldErrors.fullName ? "profile-name-error" : undefined}
-          disabled={isPending}
-        />
-        {fieldErrors.fullName && (
-          <span id="profile-name-error" className={styles.error} role="alert">
-            {fieldErrors.fullName}
-          </span>
-        )}
-      </div>
+          {/* Email — read only with verified status */}
+          <div className={styles.field}>
+            <label htmlFor="profile-email" className={styles.label}>
+              Email Address
+            </label>
+            <div className={styles.emailRow}>
+              <input
+                id="profile-email"
+                type="email"
+                value={email}
+                disabled
+                readOnly
+                className={`${styles.input} ${styles.inputDisabled}`}
+                aria-describedby="profile-email-meta"
+              />
+              <span
+                className={emailVerified ? styles.verifiedBadge : styles.unverifiedBadge}
+                title={emailVerified ? "Email verified" : "Email not verified"}
+                aria-label={emailVerified ? "Email verified" : "Email not verified"}
+              >
+                {emailVerified ? "✓ Verified" : "⚠ Unverified"}
+              </span>
+            </div>
+            <p id="profile-email-meta" className={styles.hint}>
+              Email is managed by your account. Contact support to change it.
+            </p>
+          </div>
 
-      {/* Phone */}
-      <div className={styles.field}>
-        <label htmlFor="profile-phone" className={styles.label}>
-          Phone Number <span className={styles.optional}>(optional)</span>
-        </label>
-        <input
-          id="profile-phone"
-          type="tel"
-          autoComplete="tel"
-          className={styles.input}
-          value={phone}
-          onChange={(e) => handleChange("phone", e.target.value)}
-          placeholder="+91 98765 43210"
-          aria-invalid={!!fieldErrors.phone}
-          aria-describedby={fieldErrors.phone ? "profile-phone-error" : undefined}
-          disabled={isPending}
-        />
-        {fieldErrors.phone && (
-          <span id="profile-phone-error" className={styles.error} role="alert">
-            {fieldErrors.phone}
-          </span>
-        )}
-      </div>
+          {/* Full Name */}
+          <div className={styles.field}>
+            <label htmlFor="profile-name" className={styles.label}>
+              Full Name
+            </label>
+            <input
+              id="profile-name"
+              type="text"
+              autoComplete="name"
+              className={styles.input}
+              value={fullName}
+              onChange={(e) => handleChange("fullName", e.target.value)}
+              placeholder="Your full name"
+              aria-required="true"
+              aria-invalid={!!fieldErrors.fullName}
+              aria-describedby={fieldErrors.fullName ? "profile-name-error" : undefined}
+              disabled={isPending}
+            />
+            {fieldErrors.fullName && (
+              <span id="profile-name-error" className={styles.error} role="alert">
+                {fieldErrors.fullName}
+              </span>
+            )}
+          </div>
 
-      <div className={styles.actions}>
-        <button
-          type="submit"
-          className={styles.saveBtn}
-          disabled={isPending}
-          aria-busy={isPending}
-        >
-          {isPending ? "Saving..." : "SAVE CHANGES"}
-        </button>
-      </div>
-    </form>
+          {/* Phone */}
+          <div className={styles.field}>
+            <label htmlFor="profile-phone" className={styles.label}>
+              Phone Number{" "}
+              <span className={styles.optional}>(optional)</span>
+            </label>
+            <input
+              id="profile-phone"
+              type="tel"
+              autoComplete="tel"
+              className={styles.input}
+              value={phone}
+              onChange={(e) => handleChange("phone", e.target.value)}
+              placeholder="+91 98765 43210"
+              aria-invalid={!!fieldErrors.phone}
+              aria-describedby={
+                fieldErrors.phone ? "profile-phone-error" : "profile-phone-hint"
+              }
+              disabled={isPending}
+            />
+            {fieldErrors.phone ? (
+              <span id="profile-phone-error" className={styles.error} role="alert">
+                {fieldErrors.phone}
+              </span>
+            ) : (
+              <p id="profile-phone-hint" className={styles.hint}>
+                Used for order communication and delivery updates.
+              </p>
+            )}
+          </div>
+
+          <div className={styles.actions}>
+            <button
+              type="submit"
+              className={styles.saveBtn}
+              disabled={isPending}
+              aria-busy={isPending}
+            >
+              {isPending ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </form>
+      </section>
+
+      {/* ── Account Security ─────────────────────────────── */}
+      <section className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>Account Security</h2>
+          <p className={styles.sectionDesc}>
+            Manage your account access and session.
+          </p>
+        </div>
+
+        <div className={styles.securityRows}>
+          <div className={styles.securityRow}>
+            <div className={styles.securityInfo}>
+              <span className={styles.securityLabel}>Password</span>
+              <span className={styles.securityMeta}>
+                Managed by Supabase Auth. Reset via email link.
+              </span>
+            </div>
+          </div>
+
+          <div className={styles.securityRow}>
+            <div className={styles.securityInfo}>
+              <span className={styles.securityLabel}>Sign Out</span>
+              <span className={styles.securityMeta}>
+                Sign out from your current session.
+              </span>
+            </div>
+            <form action="/api/auth/logout" method="POST">
+              <button type="submit" className={styles.signOutBtn}>
+                Sign Out
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

@@ -1,104 +1,201 @@
-/*
- * RFC Store — Order Timeline Styles (Phase 7)
- */
-
-.timeline {
-  display: flex;
-  align-items: flex-start;
-  gap: 0;
-  margin: 24px 0;
-}
-
-.step {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-
-/* Connector line */
-.step:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  top: 14px;
-  left: calc(50% + 14px);
-  width: calc(100% - 28px);
-  height: 2px;
-  background: var(--color-outline-variant);
-  z-index: 0;
-}
-
-.step.completed:not(:last-child)::after {
-  background: var(--color-secondary);
-}
-
-/* Dot */
-.dot {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--color-surface-container);
-  border: 2px solid var(--color-outline-variant);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
-  flex-shrink: 0;
-  transition: all var(--transition-base);
-}
-
-.step.completed .dot {
-  background: var(--color-secondary);
-  border-color: var(--color-secondary);
-}
-
-.step.current .dot {
-  background: var(--color-surface-container-lowest);
-  border-color: var(--color-secondary);
-  border-width: 3px;
-}
-
-.checkIcon {
-  width: 14px;
-  height: 14px;
-  color: white;
-}
-
-/* Label */
-.label {
-  margin-top: 8px;
-  font-family: var(--font-label);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  text-align: center;
-  color: var(--color-on-surface-variant);
-  line-height: 1.2;
-}
-
-.step.completed .label {
-  color: var(--color-primary);
-}
-
-.step.current .label {
-  color: var(--color-secondary);
-}
-
-/* ── Cancelled / Refunded ────────────────────────────────── */
 .cancelledBadge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: var(--color-error-container);
-  border-radius: var(--radius-sm);
+  padding: 0.5rem 1rem;
+  background-color: rgba(230, 57, 70, 0.1);
+  color: var(--rfc-accent);
   font-family: var(--font-label);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  border-radius: var(--radius-sm, 2px);
+  border: 1px solid rgba(230, 57, 70, 0.2);
   text-transform: uppercase;
+}
+
+.timelineWrapper {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.step:last-child {
+  flex: 0;
+  align-items: flex-end;
+}
+
+.step:first-child {
+  align-items: flex-start;
+}
+
+.nodeContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  height: 24px;
+}
+
+.step:last-child .nodeContainer {
+  width: auto;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  z-index: 2;
+  position: relative;
+  background-color: var(--rfc-surface);
+  border: 2px solid var(--rfc-border);
+  box-sizing: border-box;
+}
+
+.line {
+  height: 2px;
+  background-color: var(--rfc-border);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 16px;
+  right: 0;
+  z-index: 1;
+}
+
+.step:first-child .line {
+  left: 16px;
+}
+
+.step:last-child .dot {
+  margin-left: auto;
+}
+
+.label {
+  margin-top: 0.75rem;
+  font-family: var(--font-label);
+  font-size: 11px;
   letter-spacing: 0.05em;
-  color: var(--color-on-error-container);
+  text-transform: uppercase;
+  color: var(--rfc-text-muted);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.step:first-child .label {
+  text-align: left;
+}
+
+.step:last-child .label {
+  text-align: right;
+}
+
+/* States */
+.done .dot {
+  background-color: var(--rfc-dark);
+  border-color: var(--rfc-dark);
+}
+
+.done .line {
+  background-color: var(--rfc-dark);
+}
+
+.current .dot {
+  background-color: var(--rfc-accent);
+  border-color: var(--rfc-accent);
+}
+
+.current .dot::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--rfc-accent);
+  opacity: 0.5;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.current .label {
+  color: var(--rfc-accent);
+  font-weight: 600;
+}
+
+.future .dot {
+  background-color: transparent;
+  border-color: var(--rfc-border);
+}
+
+.future .line {
+  background-color: var(--rfc-border);
+}
+
+.future .label {
+  color: var(--rfc-text-subtle);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Responsive Vertical Layout */
+@media (max-width: 640px) {
+  .timeline {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .step, .step:first-child, .step:last-child {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: auto;
+  }
+
+  .nodeContainer {
+    width: 16px;
+    height: 16px;
+    margin-right: 1rem;
+    position: relative;
+  }
+
+  .line {
+    width: 2px;
+    height: calc(1.5rem + 16px);
+    top: 16px;
+    left: 7px;
+    transform: none;
+  }
+  
+  .step:first-child .line {
+    left: 7px;
+  }
+
+  .label, .step:first-child .label, .step:last-child .label {
+    margin-top: 0;
+    text-align: left;
+    white-space: normal;
+  }
 }

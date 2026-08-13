@@ -31,10 +31,7 @@ export default async function AddressesPage() {
   const list = (addresses ?? []) as AddressRow[];
 
   return (
-    <AccountShell
-      greeting="My Addresses"
-      subheading="Manage your saved shipping addresses."
-    >
+    <AccountShell pageTitle="My Addresses">
       <div className={styles.page}>
         <div className={styles.topRow}>
           <p className={styles.count}>
