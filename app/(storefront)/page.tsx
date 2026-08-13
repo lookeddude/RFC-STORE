@@ -48,8 +48,10 @@ export default function HomePage() {
         <HeroSection />
       </div>
 
-      {/* Offer Strip — animated marquee below hero */}
-      <OfferStrip />
+      {/* Offer Strip — separated from hero with a small gap */}
+      <div style={{ marginTop: "10px" }}>
+        <OfferStrip />
+      </div>
 
       {/* Shop by Discipline — Bento Grid */}
       <DisciplineGrid />
