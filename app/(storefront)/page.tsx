@@ -18,6 +18,7 @@
 import type { Metadata } from "next";
 import {
   HeroSection,
+  OfferStrip,
   DisciplineGrid,
   FeaturedGear,
   EditorialBanner,
@@ -40,12 +41,15 @@ export default function HomePage() {
     <>
       {/*
        * Hero is full-viewport — it sits flush against navbar.
-       * The -116px margin cancels the storefront layout's padding-top
+       * The -80px margin cancels the storefront layout's padding-top
        * so the hero fills edge-to-edge behind the navbar.
        */}
-      <div style={{ marginTop: "-116px" }}>
+      <div style={{ marginTop: "-80px" }}>
         <HeroSection />
       </div>
+
+      {/* Offer Strip — animated marquee below hero */}
+      <OfferStrip />
 
       {/* Shop by Discipline — Bento Grid */}
       <DisciplineGrid />

@@ -1,0 +1,149 @@
+.page {
+  min-height: 100vh;
+  background: #080b12;
+}
+
+/* ── Hero ───────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, #0a0e18 0%, #0f1520 50%, #0a0e18 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 72px 24px 64px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(230,57,70,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.heroEyebrow {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #E63946;
+  margin-bottom: 16px;
+}
+
+.heroTitle {
+  font-family: var(--font-headline);
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #fff;
+  line-height: 0.95;
+  margin-bottom: 20px;
+}
+
+.heroSub {
+  font-size: 16px;
+  color: rgba(255,255,255,0.45);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── Grid ───────────────────────────────────── */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 64px 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* ── Card ───────────────────────────────────── */
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 24px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.055);
+  border-color: var(--accent, #E63946);
+}
+
+/* Glow behind card on hover */
+.cardGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 20% 50%, var(--accent, #E63946), transparent);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  border-radius: inherit;
+  mix-blend-mode: screen;
+}
+
+.card:hover .cardGlow { opacity: 0.08; }
+
+.cardIcon {
+  font-size: 36px;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease;
+}
+
+.card:hover .cardIcon {
+  background: color-mix(in srgb, var(--accent, #E63946) 15%, transparent);
+}
+
+.cardBody { flex: 1; min-width: 0; }
+
+.cardTitle {
+  font-family: var(--font-headline);
+  font-size: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.cardDesc {
+  font-size: 13px;
+  color: rgba(255,255,255,0.38);
+  line-height: 1.5;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.cardArrow {
+  color: rgba(255,255,255,0.25);
+  flex-shrink: 0;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover .cardArrow {
+  color: var(--accent, #E63946);
+  transform: translateX(4px);
+}

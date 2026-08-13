@@ -14,24 +14,25 @@
  *   - Mobile: hamburger menu
  */
 import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { NAV_LINKS, ROUTES, RFC_BRAND } from "@/lib/constants/site";
-import { Container } from "@/components/ui/Container";
 import { useCart } from "@/context/CartContext";
 import { createClient } from "@/lib/supabase/client";
 import styles from "./Navbar.module.css";
 import { cn } from "@/lib/utils/cn";
 
 /** Height of announcement bar — used to offset navbar position */
-const ANNOUNCEMENT_BAR_HEIGHT = 36;
+const ANNOUNCEMENT_BAR_HEIGHT = 0;
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const lastScrollY = useRef(0);
   const router = useRouter();
+  const pathname = usePathname();
   const { state: cartState } = useCart();
   const cartCount = cartState.itemCount;
 
@@ -48,10 +49,11 @@ export function Navbar() {
   }, []);
 
 
-  // Auto-hide on scroll down, reappear on scroll up (Stitch JS behavior)
+  // Auto-hide on scroll down, reappear on scroll up + scrolled shadow
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
+      setIsScrolled(currentY > 20);
       if (currentY > lastScrollY.current && currentY > ANNOUNCEMENT_BAR_HEIGHT + 80) {
         setIsVisible(false);
       } else {
@@ -75,92 +77,111 @@ export function Navbar() {
       <header
         className={cn(
           styles.navbar,
-          !isVisible && styles["navbar--hidden"]
+          !isVisible && styles["navbar--hidden"],
+          isScrolled && styles["navbar--scrolled"]
         )}
         role="banner"
-        style={{ top: `${ANNOUNCEMENT_BAR_HEIGHT}px` }}
       >
-        <Container>
-          <nav className={styles.nav} aria-label="Main navigation">
-            {/* Brand */}
-            <Link
-              href={ROUTES.home}
-              className={styles.brand}
-              aria-label={`${RFC_BRAND.name} — Home`}
-            >
-              <span className={styles.brandText}>REVIVE FIGHT CLUB</span>
+        <nav className={styles.nav} aria-label="Main navigation">
+
+          {/* ── Brand ─────────────────────────────────── */}
+          <Link
+            href={ROUTES.home}
+            className={styles.brand}
+            aria-label={`${RFC_BRAND.name} — Home`}
+          >
+            {/* RFC red monogram badge */}
+            <div className={styles.brandMonogram} aria-hidden="true">
+              <span className={styles.brandMonogramText}>RFC</span>
+            </div>
+            {/* Name + tagline stacked */}
+            <div className={styles.brandStack}>
+              <span className={styles.brandText}>Revive Fight Club</span>
+              <span className={styles.brandSub}>Built for the fight</span>
+            </div>
+          </Link>
+
+          {/* ── Desktop Nav Links ─────────────────────── */}
+          <ul className={styles.navLinks} role="list">
+            {NAV_LINKS.map((link) => (
+              <li key={link.label} className={styles.navItem}>
+                <Link
+                  href={link.href}
+                  className={cn(
+                    styles.navLink,
+                    pathname === link.href && styles.navLinkActive
+                  )}
+                  aria-current={pathname === link.href ? "page" : undefined}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* ── Right Actions ─────────────────────────── */}
+          <div className={styles.actions}>
+
+            {/* Search pill — desktop */}
+            <div className={styles.searchBar} role="search">
+              <SearchIcon />
+              <input
+                type="search"
+                placeholder="Search gear..."
+                className={styles.searchInput}
+                aria-label="Search products"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    const q = (e.target as HTMLInputElement).value.trim();
+                    if (q) router.push(`/shop?q=${encodeURIComponent(q)}`);
+                  }
+                }}
+              />
+            </div>
+
+            {/* Shop Now CTA — desktop only (≥1100px) */}
+            <Link href="/shop" className={styles.shopCta} aria-label="Shop all products">
+              Shop Now
             </Link>
 
-            {/* Desktop Nav Links */}
-            <ul className={styles.navLinks} role="list">
-              {NAV_LINKS.map((link) => (
-                <li key={link.href} className={styles.navItem}>
-                  <Link href={link.href} className={styles.navLink}>
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {/* Cart */}
+            <Link
+              href={ROUTES.cart}
+              className={cn(styles.iconBtn, styles.cartBtn)}
+              aria-label={`Shopping cart${cartCount > 0 ? `, ${cartCount} item${cartCount === 1 ? "" : "s"}` : ""}`}
+            >
+              <CartIcon />
+              {cartCount > 0 && (
+                <span className={styles.cartCount} aria-hidden="true">
+                  {cartCount > 99 ? "99+" : cartCount}
+                </span>
+              )}
+            </Link>
 
-            {/* Right Actions */}
-            <div className={styles.actions}>
-              {/* Inline Search — desktop only */}
-              <div className={styles.searchBar} role="search">
-                <input
-                  type="search"
-                  placeholder="Search..."
-                  className={styles.searchInput}
-                  aria-label="Search products"
-                  // Phase 3: wire to search route
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      const q = (e.target as HTMLInputElement).value.trim();
-                      if (q) router.push(`/shop?q=${encodeURIComponent(q)}`);
-                    }
-                  }}
-                />
-                <SearchIcon />
-              </div>
+            {/* Account */}
+            <Link
+              href={isLoggedIn ? ROUTES.account.root : ROUTES.auth.login}
+              className={cn(styles.iconBtn, isLoggedIn && styles["iconBtn--active"])}
+              aria-label={isLoggedIn ? "My Account" : "Sign In"}
+            >
+              <AccountIcon />
+            </Link>
 
-              {/* Cart */}
-              <Link
-                href={ROUTES.cart}
-                className={cn(styles.iconBtn, styles.cartBtn)}
-                aria-label={`Shopping cart${cartCount > 0 ? `, ${cartCount} item${cartCount === 1 ? "" : "s"}` : ""}`}
-              >
-                <CartIcon />
-                {cartCount > 0 && (
-                  <span className={styles.cartCount} aria-hidden="true">
-                    {cartCount > 99 ? "99+" : cartCount}
-                  </span>
-                )}
-              </Link>
-
-              {/* Account — links to /account if logged in, /login if not */}
-              <Link
-                href={isLoggedIn ? ROUTES.account.root : ROUTES.auth.login}
-                className={cn(styles.iconBtn, isLoggedIn && styles["iconBtn--active"])}
-                aria-label={isLoggedIn ? "My Account" : "Sign In"}
-              >
-                <AccountIcon />
-              </Link>
-
-              {/* Mobile Menu Toggle */}
-              <button
-                className={cn(styles.iconBtn, styles.menuToggle)}
-                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-                aria-expanded={isMobileMenuOpen}
-                aria-controls="mobile-menu"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              >
-                {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
-              </button>
-            </div>
-          </nav>
-        </Container>
+            {/* Mobile hamburger */}
+            <button
+              className={cn(styles.iconBtn, styles.menuToggle)}
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+            </button>
+          </div>
+        </nav>
       </header>
 
-      {/* Mobile Menu Overlay */}
+      {/* ── Mobile Menu Overlay ────────────────────── */}
       {isMobileMenuOpen && (
         <div
           className={styles.mobileOverlay}
@@ -168,8 +189,8 @@ export function Navbar() {
           role="dialog"
           aria-modal="true"
           aria-label="Mobile navigation"
+          style={{ top: `${ANNOUNCEMENT_BAR_HEIGHT + 80}px` }}
           onClick={() => setIsMobileMenuOpen(false)}
-          style={{ top: `${ANNOUNCEMENT_BAR_HEIGHT}px` }}
         >
           <nav
             className={styles.mobileMenu}
@@ -177,13 +198,14 @@ export function Navbar() {
           >
             <ul role="list">
               {NAV_LINKS.map((link) => (
-                <li key={link.href}>
+                <li key={link.label}>
                   <Link
                     href={link.href}
                     className={styles.mobileNavLink}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
+                    <ChevronRightIcon />
                   </Link>
                 </li>
               ))}
@@ -194,6 +216,7 @@ export function Navbar() {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {isLoggedIn ? "My Account" : "Sign In"}
+                  <ChevronRightIcon />
                 </Link>
               </li>
               <li>
@@ -202,7 +225,8 @@ export function Navbar() {
                   className={styles.mobileNavLink}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Cart
+                  Cart {cartCount > 0 ? `(${cartCount})` : ""}
+                  <ChevronRightIcon />
                 </Link>
               </li>
             </ul>
@@ -258,6 +282,14 @@ function CloseIcon() {
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M18 6 6 18" />
       <path d="m6 6 12 12" />
+    </svg>
+  );
+}
+
+function ChevronRightIcon() {
+  return (
+    <svg className={styles.mobileNavArrow} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="m9 18 6-6-6-6" />
     </svg>
   );
 }

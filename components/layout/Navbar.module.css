@@ -1,7 +1,18 @@
 /*
- * RFC Store — Navbar Styles (Light Theme)
- * Stitch spec: surface/white background, dark text, border-bottom,
- * auto-hide on scroll down, reappear on scroll up.
+ * RFC Store — Navbar (Light Premium Redesign)
+ *
+ * Inspired by Nike, Gymshark, Under Armour — top-tier sports brands.
+ *
+ * Design:
+ *   ✦ Pure white background with a very refined bottom shadow
+ *   ✦ RFC red square monogram badge (keeps brand punch on white)
+ *   ✦ Brand name: deep navy/charcoal — strong, legible
+ *   ✦ Nav links: medium grey → full charcoal on hover with
+ *     a sliding red underline animation
+ *   ✦ Search: rounded pill with light grey bg, darkens on focus
+ *   ✦ Cart + Account: dark icons, red badge
+ *   ✦ Mobile menu: white panel, large dark typography
+ *   ✦ Scroll-spy: thin red top border appears after 60px scroll
  */
 
 /* ── Navbar Base ─────────────────────────────────────────── */
@@ -9,11 +20,27 @@
   position: fixed;
   left: 0;
   right: 0;
+  top: 0;
   z-index: 100;
-  height: var(--navbar-height);
-  background-color: #f8f9ff; /* surface-bright — The Lab */
-  border-bottom: 1px solid #c6c6cb; /* outline-variant */
-  transition: transform var(--transition-base);
+  height: 72px;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+
+  /* Subtle layered shadow — gives depth without looking heavy */
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.04),
+    0 4px 16px rgba(0,0,0,0.06);
+
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s ease;
+}
+
+/* Scrolled state — slightly stronger shadow */
+.navbar--scrolled {
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.06),
+    0 8px 24px rgba(0,0,0,0.1);
 }
 
 /* Auto-hide when scrolling down */
@@ -21,48 +48,100 @@
   transform: translateY(-100%);
 }
 
+/* ── Inner layout ────────────────────────────────────────── */
 .nav {
   display: flex;
   align-items: center;
   height: 100%;
-  gap: var(--space-6);
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 28px;
+  gap: 0;
 }
 
 /* ── Brand ───────────────────────────────────────────────── */
 .brand {
   display: flex;
   align-items: center;
+  gap: 11px;
   flex-shrink: 0;
   text-decoration: none;
+  margin-right: 40px;
+  transition: opacity 0.2s ease;
+}
+
+.brand:hover { opacity: 0.82; }
+
+/* RFC red square badge */
+.brandMonogram {
+  width: 36px;
+  height: 36px;
+  background: #E63946;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(230,57,70,0.35);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.brand:hover .brandMonogram {
+  box-shadow: 0 5px 18px rgba(230,57,70,0.5);
+  transform: scale(1.05);
+}
+
+.brandMonogramText {
+  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-size: 13px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.03em;
+  line-height: 1;
+}
+
+/* Brand name stack */
+.brandStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 
 .brandText {
-  font-family: var(--font-headline);
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: #0b1c30; /* on-background */
+  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  color: #111827;
   text-transform: uppercase;
   white-space: nowrap;
+  line-height: 1;
 }
 
-/* ── Nav Links ───────────────────────────────────────────── */
+.brandSub {
+  font-family: var(--font-label, 'Inter', sans-serif);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #9ca3af;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* ── Desktop Nav Links ───────────────────────────────────── */
 .navLinks {
   display: none;
   align-items: stretch;
-  gap: 0;
   flex: 1;
-  justify-content: center;
   list-style: none;
   padding: 0;
   margin: 0;
   height: 100%;
+  gap: 0;
 }
 
 @media (min-width: 768px) {
-  .navLinks {
-    display: flex;
-  }
+  .navLinks { display: flex; }
 }
 
 .navItem {
@@ -72,161 +151,255 @@
 }
 
 .navLink {
-  font-family: var(--font-label);
-  font-size: var(--font-label-bold-size);
-  font-weight: var(--font-label-bold-weight);
-  letter-spacing: var(--font-label-bold-letter-spacing);
-  text-transform: uppercase;
-  color: #45474b; /* on-surface-variant */
-  text-decoration: none;
-  padding-inline: var(--space-5);
-  height: 100%;
+  position: relative;
   display: flex;
   align-items: center;
-  border-bottom: 2px solid transparent;
-  transition: color var(--transition-fast), border-color var(--transition-fast);
-  position: relative;
+  height: 100%;
+  padding: 0 18px;
+  font-family: var(--font-label, 'Inter', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #6b7280;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+/* Animated sliding bottom bar */
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 18px;
+  right: 18px;
+  height: 2.5px;
+  background: #E63946;
+  border-radius: 2px 2px 0 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navLink:hover {
-  color: var(--color-secondary); /* Coral Red */
-  border-bottom-color: var(--color-secondary);
+  color: #111827;
 }
 
-/* Active link — first item (Shop) active in Stitch */
-.navLink[data-active="true"],
-.navLink:first-child {
-  color: var(--color-secondary);
-  border-bottom-color: var(--color-secondary);
+.navLink:hover::after {
+  transform: scaleX(1);
 }
 
-/* ── Actions ─────────────────────────────────────────────── */
+/* Active page */
+.navLinkActive {
+  color: #E63946 !important;
+  font-weight: 800;
+}
+
+.navLinkActive::after {
+  transform: scaleX(1);
+}
+
+/* ── Right actions ───────────────────────────────────────── */
 .actions {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: 4px;
   margin-left: auto;
+  flex-shrink: 0;
 }
 
-/* Inline search — desktop only */
+/* ── Search pill ─────────────────────────────────────────── */
 .searchBar {
   display: none;
   align-items: center;
-  gap: 6px;
-  border-bottom: 1px solid #c6c6cb;
-  padding-bottom: 4px;
-  width: 180px;
-  color: #45474b;
+  gap: 8px;
+  background: #f3f4f6;
+  border: 1.5px solid transparent;
+  border-radius: 100px;
+  padding: 0 14px;
+  height: 38px;
+  width: 190px;
+  color: #9ca3af;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    width 0.28s ease,
+    color 0.2s ease;
+  cursor: text;
 }
 
-@media (min-width: 768px) {
-  .searchBar {
-    display: flex;
-  }
+.searchBar:focus-within {
+  background: #fff;
+  border-color: #E63946;
+  width: 230px;
+  color: #374151;
+  box-shadow: 0 0 0 3px rgba(230,57,70,0.1);
+}
+
+@media (min-width: 960px) {
+  .searchBar { display: flex; }
 }
 
 .searchInput {
   background: transparent;
   border: none;
   outline: none;
-  font-family: var(--font-body);
-  font-size: 15px;
-  color: #0b1c30;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 13px;
+  color: #111827;
   width: 100%;
   padding: 0;
-  height: 24px;
+  height: 100%;
 }
 
 .searchInput::placeholder {
-  color: #76777b;
+  color: #9ca3af;
+  font-size: 12.5px;
 }
 
-.searchInput::-webkit-search-cancel-button {
-  display: none;
-}
+.searchInput::-webkit-search-cancel-button { display: none; }
 
-/* Icon buttons */
+/* ── Icon Buttons ────────────────────────────────────────── */
 .iconBtn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: var(--radius-sm);
-  color: #45474b;
+  border-radius: 10px;
+  color: #374151;
   background: transparent;
-  border: none;
+  border: 1.5px solid transparent;
   cursor: pointer;
-  transition:
-    color var(--transition-fast),
-    background-color var(--transition-fast);
   text-decoration: none;
   position: relative;
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.15s ease;
 }
 
 .iconBtn:hover {
-  color: var(--color-secondary);
-  background-color: rgba(11, 28, 48, 0.05);
+  color: #111827;
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+  transform: translateY(-1px);
 }
 
-/* Active state — when user is logged in */
+.iconBtn:active { transform: translateY(0); }
+
+/* Account — red when logged in */
 .iconBtn--active {
-  color: var(--color-secondary);
+  color: #E63946;
 }
 
-/* Cart badge */
-.cartBtn {
-  position: relative;
+.iconBtn--active:hover {
+  color: #E63946;
+  background: #fff1f2;
+  border-color: #fecdd3;
 }
+
+/* Cart count badge */
+.cartBtn { position: relative; }
 
 .cartCount {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  min-width: 16px;
-  height: 16px;
-  background-color: var(--color-secondary);
-  color: var(--color-on-secondary);
-  font-size: 10px;
-  font-weight: 700;
-  font-family: var(--font-label);
+  top: 2px;
+  right: 2px;
+  min-width: 18px;
+  height: 18px;
+  background: #E63946;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  font-family: var(--font-label, 'Inter', sans-serif);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 3px;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(230,57,70,0.4);
+  animation: badgePop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  line-height: 1;
 }
 
-/* Mobile menu toggle — visible only mobile */
-.menuToggle {
-  display: flex;
+@keyframes badgePop {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
 }
+
+/* ── Shop Now CTA pill (premium touch) ───────────────────── */
+.shopCta {
+  display: none;
+  align-items: center;
+  height: 38px;
+  padding: 0 20px;
+  background: #111827;
+  color: #fff;
+  font-family: var(--font-label, 'Inter', sans-serif);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+  margin-left: 4px;
+}
+
+.shopCta:hover {
+  background: #E63946;
+  transform: translateY(-1px);
+}
+
+@media (min-width: 1100px) {
+  .shopCta { display: flex; }
+}
+
+/* Mobile toggle — visible mobile only */
+.menuToggle { display: flex; }
 
 @media (min-width: 768px) {
-  .menuToggle {
-    display: none;
-  }
+  .menuToggle { display: none; }
 }
 
-/* ── Mobile Menu ─────────────────────────────────────────── */
+/* ── Mobile Overlay ──────────────────────────────────────── */
 .mobileOverlay {
   position: fixed;
   inset: 0;
   z-index: 99;
-  background-color: rgba(11, 28, 48, 0.6);
-  backdrop-filter: blur(4px);
-  animation: fadeIn var(--transition-fast) ease;
+  background: rgba(17, 24, 39, 0.55);
+  backdrop-filter: blur(6px);
+  animation: overlayIn 0.22s ease;
 }
 
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Mobile Menu Panel ───────────────────────────────────── */
 .mobileMenu {
   position: absolute;
-  top: var(--navbar-height);
+  top: 0;
   left: 0;
   right: 0;
-  background-color: #f8f9ff;
-  padding: var(--space-4) 0 var(--space-8);
-  border-bottom: 1px solid #c6c6cb;
-  animation: slideDown var(--transition-base) ease;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  padding: 8px 0 24px;
+  animation: menuIn 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes menuIn {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
 .mobileMenu ul {
@@ -236,30 +409,55 @@
 }
 
 .mobileNavLink {
-  display: block;
-  padding: var(--space-4) var(--space-6);
-  font-family: var(--font-headline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 28px;
+  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: #0b1c30;
+  letter-spacing: 0.01em;
+  color: #111827;
   text-decoration: none;
-  border-bottom: 1px solid rgba(11, 28, 48, 0.06);
-  transition: color var(--transition-fast), background-color var(--transition-fast);
+  border-bottom: 1px solid #f3f4f6;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.18s ease, background 0.18s ease, padding-left 0.2s ease;
+}
+
+/* Left accent slide-in */
+.mobileNavLink::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0; bottom: 0;
+  width: 0;
+  background: #E63946;
+  border-radius: 0 3px 3px 0;
+  transition: width 0.2s ease;
 }
 
 .mobileNavLink:hover {
-  color: var(--color-secondary);
-  background-color: rgba(11, 28, 48, 0.03);
+  color: #E63946;
+  background: #fff8f8;
+  padding-left: 36px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.mobileNavLink:hover::before {
+  width: 4px;
 }
 
-@keyframes slideDown {
-  from { transform: translateY(-8px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+/* Mobile nav arrow */
+.mobileNavArrow {
+  width: 20px;
+  height: 20px;
+  color: #d1d5db;
+  flex-shrink: 0;
+  transition: color 0.18s, transform 0.18s;
+}
+
+.mobileNavLink:hover .mobileNavArrow {
+  color: #E63946;
+  transform: translateX(3px);
 }
