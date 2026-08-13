@@ -2,15 +2,12 @@
  * RFC Store — Storefront Layout
  *
  * Wraps all public storefront pages with:
- *   1. Navbar (fixed, 80px height)
- *   2. Main content (padded top = 80px)
+ *   1. Navbar (fixed, 64px mobile / 72px desktop)
+ *   2. Main content (padded top = navbar height)
  *   3. Footer
  *
  * The Hero section overrides padding-top to zero since it
  * is a full-viewport section that sits flush against the navbar.
- *
- * AnnouncementBar removed from fixed header — now rendered as
- * the OfferStrip section directly below the hero on the homepage.
  */
 import React from "react";
 import { Navbar } from "@/components/layout/Navbar";
@@ -20,23 +17,26 @@ interface StorefrontLayoutProps {
   children: React.ReactNode;
 }
 
-/** Total fixed header height: Navbar only (80px) */
-const HEADER_OFFSET = 80;
-
 export default function StorefrontLayout({ children }: StorefrontLayoutProps) {
   return (
     <>
       {/* Fixed: Navbar */}
       <Navbar />
-      {/* Page content — offset for navbar */}
+      {/* Page content — offset for navbar height (64px mobile, 72px desktop) */}
       <main
         id="main-content"
-        style={{ paddingTop: `${HEADER_OFFSET}px`, minHeight: "100dvh" }}
+        style={{
+          paddingTop: "var(--navbar-height, 64px)",
+          minHeight: "100dvh",
+        }}
       >
+        <style>{`
+          :root { --navbar-height: 64px; }
+          @media (min-width: 768px) { :root { --navbar-height: 72px; } }
+        `}</style>
         {children}
       </main>
       <Footer />
     </>
   );
 }
-

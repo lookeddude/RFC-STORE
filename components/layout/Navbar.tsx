@@ -3,15 +3,10 @@
 /**
  * RFC Store — Navigation Bar
  *
- * Stitch design spec (Light themed — "The Lab"):
- *   - Surface background (#F8F9FF) with bottom border
- *   - Sits below the fixed AnnouncementBar (offset by 36px bar height)
- *   - RFC brand logotype left-aligned
- *   - Nav links centre: Shop, Categories, Training, About
- *   - Right: inline search (desktop), cart icon, account icon
- *   - Auto-hide on scroll down, reappear on scroll up
- *   - Active link: Coral Red underline
- *   - Mobile: hamburger menu
+ * Desktop: Brand | Nav Links (center) | Search pill | Shop CTA | Cart | Account
+ * Mobile:  Brand (left, flex-1) | Search | Cart | Account | Hamburger
+ *
+ * The mobile order satisfies: brand identity → search → cart → profile → hamburger
  */
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -22,21 +17,22 @@ import { createClient } from "@/lib/supabase/client";
 import styles from "./Navbar.module.css";
 import { cn } from "@/lib/utils/cn";
 
-/** Height of announcement bar — used to offset navbar position */
 const ANNOUNCEMENT_BAR_HEIGHT = 0;
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const lastScrollY = useRef(0);
+  const mobileSearchRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const pathname = usePathname();
   const { state: cartState } = useCart();
   const cartCount = cartState.itemCount;
 
-  // Auth state — check session and listen for changes
+  // Auth state
   useEffect(() => {
     const supabase = createClient();
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -48,8 +44,7 @@ export function Navbar() {
     return () => subscription.unsubscribe();
   }, []);
 
-
-  // Auto-hide on scroll down, reappear on scroll up + scrolled shadow
+  // Auto-hide on scroll down, reappear on scroll up
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
@@ -61,7 +56,6 @@ export function Navbar() {
       }
       lastScrollY.current = currentY;
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -71,6 +65,26 @@ export function Navbar() {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [isMobileMenuOpen]);
+
+  // Focus mobile search input when opened
+  useEffect(() => {
+    if (isMobileSearchOpen) {
+      setTimeout(() => mobileSearchRef.current?.focus(), 80);
+    }
+  }, [isMobileSearchOpen]);
+
+  const handleMobileSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const q = (e.target as HTMLInputElement).value.trim();
+      if (q) {
+        router.push(`/shop?q=${encodeURIComponent(q)}`);
+        setIsMobileSearchOpen(false);
+      }
+    }
+    if (e.key === "Escape") {
+      setIsMobileSearchOpen(false);
+    }
+  };
 
   return (
     <>
@@ -90,11 +104,11 @@ export function Navbar() {
             className={styles.brand}
             aria-label={`${RFC_BRAND.name} — Home`}
           >
-            {/* RFC red monogram badge */}
+            {/* RFC red square badge */}
             <div className={styles.brandMonogram} aria-hidden="true">
               <span className={styles.brandMonogramText}>RFC</span>
             </div>
-            {/* Name + tagline stacked */}
+            {/* Name + tagline — hidden on smallest screens */}
             <div className={styles.brandStack}>
               <span className={styles.brandText}>Revive Fight Club</span>
               <span className={styles.brandSub}>Built for the fight</span>
@@ -122,7 +136,7 @@ export function Navbar() {
           {/* ── Right Actions ─────────────────────────── */}
           <div className={styles.actions}>
 
-            {/* Search pill — desktop */}
+            {/* Desktop: Search pill (≥960px) */}
             <div className={styles.searchBar} role="search">
               <SearchIcon />
               <input
@@ -139,7 +153,16 @@ export function Navbar() {
               />
             </div>
 
-            {/* Shop Now CTA — desktop only (≥1100px) */}
+            {/* Mobile: Search icon button (<768px) */}
+            <button
+              className={cn(styles.iconBtn, styles.mobileSearchBtn)}
+              aria-label="Search products"
+              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+            >
+              <SearchIcon />
+            </button>
+
+            {/* Desktop: Shop Now CTA (≥1100px) */}
             <Link href="/shop" className={styles.shopCta} aria-label="Shop all products">
               Shop Now
             </Link>
@@ -167,7 +190,7 @@ export function Navbar() {
               <AccountIcon />
             </Link>
 
-            {/* Mobile hamburger */}
+            {/* Mobile hamburger — LAST */}
             <button
               className={cn(styles.iconBtn, styles.menuToggle)}
               aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
@@ -179,6 +202,33 @@ export function Navbar() {
             </button>
           </div>
         </nav>
+
+        {/* ── Mobile Search Expand Bar ───────────────── */}
+        <div
+          className={cn(styles.mobileSearchBar, isMobileSearchOpen && styles["mobileSearchBar--open"])}
+          aria-hidden={!isMobileSearchOpen}
+        >
+          <div className={styles.mobileSearchInner}>
+            <SearchIcon />
+            <input
+              ref={mobileSearchRef}
+              type="search"
+              placeholder="Search boxing, MMA, training gear..."
+              className={styles.mobileSearchInput}
+              aria-label="Search products"
+              tabIndex={isMobileSearchOpen ? 0 : -1}
+              onKeyDown={handleMobileSearch}
+            />
+            <button
+              className={styles.mobileSearchClose}
+              onClick={() => setIsMobileSearchOpen(false)}
+              aria-label="Close search"
+              tabIndex={isMobileSearchOpen ? 0 : -1}
+            >
+              <CloseIcon />
+            </button>
+          </div>
+        </div>
       </header>
 
       {/* ── Mobile Menu Overlay ────────────────────── */}
@@ -189,7 +239,7 @@ export function Navbar() {
           role="dialog"
           aria-modal="true"
           aria-label="Mobile navigation"
-          style={{ top: `${ANNOUNCEMENT_BAR_HEIGHT + 80}px` }}
+          style={{ top: `${ANNOUNCEMENT_BAR_HEIGHT + 72}px` }}
           onClick={() => setIsMobileMenuOpen(false)}
         >
           <nav
@@ -201,7 +251,10 @@ export function Navbar() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className={styles.mobileNavLink}
+                    className={cn(
+                      styles.mobileNavLink,
+                      pathname === link.href && styles.mobileNavLinkActive
+                    )}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
@@ -219,17 +272,18 @@ export function Navbar() {
                   <ChevronRightIcon />
                 </Link>
               </li>
-              <li>
-                <Link
-                  href={ROUTES.cart}
-                  className={styles.mobileNavLink}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Cart {cartCount > 0 ? `(${cartCount})` : ""}
-                  <ChevronRightIcon />
-                </Link>
-              </li>
             </ul>
+
+            {/* Mobile menu footer CTA */}
+            <div className={styles.mobileMenuFooter}>
+              <Link
+                href="/shop"
+                className={styles.mobileMenuCta}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                SHOP ALL GEAR →
+              </Link>
+            </div>
           </nav>
         </div>
       )}
@@ -269,7 +323,7 @@ function CartIcon() {
 
 function MenuIcon() {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <line x1="4" y1="6" x2="20" y2="6" />
       <line x1="4" y1="12" x2="20" y2="12" />
       <line x1="4" y1="18" x2="20" y2="18" />
@@ -279,7 +333,7 @@ function MenuIcon() {
 
 function CloseIcon() {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M18 6 6 18" />
       <path d="m6 6 12 12" />
     </svg>

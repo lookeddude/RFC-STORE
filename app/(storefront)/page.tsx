@@ -49,11 +49,10 @@ export default function HomePage() {
     <>
       {/*
        * Hero is full-viewport — it sits flush against navbar.
-       * The -80px margin cancels the storefront layout's padding-top
-       * so the hero fills edge-to-edge behind the navbar.
+       * Negative margin = navbar height (64px mobile, 72px desktop).
        * Mobile: 75vh | Desktop: 100vh (controlled inside HeroSection)
        */}
-      <div style={{ marginTop: "-80px" }}>
+      <div style={{ marginTop: "calc(-1 * var(--navbar-height, 64px))" }}>
         <HeroSection />
       </div>
 

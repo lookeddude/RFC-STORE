@@ -1,7 +1,14 @@
 /*
  * RFC Store — Navbar
- * Light premium navbar — white bg, charcoal text, ONE RFC red accent.
- * Now fully token-based: var(--rfc-accent), var(--rfc-dark), var(--rfc-text).
+ *
+ * Mobile layout (< 768px):
+ *   [RFC Badge + Brand Name (flex-1)] [🔍] [🛒] [👤] [☰]
+ *
+ * Desktop layout (≥ 768px):
+ *   [RFC Badge + Brand] [Nav Links (flex-1)] [Search pill] [Shop CTA] [🛒] [👤]
+ *
+ * Design language: Premium, clean, white surface. ONE RFC red accent.
+ * All sizing and spacing uses design tokens.
  */
 
 /* ── Navbar Base ─────────────────────────────────────────── */
@@ -11,7 +18,7 @@
   right: 0;
   top: 0;
   z-index: 100;
-  height: 72px;
+  height: 64px;
   background: var(--rfc-surface);
   border-bottom: 1px solid var(--rfc-border);
   box-shadow:
@@ -19,99 +26,129 @@
     0 2px 12px rgba(0,0,0,0.04);
   transition:
     transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.3s ease;
+    box-shadow 0.3s ease,
+    height 0.25s ease;
 }
 
-/* Scrolled state — slightly stronger shadow */
+/* Scrolled state */
 .navbar--scrolled {
   box-shadow:
-    0 1px 0 rgba(0,0,0,0.05),
-    0 6px 20px rgba(0,0,0,0.08);
+    0 1px 0 rgba(0,0,0,0.06),
+    0 6px 20px rgba(0,0,0,0.09);
 }
 
-/* Auto-hide when scrolling down */
+/* Auto-hide on scroll down */
 .navbar--hidden {
   transform: translateY(-100%);
 }
 
-/* ── Inner layout ────────────────────────────────────────── */
+/* ── Inner nav layout ────────────────────────────────────── */
 .nav {
   display: flex;
   align-items: center;
-  height: 100%;
+  height: 64px;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 28px;
+  padding: 0 16px;
   gap: 0;
+}
+
+@media (min-width: 768px) {
+  .nav {
+    height: 72px;
+    padding: 0 28px;
+  }
+
+  .navbar {
+    height: 72px;
+  }
 }
 
 /* ── Brand ───────────────────────────────────────────────── */
 .brand {
   display: flex;
   align-items: center;
-  gap: 11px;
-  flex-shrink: 0;
+  gap: 9px;
+  flex: 1;                  /* Takes all remaining space on mobile → pushes actions to right */
+  min-width: 0;
   text-decoration: none;
-  margin-right: 40px;
   transition: opacity 0.2s ease;
 }
 
 .brand:hover { opacity: 0.82; }
 
+@media (min-width: 768px) {
+  .brand {
+    flex: 0 0 auto;           /* Fixed width on desktop */
+    margin-right: 32px;
+  }
+}
+
 /* RFC red square badge */
 .brandMonogram {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   background: var(--rfc-accent);
   border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 3px 10px rgba(230,57,70,0.3);
+  box-shadow: 0 3px 10px rgba(230,57,70,0.28);
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .brand:hover .brandMonogram {
-  box-shadow: 0 5px 18px rgba(230,57,70,0.45);
-  transform: scale(1.05);
+  box-shadow: 0 5px 16px rgba(230,57,70,0.42);
+  transform: scale(1.04);
 }
 
 .brandMonogramText {
   font-family: var(--font-headline);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 900;
   color: #fff;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   line-height: 1;
 }
 
-/* Brand name stack */
+/* Brand name + tagline stack */
 .brandStack {
   display: flex;
   flex-direction: column;
   gap: 1px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .brandText {
   font-family: var(--font-headline);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 900;
   letter-spacing: 0.03em;
   color: var(--rfc-dark);
   text-transform: uppercase;
   white-space: nowrap;
   line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .brandSub {
   font-family: var(--font-label);
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 600;
   letter-spacing: 0.12em;
   color: var(--rfc-text-subtle);
   text-transform: uppercase;
   line-height: 1;
+  white-space: nowrap;
+}
+
+/* On very small phones (< 360px): hide tagline */
+@media (max-width: 359px) {
+  .brandSub { display: none; }
+  .brandText { font-size: 12px; }
 }
 
 /* ── Desktop Nav Links ───────────────────────────────────── */
@@ -141,7 +178,7 @@
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 0 16px;
+  padding: 0 14px;
   font-family: var(--font-label);
   font-size: 12px;
   font-weight: 700;
@@ -153,13 +190,12 @@
   transition: color 0.2s ease;
 }
 
-/* Animated sliding bottom bar */
 .navLink::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 16px;
-  right: 16px;
+  left: 14px;
+  right: 14px;
   height: 2px;
   background: var(--rfc-accent);
   border-radius: 2px 2px 0 0;
@@ -168,39 +204,33 @@
   transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.navLink:hover {
-  color: var(--rfc-dark);
-}
+.navLink:hover { color: var(--rfc-dark); }
+.navLink:hover::after { transform: scaleX(1); }
 
-.navLink:hover::after {
-  transform: scaleX(1);
-}
-
-/* Active page */
 .navLinkActive {
   color: var(--rfc-accent) !important;
   font-weight: 800;
 }
+.navLinkActive::after { transform: scaleX(1); }
 
-.navLinkActive::after {
-  transform: scaleX(1);
-}
-
-/* ── Right actions ───────────────────────────────────────── */
+/* ── Actions (right side) ────────────────────────────────── */
 .actions {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-left: auto;
+  gap: 2px;
   flex-shrink: 0;
 }
 
-/* ── Search pill ─────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .actions { gap: 4px; margin-left: auto; }
+}
+
+/* ── Desktop Search pill (hidden on mobile) ──────────────── */
 .searchBar {
   display: none;
   align-items: center;
   gap: 8px;
-  background: var(--rfc-surface-subtle, #F0F1F3);
+  background: #F0F1F3;
   border: 1.5px solid transparent;
   border-radius: 100px;
   padding: 0 14px;
@@ -244,13 +274,94 @@
 
 .searchInput::-webkit-search-cancel-button { display: none; }
 
+/* ── Mobile Search icon button ───────────────────────────── */
+.mobileSearchBtn {
+  display: flex;   /* visible on mobile */
+}
+
+@media (min-width: 960px) {
+  .mobileSearchBtn { display: none; } /* hidden once desktop search pill shows */
+}
+
+/* ── Mobile Search Expand Bar ────────────────────────────── */
+.mobileSearchBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 64px;
+  background: var(--rfc-surface);
+  border-top: 1px solid var(--rfc-border);
+  border-bottom: 2px solid var(--rfc-accent);
+  height: 0;
+  overflow: hidden;
+  transition: height 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+}
+
+.mobileSearchBar--open {
+  height: 52px;
+}
+
+@media (min-width: 960px) {
+  .mobileSearchBar { display: none; }
+}
+
+.mobileSearchInner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  height: 52px;
+  color: var(--rfc-text-subtle);
+}
+
+.mobileSearchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--rfc-text);
+  height: 100%;
+  padding: 0;
+}
+
+.mobileSearchInput::placeholder {
+  color: var(--rfc-text-subtle);
+  font-size: 14px;
+}
+
+.mobileSearchInput::-webkit-search-cancel-button { display: none; }
+
+.mobileSearchClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--rfc-text-muted);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.mobileSearchClose:hover {
+  background: var(--rfc-accent-light);
+  color: var(--rfc-accent);
+}
+
 /* ── Icon Buttons ────────────────────────────────────────── */
 .iconBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 8px;
   color: var(--rfc-text-muted);
   background: transparent;
@@ -258,6 +369,7 @@
   cursor: pointer;
   text-decoration: none;
   position: relative;
+  flex-shrink: 0;
   transition:
     color 0.18s ease,
     background 0.18s ease,
@@ -267,7 +379,7 @@
 
 .iconBtn:hover {
   color: var(--rfc-dark);
-  background: var(--rfc-surface-subtle, #F0F1F3);
+  background: #F0F1F3;
   border-color: var(--rfc-border);
   transform: translateY(-1px);
 }
@@ -275,9 +387,7 @@
 .iconBtn:active { transform: translateY(0); }
 
 /* Account — accent when logged in */
-.iconBtn--active {
-  color: var(--rfc-accent);
-}
+.iconBtn--active { color: var(--rfc-accent); }
 
 .iconBtn--active:hover {
   color: var(--rfc-accent);
@@ -292,8 +402,8 @@
   position: absolute;
   top: 2px;
   right: 2px;
-  min-width: 18px;
-  height: 18px;
+  min-width: 17px;
+  height: 17px;
   background: var(--rfc-accent);
   color: #fff;
   font-size: 9px;
@@ -315,7 +425,7 @@
   to   { transform: scale(1); }
 }
 
-/* ── Shop Now CTA ────────────────────────────────────────── */
+/* ── Shop Now CTA (desktop ≥ 1100px only) ────────────────── */
 .shopCta {
   display: none;
   align-items: center;
@@ -346,20 +456,21 @@
   .shopCta { display: flex; }
 }
 
-/* Mobile toggle */
+/* ── Mobile Hamburger (hidden on desktop) ────────────────── */
 .menuToggle { display: flex; }
 
 @media (min-width: 768px) {
   .menuToggle { display: none; }
 }
 
-/* ── Mobile Overlay ──────────────────────────────────────── */
+/* ── Mobile Menu Overlay ─────────────────────────────────── */
 .mobileOverlay {
   position: fixed;
   inset: 0;
   z-index: 99;
   background: rgba(17, 24, 39, 0.5);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   animation: overlayIn 0.22s ease;
 }
 
@@ -375,20 +486,21 @@
   left: 0;
   right: 0;
   background: var(--rfc-surface);
-  border-bottom: 1px solid var(--rfc-border);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.1);
-  padding: 8px 0 24px;
+  border-bottom: 3px solid var(--rfc-accent);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.14);
+  padding-bottom: 0;
   animation: menuIn 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 }
 
 @keyframes menuIn {
-  from { transform: translateY(-8px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+  from { transform: translateY(-10px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
 }
 
 .mobileMenu ul {
   list-style: none;
-  padding: 0;
+  padding: 8px 0 0;
   margin: 0;
 }
 
@@ -396,9 +508,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 28px;
+  padding: 14px 24px;
   font-family: var(--font-headline);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.01em;
@@ -410,7 +522,7 @@
   transition: color 0.18s ease, background 0.18s ease, padding-left 0.2s ease;
 }
 
-/* Left accent slide-in */
+/* Left accent slide-in on hover */
 .mobileNavLink::before {
   content: '';
   position: absolute;
@@ -422,26 +534,59 @@
   transition: width 0.2s ease;
 }
 
-.mobileNavLink:hover {
+.mobileNavLink:hover,
+.mobileNavLinkActive {
   color: var(--rfc-accent);
   background: var(--rfc-accent-light);
-  padding-left: 36px;
+  padding-left: 32px;
 }
 
-.mobileNavLink:hover::before {
+.mobileNavLink:hover::before,
+.mobileNavLinkActive::before {
   width: 4px;
 }
 
 /* Mobile nav arrow */
 .mobileNavArrow {
-  width: 20px;
-  height: 20px;
-  color: var(--rfc-border-strong, #D1D5DB);
+  width: 18px;
+  height: 18px;
+  color: #D1D5DB;
   flex-shrink: 0;
   transition: color 0.18s, transform 0.18s;
 }
 
-.mobileNavLink:hover .mobileNavArrow {
+.mobileNavLink:hover .mobileNavArrow,
+.mobileNavLinkActive .mobileNavArrow {
   color: var(--rfc-accent);
   transform: translateX(3px);
+}
+
+/* ── Mobile Menu Footer ──────────────────────────────────── */
+.mobileMenuFooter {
+  padding: 20px 24px;
+  background: var(--rfc-bg, #F5F6F8);
+  border-top: 1px solid var(--rfc-border);
+}
+
+.mobileMenuCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  background: var(--rfc-accent);
+  color: #ffffff;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(230,57,70,0.3);
+  transition: background 0.18s ease, transform 0.15s ease;
+}
+
+.mobileMenuCta:hover {
+  background: var(--rfc-accent-dark);
+  transform: translateY(-1px);
 }
