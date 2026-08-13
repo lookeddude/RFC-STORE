@@ -199,7 +199,7 @@ export const EDITORIAL_CONTENT: EditorialContent = {
     "Our gear is tested in the fire of the hardest training camps. Built to absorb, built to endure, built so you can push past your limits.",
   cta: { label: "EXPLORE THE COLLECTION", href: "/shop" },
   image: {
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuBt0VPbT4bSvNxD--I7S3CO_2CAiz25p87wJ35Xz5uMhJJlurSP-haWD_oZfj8HLwb8FBI-PhdFzEj2f9PIVO8vuD0PZ2m5VVYOldbRIKxmfoJzMHvHnY99Cl96Uf7w4Q8qRA1n_xAskin0s-JkmMKhDkkCYB0nHTbsiBj1o27UTuryyRZmU0MgsdGRWL_zTW065QEIUj-F8uU7Na7k-RyiK36nc-ifPCIJCO4XpNIk21UHrIjbKiVY",
-    alt: "Close up abstract shot of sweat dripping off a heavily used, textured leather heavy bag in a dark, atmospheric boxing gym. The lighting is cinematic and moody.",
+    src: "/editorial-fighter.jpg",
+    alt: "Professional fighter wrapping hands with red hand wraps in an authentic boxing gym — RFC Store campaign.",
   },
 };
