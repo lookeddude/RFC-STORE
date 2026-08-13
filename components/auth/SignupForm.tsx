@@ -41,7 +41,15 @@ export function SignupForm() {
           if (result.fieldErrors) setFieldErrors(result.fieldErrors as SignupFormErrors);
           setServerError(result.error ?? "Something went wrong.");
         }
-      } catch {
+      } catch (err: unknown) {
+        // Next.js redirect() throws internally — do NOT treat it as an error
+        if (
+          err instanceof Error &&
+          (err.message === "NEXT_REDIRECT" ||
+            (err as { digest?: string }).digest?.startsWith("NEXT_REDIRECT"))
+        ) {
+          return;
+        }
         setServerError("An unexpected error occurred. Please try again.");
       }
     });

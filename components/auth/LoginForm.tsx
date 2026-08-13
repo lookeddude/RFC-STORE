@@ -44,7 +44,15 @@ export function LoginForm() {
           setServerError(result.error ?? "Something went wrong.");
         }
         // On success, loginAction calls redirect() — no further handling needed
-      } catch {
+      } catch (err: unknown) {
+        // Next.js redirect() throws internally — do NOT treat it as an error
+        if (
+          err instanceof Error &&
+          (err.message === "NEXT_REDIRECT" ||
+            (err as { digest?: string }).digest?.startsWith("NEXT_REDIRECT"))
+        ) {
+          return; // Successful redirect — ignore
+        }
         setServerError("An unexpected error occurred. Please try again.");
       }
     });
