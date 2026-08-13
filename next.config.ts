@@ -1,8 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Output configuration — 'standalone' for Node.js deployments (Vercel, Hostinger Node.js)
-  output: "standalone",
+  // Output mode:
+  // - Vercel: no output override needed (Vercel handles it natively)
+  // - Hostinger Node.js: needs 'standalone' for self-hosted deployment
+  // process.env.VERCEL is automatically set to '1' on Vercel builds
+  output: process.env.VERCEL ? undefined : "standalone",
+
 
   // ── Permanent redirects for routes not yet implemented ────
   // These routes appear in the navbar and content links.
@@ -10,21 +14,14 @@ const nextConfig: NextConfig = {
   // 308 Permanent Redirect — search engines transfer link equity.
   async redirects() {
     return [
-      // Category browse → shop (DisciplineGrid cards use /categories/:slug)
+      // Category slug → filtered shop view
+      // (e.g. DisciplineGrid cards: /categories/boxing → /shop?category=boxing)
       {
         source: "/categories/:slug",
         destination: "/shop?category=:slug",
         permanent: true,
       },
-      // Top-level categories → shop
-      {
-        source: "/categories",
-        destination: "/shop",
-        permanent: true,
-      },
-      // Placeholder pages → shop until built
-      { source: "/training",  destination: "/shop", permanent: true },
-      { source: "/about",     destination: "/shop", permanent: true },
+      // Other placeholder routes → shop
       { source: "/wholesale", destination: "/shop", permanent: true },
       { source: "/search",    destination: "/shop", permanent: true },
     ];
