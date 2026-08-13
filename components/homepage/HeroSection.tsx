@@ -28,8 +28,8 @@ export function HeroSection() {
     >
       {/* Responsive hero height: 75vh on mobile, 100vh on desktop */}
       <style>{`
-        :root { --hero-min-height: 75vh; }
-        @media (min-width: 768px) { :root { --hero-min-height: 100vh; } }
+        :root { --hero-min-height: 60vh; }
+        @media (min-width: 1024px) { :root { --hero-min-height: 100vh; } }
       `}</style>
       {/* Background Image */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
