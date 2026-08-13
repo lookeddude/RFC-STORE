@@ -117,6 +117,8 @@ export interface Database {
           compare_at_price: number | null;
           is_active: boolean;
           is_featured: boolean;
+          is_new_arrival: boolean;
+          is_bestseller: boolean;
           tags: string[];
           meta_title: string | null;
           meta_description: string | null;
@@ -131,6 +133,8 @@ export interface Database {
           compare_at_price?: number | null;
           is_active?: boolean;
           is_featured?: boolean;
+          is_new_arrival?: boolean;
+          is_bestseller?: boolean;
           tags?: string[];
           meta_title?: string | null;
           meta_description?: string | null;
@@ -145,8 +149,12 @@ export interface Database {
           compare_at_price?: number | null;
           is_active?: boolean;
           is_featured?: boolean;
+          is_new_arrival?: boolean;
+          is_bestseller?: boolean;
           tags?: string[];
           updated_at?: string;
+          meta_title?: string | null;
+          meta_description?: string | null;
         };
         Relationships: [
           {
@@ -156,6 +164,243 @@ export interface Database {
             referencedColumns: ["id"];
           }
         ];
+      };
+      /**
+       * Saved shipping addresses
+       */
+      addresses: {
+        Row: {
+          id: string;
+          user_id: string;
+          created_at: string;
+          updated_at: string;
+          label: string;
+          full_name: string;
+          phone: string;
+          line1: string;
+          line2: string | null;
+          city: string;
+          state: string;
+          postal_code: string;
+          country: string;
+          is_default: boolean;
+        };
+        Insert: {
+          user_id: string;
+          label?: string;
+          full_name: string;
+          phone: string;
+          line1: string;
+          line2?: string | null;
+          city: string;
+          state: string;
+          postal_code: string;
+          country?: string;
+          is_default?: boolean;
+        };
+        Update: {
+          label?: string;
+          full_name?: string;
+          phone?: string;
+          line1?: string;
+          line2?: string | null;
+          city?: string;
+          state?: string;
+          postal_code?: string;
+          country?: string;
+          is_default?: boolean;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      /**
+       * Orders
+       */
+      orders: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          order_number: string;
+          user_id: string | null;
+          status: string;
+          payment_status: string;
+          customer_name: string;
+          customer_email: string;
+          customer_phone: string;
+          shipping_address: Json | null;
+          subtotal: number;
+          shipping_amount: number;
+          tax_amount: number;
+          discount_amount: number;
+          total_amount: number;
+          currency: string;
+          notes: string | null;
+          metadata: Json | null;
+        };
+        Insert: {
+          order_number: string;
+          user_id?: string | null;
+          status?: string;
+          payment_status?: string;
+          customer_name: string;
+          customer_email: string;
+          customer_phone: string;
+          shipping_address?: Json | null;
+          subtotal: number;
+          shipping_amount?: number;
+          tax_amount?: number;
+          discount_amount?: number;
+          total_amount: number;
+          currency?: string;
+        };
+        Update: {
+          status?: string;
+          payment_status?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      /**
+       * Order Items (with snapshot fields)
+       */
+      order_items: {
+        Row: {
+          id: string;
+          order_id: string;
+          product_id: string | null;
+          variant_id: string | null;
+          product_name_snapshot: string;
+          variant_name_snapshot: string | null;
+          sku_snapshot: string | null;
+          unit_price_snapshot: number;
+          quantity: number;
+          line_total: number;
+          metadata: Json | null;
+        };
+        Insert: {
+          order_id: string;
+          product_id?: string | null;
+          variant_id?: string | null;
+          product_name_snapshot: string;
+          variant_name_snapshot?: string | null;
+          sku_snapshot?: string | null;
+          unit_price_snapshot: number;
+          quantity: number;
+          line_total: number;
+        };
+        Update: Record<string, never>;
+        Relationships: [];
+      };
+      /**
+       * Product Variants
+       */
+      product_variants: {
+        Row: {
+          id: string;
+          created_at: string;
+          product_id: string;
+          name: string;
+          sku: string;
+          price: number;
+          compare_at_price: number | null;
+          attributes: Record<string, string>;
+          is_available: boolean;
+        };
+        Insert: {
+          product_id: string;
+          name: string;
+          sku: string;
+          price: number;
+          compare_at_price?: number | null;
+          attributes?: Record<string, string>;
+          is_available?: boolean;
+        };
+        Update: {
+          name?: string;
+          sku?: string;
+          price?: number;
+          compare_at_price?: number | null;
+          attributes?: Record<string, string>;
+          is_available?: boolean;
+        };
+        Relationships: [];
+      };
+      /**
+       * Product Images
+       */
+      product_images: {
+        Row: {
+          id: string;
+          created_at: string;
+          product_id: string;
+          url: string;
+          alt_text: string | null;
+          sort_order: number;
+          is_primary: boolean;
+        };
+        Insert: {
+          product_id: string;
+          url: string;
+          alt_text?: string | null;
+          sort_order?: number;
+          is_primary?: boolean;
+        };
+        Update: {
+          url?: string;
+          alt_text?: string | null;
+          sort_order?: number;
+          is_primary?: boolean;
+        };
+        Relationships: [];
+      };
+      /**
+       * Store Settings (key-value)
+       */
+      store_settings: {
+        Row: {
+          key: string;
+          value: string | null;
+          label: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          key: string;
+          value?: string | null;
+          label?: string | null;
+        };
+        Update: {
+          value?: string | null;
+          label?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      /**
+       * Inventory
+       */
+      inventory: {
+        Row: {
+          id: string;
+          updated_at: string;
+          variant_id: string;
+          quantity: number;
+          reserved: number;
+          low_threshold: number;
+        };
+        Insert: {
+          variant_id: string;
+          quantity?: number;
+          reserved?: number;
+          low_threshold?: number;
+        };
+        Update: {
+          quantity?: number;
+          reserved?: number;
+          low_threshold?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
     };
     Views: Record<string, never>;

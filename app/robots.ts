@@ -1,9 +1,10 @@
 /**
- * RFC Store — Robots.txt
+ * RFC Store — Robots.txt (Phase 9)
+ *
  * Controls crawler access to the application.
  *
- * Phase 1: Allow all crawlers.
- * Phase 6: Restrict /admin, /api/* from crawlers.
+ * ALLOWED:  Homepage, /shop, /shop/[slug] — public product pages
+ * DISALLOWED: Admin, API, Account, Checkout, Cart, Order confirmation
  */
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
@@ -20,6 +21,9 @@ export default function robots(): MetadataRoute.Robots {
           "/account/",
           "/checkout/",
           "/cart/",
+          "/order-confirmation/",
+          "/login",
+          "/signup",
           "/_next/",
         ],
       },
@@ -28,3 +32,4 @@ export default function robots(): MetadataRoute.Robots {
     host: siteConfig.url,
   };
 }
+

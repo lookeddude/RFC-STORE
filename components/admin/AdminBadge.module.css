@@ -1,0 +1,19 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-label);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.sm { font-size: 10px; padding: 2px 7px; }
+.md { font-size: 12px; padding: 4px 10px; }
+
+.success  { background: #dcfce7; color: #166534; }
+.warning  { background: #fef9c3; color: #854d0e; }
+.error    { background: #fee2e2; color: #991b1b; }
+.info     { background: #dbeafe; color: #1e40af; }
+.primary  { background: rgba(230,57,70,0.12); color: var(--color-secondary); }
+.neutral  { background: var(--color-surface-container); color: var(--color-on-surface-variant); }

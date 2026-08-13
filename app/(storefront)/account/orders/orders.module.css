@@ -1,0 +1,90 @@
+/*
+ * RFC Store — My Orders Page Styles
+ */
+
+.page { display: flex; flex-direction: column; gap: 0; }
+
+/* ── Order List ──────────────────────────────────────────── */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Empty State ─────────────────────────────────────────── */
+.empty {
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-default);
+  padding: 64px 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.emptyHeading {
+  font-family: var(--font-headline);
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.emptyText {
+  font-size: 15px;
+  color: var(--color-on-surface-variant);
+}
+
+.shopBtn {
+  margin-top: 8px;
+  display: inline-flex;
+  padding: 12px 24px;
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+
+.shopBtn:hover { background: var(--color-secondary-dark); }
+
+/* ── Pagination ──────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.pageBtn {
+  padding: 8px 20px;
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.pageBtn:hover {
+  background: var(--color-surface-container);
+  border-color: var(--color-outline);
+}
+
+.pageInfo {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-on-surface-variant);
+}

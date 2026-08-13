@@ -1,0 +1,240 @@
+/* RFC Store — Shared Admin Page Styles */
+
+/* ── Page Header ─────────────────────────────────────────── */
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.pageTitleBlock { flex: 1; min-width: 0; }
+
+.pageTitle {
+  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-size: 24px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #0A0E14;
+}
+
+.pageSub { font-size: 13px; color: #6b7280; margin-top: 3px; }
+
+/* ── Primary Button ──────────────────────────────────────── */
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: #0A0E14;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.primaryBtn:hover { background: #1a2030; }
+
+/* ── Filters Bar ─────────────────────────────────────────── */
+.filtersBar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+  max-width: 360px;
+  padding: 9px 14px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  color: #111827;
+  transition: border-color 0.15s;
+}
+.searchInput:focus { border-color: #0A0E14; }
+
+.filterSelect {
+  padding: 9px 14px;
+  font-size: 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: #374151;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 32px;
+}
+
+/* ── Table Container ─────────────────────────────────────── */
+.tableContainer {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tableWrap { overflow-x: auto; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th {
+  text-align: left;
+  padding: 11px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+  color: #374151;
+}
+
+.table tbody tr:last-child td { border-bottom: none; }
+.table tbody tr:hover td { background: #fafafa; }
+
+/* ── Table Cell Helpers ──────────────────────────────────── */
+.productName {
+  font-weight: 700;
+  color: #111827;
+  font-size: 14px;
+}
+
+.productMeta {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.priceCell {
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+}
+
+.comparePrice {
+  text-decoration: line-through;
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.actionCell {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.editBtn {
+  padding: 5px 12px;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.editBtn:hover { border-color: #0A0E14; color: #0A0E14; }
+
+.dangerBtn {
+  padding: 5px 12px;
+  background: #fff;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #dc2626;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.dangerBtn:hover { background: #fee2e2; }
+
+/* ── Image Thumbnail ─────────────────────────────────────── */
+.imgThumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: #f3f4f6;
+  flex-shrink: 0;
+  border: 1px solid #e5e7eb;
+}
+
+.imgPlaceholder {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d1d5db;
+  flex-shrink: 0;
+}
+
+.productRow { display: flex; align-items: center; gap: 12px; }
+
+/* ── Misc ────────────────────────────────────────────────── */
+.noWrap { white-space: nowrap; }
+.muted { color: #9ca3af; font-size: 12px; }
+.bold { font-weight: 700; color: #111827; }
+
+/* ── Toggle Switch ───────────────────────────────────────── */
+.toggleBtn {
+  position: relative;
+  display: inline-flex;
+  width: 40px; height: 22px;
+  border: none; background: none; cursor: pointer;
+  padding: 0; flex-shrink: 0;
+}
+.toggleTrack {
+  width: 100%; height: 100%;
+  border-radius: 11px;
+  transition: background 0.2s;
+}
+.trackOn  { background: #22c55e; }
+.trackOff { background: #d1d5db; }
+.toggleThumb {
+  position: absolute; top: 3px;
+  width: 16px; height: 16px;
+  border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+.thumbOn  { transform: translateX(21px); }
+.thumbOff { transform: translateX(3px);  }

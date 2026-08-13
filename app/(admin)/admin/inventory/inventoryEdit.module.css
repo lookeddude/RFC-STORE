@@ -1,0 +1,77 @@
+.editBtn {
+  padding: 5px 12px;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.editBtn:hover { border-color: #0A0E14; color: #0A0E14; }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  min-width: 180px;
+}
+
+.fields { display: flex; gap: 8px; }
+
+.label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  margin-bottom: 3px;
+}
+
+.input {
+  width: 70px;
+  padding: 5px 8px;
+  font-size: 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 5px;
+  background: #fff;
+  color: #111827;
+  outline: none;
+}
+.input:focus { border-color: #0A0E14; }
+
+.error { font-size: 11px; color: #dc2626; }
+
+.actions { display: flex; gap: 6px; }
+
+.saveBtn {
+  padding: 5px 12px;
+  background: #0A0E14;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.saveBtn:hover:not(:disabled) { background: #1a2030; }
+.saveBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.cancelBtn {
+  padding: 5px 10px;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+}
+.cancelBtn:hover { background: #f3f4f6; }

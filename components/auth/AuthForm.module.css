@@ -1,0 +1,118 @@
+/*
+ * RFC Store — Auth Form Shared Input Styles
+ */
+
+/* ── Form Layout ─────────────────────────────────────────── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-on-surface);
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-on-surface);
+  background: var(--color-surface-container-low);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-default);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  appearance: none;
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(10, 14, 20, 0.08);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--color-error);
+}
+
+.input[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px rgba(186, 26, 26, 0.1);
+}
+
+.error {
+  font-size: 13px;
+  color: var(--color-error);
+  font-weight: 500;
+}
+
+/* ── Server Error ────────────────────────────────────────── */
+.serverError {
+  background: var(--color-error-container);
+  border: 1px solid rgba(186, 26, 26, 0.2);
+  border-radius: var(--radius-default);
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--color-on-error-container);
+  font-weight: 500;
+}
+
+/* ── Submit Button ───────────────────────────────────────── */
+.submitBtn {
+  width: 100%;
+  padding: 14px;
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--color-secondary-dark);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ── Spinner ─────────────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}

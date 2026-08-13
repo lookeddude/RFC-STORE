@@ -1,0 +1,122 @@
+/* RFC Store — Address Card Styles */
+
+.card {
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-default);
+  padding: 20px 24px;
+  position: relative;
+  transition: box-shadow var(--transition-base);
+}
+
+.card:hover { box-shadow: var(--shadow-card-hover); }
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.label {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+}
+
+.defaultBadge {
+  display: inline-flex;
+  padding: 2px 8px;
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.actionBtn {
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-on-surface-variant);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all var(--transition-fast);
+}
+
+.actionBtn:hover {
+  border-color: var(--color-outline);
+  color: var(--color-primary);
+}
+
+.actionBtn--default:hover {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-on-secondary);
+}
+
+.actionBtn--delete:hover {
+  background: var(--color-error-container);
+  border-color: transparent;
+  color: var(--color-on-error-container);
+}
+
+.actionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Address Body ────────────────────────────────────────── */
+.address {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-on-surface-variant);
+  font-style: normal;
+  line-height: 1.75;
+}
+
+.name {
+  font-weight: 600;
+  color: var(--color-on-surface);
+}
+
+.phone {
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+/* ── Error ───────────────────────────────────────────────── */
+.error {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--color-error);
+}

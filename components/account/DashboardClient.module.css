@@ -1,0 +1,241 @@
+/*
+ * RFC Store — Dashboard Client Styles (Phase 7)
+ * Bento grid layout matching Stitch "RFC Account Dashboard" design.
+ */
+
+/* ── Bento Grid ──────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Card ────────────────────────────────────────────────── */
+.card {
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-default);
+  padding: 24px;
+  transition: box-shadow var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.cardTitle {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--color-primary);
+}
+
+.cardLink {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-secondary);
+  text-decoration: none;
+}
+
+.cardLink:hover {
+  text-decoration: underline;
+}
+
+/* ── Recent Order Card ───────────────────────────────────── */
+.orderMeta {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-on-surface-variant);
+  margin-top: 2px;
+}
+
+.statusBadge {
+  display: inline-flex;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+}
+
+.orderProduct {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-top: 1px solid var(--color-outline-variant);
+  border-bottom: 1px solid var(--color-outline-variant);
+  margin-bottom: 16px;
+}
+
+.orderProductIcon {
+  width: 56px;
+  height: 64px;
+  background: var(--color-surface-container);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-on-surface-variant);
+  font-size: 24px;
+}
+
+.orderProductName {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 3px;
+}
+
+.orderProductMeta {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-on-surface-variant);
+}
+
+.orderProductPrice {
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-secondary);
+  margin-top: 4px;
+}
+
+.viewOrderLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.viewOrderLink:hover {
+  color: var(--color-secondary);
+}
+
+/* ── Address Card ────────────────────────────────────────── */
+.address {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-on-surface-variant);
+  font-style: normal;
+  line-height: 1.7;
+}
+
+.addressName {
+  font-weight: 600;
+  color: var(--color-on-surface);
+  display: block;
+}
+
+/* ── Profile Card ────────────────────────────────────────── */
+.profileRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-on-surface-variant);
+  margin-bottom: 10px;
+}
+
+.profileIcon {
+  color: var(--color-outline);
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* ── Empty States ────────────────────────────────────────── */
+.emptyCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 24px;
+  gap: 12px;
+  color: var(--color-on-surface-variant);
+}
+
+.emptyText {
+  font-size: 14px;
+  color: var(--color-on-surface-variant);
+}
+
+.emptyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.emptyBtn:hover {
+  background: var(--color-secondary-dark);
+}
+
+/* ── Skeleton ────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-container-low) 25%,
+    var(--color-surface-container) 50%,
+    var(--color-surface-container-low) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+.skeletonLine {
+  height: 16px;
+  margin-bottom: 10px;
+  border-radius: var(--radius-sm);
+}

@@ -1,0 +1,92 @@
+/*
+ * RFC Store — Account Shell Styles (Phase 7)
+ * Two-column layout: sidebar + main content
+ */
+
+/* ── Page Container ──────────────────────────────────────── */
+.page {
+  background: var(--color-background);
+  min-height: calc(100dvh - 116px);
+  padding: 0 var(--space-margin-mobile);
+  padding-bottom: var(--space-20);
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding-left: var(--space-margin-desktop);
+    padding-right: var(--space-margin-desktop);
+  }
+}
+
+/* ── Page Header ─────────────────────────────────────────── */
+.header {
+  padding-top: 48px;
+  padding-bottom: 36px;
+}
+
+.greeting {
+  font-family: var(--font-headline);
+  font-size: 36px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+}
+
+@media (min-width: 768px) {
+  .greeting {
+    font-size: 48px;
+  }
+}
+
+.subheading {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-on-surface-variant);
+}
+
+/* ── Mobile Nav Strip ────────────────────────────────────── */
+.mobileNavWrapper {
+  margin-bottom: 28px;
+}
+
+@media (min-width: 768px) {
+  .mobileNavWrapper {
+    display: none;
+  }
+}
+
+/* ── Two-column Layout ───────────────────────────────────── */
+.layout {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .layout {
+    display: flex;
+    gap: var(--space-8);
+    align-items: flex-start;
+  }
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.sidebar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    display: block;
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 132px; /* 116px header offset + 16px breathing room */
+  }
+}
+
+/* ── Main Content ────────────────────────────────────────── */
+.content {
+  flex: 1;
+  min-width: 0; /* prevent flex overflow */
+}

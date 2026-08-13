@@ -1,8 +1,34 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Output configuration — 'standalone' for Node.js deployments (Vercel, Hostinger Node)
+  // Output configuration — 'standalone' for Node.js deployments (Vercel, Hostinger Node.js)
   output: "standalone",
+
+  // ── Permanent redirects for routes not yet implemented ────
+  // These routes appear in the navbar and content links.
+  // They redirect to /shop until dedicated pages are built.
+  // 308 Permanent Redirect — search engines transfer link equity.
+  async redirects() {
+    return [
+      // Category browse → shop (DisciplineGrid cards use /categories/:slug)
+      {
+        source: "/categories/:slug",
+        destination: "/shop?category=:slug",
+        permanent: true,
+      },
+      // Top-level categories → shop
+      {
+        source: "/categories",
+        destination: "/shop",
+        permanent: true,
+      },
+      // Placeholder pages → shop until built
+      { source: "/training",  destination: "/shop", permanent: true },
+      { source: "/about",     destination: "/shop", permanent: true },
+      { source: "/wholesale", destination: "/shop", permanent: true },
+      { source: "/search",    destination: "/shop", permanent: true },
+    ];
+  },
 
   // Image optimization — allow Supabase storage domain
   images: {
@@ -25,10 +51,46 @@ const nextConfig: NextConfig = {
 
   // Security headers — applied to all routes
   async headers() {
+    // ── Content Security Policy ──────────────────────────────
+    // Using report-only mode to catch violations without breaking functionality.
+    // Upgrade to Content-Security-Policy (enforce) after verifying no violations in prod.
+    const cspDirectives = [
+      "default-src 'self'",
+      // Scripts: self + inline scripts (Next.js requires 'unsafe-inline' without nonces)
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      // Styles: self + inline (CSS-in-JS / CSS Modules) + Google Fonts
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      // Fonts: self + Google Fonts CDN
+      "font-src 'self' https://fonts.gstatic.com",
+      // Images: self + Supabase storage + Google Stitch design images (product images)
+      "img-src 'self' data: blob: https://efmwddxzsdiexzmyccvk.supabase.co https://lh3.googleusercontent.com",
+      // Connections: self + Supabase API (auth, DB, realtime, storage)
+      "connect-src 'self' https://efmwddxzsdiexzmyccvk.supabase.co wss://efmwddxzsdiexzmyccvk.supabase.co",
+      // Media: self only
+      "media-src 'self'",
+      // Frames: deny (no iframes needed)
+      "frame-src 'none'",
+      // Frame ancestors: deny clickjacking
+      "frame-ancestors 'none'",
+      // Forms: self only
+      "form-action 'self'",
+      // Base URI: self only
+      "base-uri 'self'",
+      // Object/embed: none
+      "object-src 'none'",
+      // Upgrade insecure requests in production
+      "upgrade-insecure-requests",
+    ].join("; ");
+
     return [
       {
         source: "/(.*)",
         headers: [
+          // Content Security Policy (report-only — upgrade to enforce after prod verification)
+          {
+            key: "Content-Security-Policy-Report-Only",
+            value: cspDirectives,
+          },
           // Prevent MIME type sniffing
           {
             key: "X-Content-Type-Options",
@@ -39,7 +101,7 @@ const nextConfig: NextConfig = {
             key: "X-Frame-Options",
             value: "DENY",
           },
-          // Legacy XSS filter (belt + braces with CSP in Phase 6)
+          // Legacy XSS filter (belt + braces with CSP above)
           {
             key: "X-XSS-Protection",
             value: "1; mode=block",
@@ -52,17 +114,13 @@ const nextConfig: NextConfig = {
           // Disable unused browser features
           {
             key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=()",
-          },
-          // Remove fingerprinting header
-          {
-            key: "X-Powered-By",
-            value: "",
+            value: "camera=(), microphone=(), geolocation=(), payment=()",
           },
         ],
       },
     ];
   },
+
 
   // TypeScript — fail the build on type errors in production
   typescript: {

@@ -1,0 +1,43 @@
+.imagesSection {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.imgTitle {
+  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #0A0E14;
+  margin-bottom: 12px;
+}
+
+.imgGrid { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.imgItem {
+  position: relative;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.imgPrimary { border-color: #E63946; }
+
+.img { display: block; width: 80px; height: 80px; object-fit: cover; }
+
+.primaryLabel {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: #E63946;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+  padding: 2px;
+}

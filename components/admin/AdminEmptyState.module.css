@@ -1,0 +1,17 @@
+.wrap {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 80px 32px; text-align: center; gap: 12px;
+  background: #fff; border: 1px dashed #d1d5db;
+  border-radius: 12px;
+}
+.icon { color: #9ca3af; margin-bottom: 4px; }
+.title { font-size: 18px; font-weight: 700; color: #111827; }
+.desc  { font-size: 14px; color: #6b7280; max-width: 360px; }
+.cta {
+  margin-top: 8px; padding: 10px 24px;
+  background: #0A0E14; color: #fff; border-radius: 6px;
+  font-size: 13px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; text-decoration: none;
+  transition: background 0.15s ease;
+}
+.cta:hover { background: #1a2030; }

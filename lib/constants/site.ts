@@ -35,7 +35,7 @@ export const ROUTES = {
   auth: {
     login: "/login",
     signup: "/signup",
-    logout: "/logout",
+    logout: "/api/auth/logout",
     resetPassword: "/reset-password",
   },
   admin: {

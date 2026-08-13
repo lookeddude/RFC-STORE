@@ -53,24 +53,25 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // ── Future Phase 2+: Protected Route Guards ──────────
-  // Uncomment and extend when authentication is implemented:
-  //
-  // const isAccountRoute = request.nextUrl.pathname.startsWith('/account');
-  // const isAdminRoute = request.nextUrl.pathname.startsWith('/admin');
-  //
-  // if (isAccountRoute && !user) {
-  //   const loginUrl = new URL('/login', request.url);
-  //   loginUrl.searchParams.set('redirect', request.nextUrl.pathname);
-  //   return NextResponse.redirect(loginUrl);
-  // }
-  //
-  // if (isAdminRoute && (!user || userRole !== 'admin')) {
-  //   return NextResponse.redirect(new URL('/', request.url));
-  // }
+  // ── Phase 7: Protected Route Guards ───────────────────
+  const pathname = request.nextUrl.pathname;
+  const isAccountRoute = pathname.startsWith("/account");
+  const isAdminRoute = pathname.startsWith("/admin");
 
-  // Suppress unused variable warning — user will be used in Phase 2
-  void user;
+  if (isAccountRoute && !user) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // ── Phase 8: Admin Route Guard (Edge) ─────────────────
+  // Role check cannot happen here (DB round-trip not available on Edge with anon key)
+  // Full role verification happens in the admin layout (server component)
+  if (isAdminRoute && !user) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", "/admin");
+    return NextResponse.redirect(loginUrl);
+  }
 
   return supabaseResponse;
 }

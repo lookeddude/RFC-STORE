@@ -1,0 +1,124 @@
+/*
+ * RFC Store — Order Card Styles (Phase 7)
+ * Used in My Orders list.
+ */
+
+.card {
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-default);
+  padding: 20px 24px;
+  transition: box-shadow var(--transition-base);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ── Top Row ─────────────────────────────────────────────── */
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.orderNumber {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--color-primary);
+}
+
+.orderDate {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-on-surface-variant);
+  margin-top: 2px;
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── Status Badge ────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.badge--pending,
+.badge--confirmed { background: var(--color-surface-container); color: var(--color-on-surface); }
+.badge--processing { background: #e8f4fd; color: #0369a1; }
+.badge--shipped    { background: var(--color-secondary); color: var(--color-on-secondary); }
+.badge--delivered  { background: #dcfce7; color: #166534; }
+.badge--cancelled,
+.badge--refunded   { background: var(--color-error-container); color: var(--color-on-error-container); }
+
+.paymentBadge {
+  background: var(--color-surface-container-low);
+  color: var(--color-on-surface-variant);
+  border: 1px solid var(--color-outline-variant);
+}
+
+.paymentBadge--paid { background: #dcfce7; color: #166534; border-color: transparent; }
+.paymentBadge--failed { background: var(--color-error-container); color: var(--color-on-error-container); border-color: transparent; }
+
+/* ── Meta Row ────────────────────────────────────────────── */
+.metaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.meta {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-on-surface-variant);
+}
+
+.total {
+  font-family: var(--font-label);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.viewLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-secondary);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.viewLink:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}

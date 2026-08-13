@@ -31,6 +31,7 @@ import {
   calculateTax,
   calculateTotal,
 } from "@/lib/config/shipping";
+import { notifyOrderCreated } from "@/lib/notifications";
 import type {
   CheckoutFormData,
   CheckoutFormErrors,
@@ -310,18 +311,39 @@ export async function placeOrderAction(
     return { success: false, error: "Order creation failed. Please try again." };
   }
 
-  // ── 8. Payment-ready state ──────────────────────────────
-  // TODO Phase 7: Initialize Razorpay payment order here
-  // const razorpayOrder = await razorpay.orders.create({
-  //   amount: Math.round(totalAmount * 100), // in paise
-  //   currency: 'INR',
-  //   receipt: result.order_number,
-  // });
-  // Store razorpayOrder.id on our order record
-  // Return razorpayOrder.id + key to client for payment sheet
+  // ── 8. Fire notification (non-blocking) ─────────────────
+  // notifyOrderCreated is safe to fire-and-forget: it catches its own errors.
+  // Email/SMS will activate once provider credentials are configured in .env.
+  void notifyOrderCreated({
+    orderNumber: result.order_number!,
+    orderId: result.order_id!,
+    customerName: formData.fullName.trim(),
+    customerEmail: formData.email.trim().toLowerCase(),
+    customerPhone: formData.phone.trim() || undefined,
+    totalAmount,
+    currency: "INR",
+    items: validatedItems.map((i) => ({
+      productName: i.productName,
+      variantName: i.variantName,
+      quantity: i.quantity,
+      unitPrice: i.unitPrice,
+    })),
+    shippingAddress: shippingAddressSnapshot,
+  });
 
-  // For now: order created in pending state — payment not yet processed
-  // PAYMENT GATEWAY NOT YET CONNECTED.
+  // ── 9. Payment-ready state ───────────────────────────────
+  // PAYMENT GATEWAY: NOT YET CONNECTED.
+  // Integration point: Initialize Razorpay/Cashfree here after order creation.
+  //
+  // Example (Razorpay):
+  //   const razorpayOrder = await razorpay.orders.create({
+  //     amount: Math.round(totalAmount * 100), // paise
+  //     currency: 'INR',
+  //     receipt: result.order_number,
+  //   });
+  //   return { success: true, orderId: result.order_id, razorpayOrderId: razorpayOrder.id, ... };
+  //
+  // Order is created in 'pending' state until payment is confirmed.
 
   return {
     success: true,

@@ -19,6 +19,7 @@ import Link from "next/link";
 import { NAV_LINKS, ROUTES, RFC_BRAND } from "@/lib/constants/site";
 import { Container } from "@/components/ui/Container";
 import { useCart } from "@/context/CartContext";
+import { createClient } from "@/lib/supabase/client";
 import styles from "./Navbar.module.css";
 import { cn } from "@/lib/utils/cn";
 
@@ -28,10 +29,24 @@ const ANNOUNCEMENT_BAR_HEIGHT = 36;
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const lastScrollY = useRef(0);
   const router = useRouter();
   const { state: cartState } = useCart();
   const cartCount = cartState.itemCount;
+
+  // Auth state — check session and listen for changes
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setIsLoggedIn(!!user);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session?.user);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
 
   // Auto-hide on scroll down, reappear on scroll up (Stitch JS behavior)
   useEffect(() => {
@@ -100,7 +115,7 @@ export function Navbar() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       const q = (e.target as HTMLInputElement).value.trim();
-                      if (q) router.push(`/search?q=${encodeURIComponent(q)}`);
+                      if (q) router.push(`/shop?q=${encodeURIComponent(q)}`);
                     }
                   }}
                 />
@@ -121,11 +136,11 @@ export function Navbar() {
                 )}
               </Link>
 
-              {/* Account */}
+              {/* Account — links to /account if logged in, /login if not */}
               <Link
-                href={ROUTES.auth.login}
-                className={styles.iconBtn}
-                aria-label="Account"
+                href={isLoggedIn ? ROUTES.account.root : ROUTES.auth.login}
+                className={cn(styles.iconBtn, isLoggedIn && styles["iconBtn--active"])}
+                aria-label={isLoggedIn ? "My Account" : "Sign In"}
               >
                 <AccountIcon />
               </Link>
@@ -174,11 +189,11 @@ export function Navbar() {
               ))}
               <li>
                 <Link
-                  href={ROUTES.auth.login}
+                  href={isLoggedIn ? ROUTES.account.root : ROUTES.auth.login}
                   className={styles.mobileNavLink}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Account
+                  {isLoggedIn ? "My Account" : "Sign In"}
                 </Link>
               </li>
               <li>

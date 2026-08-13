@@ -1,0 +1,217 @@
+/* RFC Store — Admin Product Form Styles */
+
+.form { display: flex; flex-direction: column; gap: 20px; }
+
+.errorBanner {
+  padding: 12px 16px;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  color: #991b1b;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.successBanner {
+  padding: 12px 16px;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  color: #166534;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ── Card ────────────────────────────────────────────────── */
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.cardTitle {
+  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #0A0E14;
+  margin-bottom: 18px;
+}
+
+.cardHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.cardHint {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+/* ── Fields ──────────────────────────────────────────────── */
+.fieldGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.fieldFull { grid-column: 1 / -1; }
+
+.label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.input {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  outline: none;
+  background: #fff;
+  color: #111827;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.input:focus { border-color: #0A0E14; }
+.inputError { border-color: #fca5a5; }
+.fieldError { font-size: 12px; color: #dc2626; margin-top: 4px; }
+
+.select {
+  width: 100%;
+  padding: 9px 32px 9px 12px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  background: #fff;
+  color: #111827;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+.textarea { min-height: 80px; resize: vertical; }
+
+/* ── Toggle ──────────────────────────────────────────────── */
+.toggleGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.toggleField {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggleCheckbox { display: none; }
+
+.toggleTrack {
+  position: relative;
+  width: 40px; height: 22px;
+  border-radius: 11px;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.trackOn  { background: #22c55e; }
+.trackOff { background: #d1d5db; }
+
+.toggleThumb {
+  position: absolute; top: 3px;
+  width: 16px; height: 16px;
+  border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+.thumbOn  { transform: translateX(21px); }
+.thumbOff { transform: translateX(3px); }
+
+.toggleLabel { font-size: 13px; color: #374151; }
+
+/* ── Variants ────────────────────────────────────────────── */
+.variantList { display: flex; flex-direction: column; gap: 14px; }
+
+.variantCard {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.variantHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.variantNum { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #6b7280; letter-spacing: 0.05em; }
+
+.removeBtn {
+  width: 24px; height: 24px;
+  background: #fff; border: 1px solid #fca5a5;
+  border-radius: 4px; color: #dc2626;
+  font-size: 12px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.removeBtn:hover { background: #fee2e2; }
+
+.addVariantBtn {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.addVariantBtn:hover { border-color: #0A0E14; color: #0A0E14; }
+
+/* ── Footer ──────────────────────────────────────────────── */
+.formFooter {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+.saveBtn {
+  padding: 12px 32px;
+  background: #0A0E14;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.saveBtn:hover:not(:disabled) { background: #1a2030; }
+.saveBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+@media (max-width: 640px) {
+  .fieldGrid { grid-template-columns: 1fr; }
+  .fieldFull { grid-column: 1; }
+}

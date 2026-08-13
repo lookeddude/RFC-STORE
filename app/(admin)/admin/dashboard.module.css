@@ -1,0 +1,150 @@
+/* RFC Store — Admin Dashboard Styles */
+
+.page { display: flex; flex-direction: column; gap: 32px; }
+
+/* ── Page Header ─────────────────────────────────────────── */
+.pageHeader { margin-bottom: 4px; }
+.pageTitle {
+  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-size: 28px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #0A0E14;
+}
+.pageSub { font-size: 14px; color: #6b7280; margin-top: 4px; }
+
+/* ── Metrics Grid ────────────────────────────────────────── */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+/* ── Section ─────────────────────────────────────────────── */
+.section {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.sectionTitle {
+  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: #0A0E14;
+}
+
+.viewAll {
+  font-size: 13px;
+  font-weight: 600;
+  color: #E63946;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.viewAll:hover { opacity: 0.75; }
+
+/* ── Table ───────────────────────────────────────────────── */
+.tableWrap { overflow-x: auto; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th {
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+  background: #f9fafb;
+  border-bottom: 1px solid #f3f4f6;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f9fafb;
+  vertical-align: middle;
+  color: #374151;
+}
+
+.table tbody tr:last-child td { border-bottom: none; }
+.table tbody tr:hover td { background: #fafafa; }
+
+.orderNum { font-weight: 700; color: #0A0E14; font-size: 13px; }
+
+.customerCell { display: flex; flex-direction: column; gap: 1px; }
+.customerName { font-weight: 600; color: #111827; }
+.customerEmail { font-size: 12px; color: #9ca3af; }
+
+.dateCell { color: #6b7280; white-space: nowrap; }
+.amountCell { font-weight: 700; color: #111827; white-space: nowrap; }
+
+.viewLink {
+  font-size: 12px;
+  font-weight: 600;
+  color: #E63946;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.viewLink:hover { text-decoration: underline; }
+
+/* ── Quick Actions ───────────────────────────────────────── */
+.quickActions {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.actionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.actionCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.actionCard:hover {
+  background: #0A0E14;
+  border-color: #0A0E14;
+  color: #fff;
+}
+
+.actionCard:hover .actionIcon { color: #fff; }
+
+.actionIcon {
+  color: #6b7280;
+  transition: color 0.15s;
+}

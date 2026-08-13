@@ -1,0 +1,93 @@
+/* RFC Store — Admin Order Detail Styles */
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  align-items: start;
+}
+
+.main { display: flex; flex-direction: column; gap: 20px; }
+.sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+.cardTitle {
+  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #0A0E14;
+  margin-bottom: 14px;
+}
+
+/* Totals */
+.totals {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #374151;
+}
+
+.totalFinal {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0A0E14;
+  padding-top: 8px;
+  border-top: 2px solid #0A0E14;
+  margin-top: 4px;
+}
+
+/* Sidebar fields */
+.fieldLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+  margin-bottom: 4px;
+  margin-top: 12px;
+}
+
+.fieldLabel:first-of-type { margin-top: 0; }
+
+.fieldValue {
+  font-size: 14px;
+  color: #111827;
+  font-weight: 500;
+}
+
+.readonlyHint {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.address {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.7;
+}
+
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar { order: -1; }
+}

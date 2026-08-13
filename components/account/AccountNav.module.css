@@ -1,0 +1,155 @@
+/*
+ * RFC Store — Account Navigation Styles (Phase 7)
+ * Stitch design: sidebar nav, active = bg-secondary (coral red), hover = bg-surface-container
+ */
+
+/* ── Sidebar Nav ─────────────────────────────────────────── */
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-default);
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-on-surface-variant);
+  text-decoration: none;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.navLink:hover {
+  color: var(--color-primary);
+  background: var(--color-surface-container);
+}
+
+.navLink[aria-current="page"],
+.navLinkActive {
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+}
+
+.navLink[aria-current="page"]:hover,
+.navLinkActive:hover {
+  background: var(--color-secondary-dark);
+  color: var(--color-on-secondary);
+}
+
+.chevron {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}
+
+/* ── Separator ───────────────────────────────────────────── */
+.separator {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-outline-variant);
+}
+
+/* ── Logout Form ─────────────────────────────────────────── */
+.logoutForm {
+  display: contents;
+}
+
+.logoutBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-default);
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-on-surface-variant);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.logoutBtn:hover {
+  color: var(--color-secondary);
+  background: var(--color-surface-container);
+}
+
+/* ── Mobile Nav ──────────────────────────────────────────── */
+.mobileNav {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 4px;
+}
+
+.mobileNav::-webkit-scrollbar {
+  display: none;
+}
+
+.mobileNavLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-on-surface-variant);
+  text-decoration: none;
+  white-space: nowrap;
+  background: var(--color-surface-container-low);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.mobileNavLink:hover {
+  color: var(--color-primary);
+  background: var(--color-surface-container);
+}
+
+.mobileNavLink[aria-current="page"],
+.mobileNavLinkActive {
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+}
+
+.mobileLogoutBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-on-surface-variant);
+  white-space: nowrap;
+  background: var(--color-surface-container-low);
+  border: none;
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.mobileLogoutBtn:hover {
+  color: var(--color-secondary);
+  background: var(--color-surface-container);
+}

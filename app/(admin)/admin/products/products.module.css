@@ -1,0 +1,8 @@
+.clearLink {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: none;
+  padding: 9px 0;
+}
+.clearLink:hover { color: #374151; }

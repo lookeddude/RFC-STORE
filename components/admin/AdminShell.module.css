@@ -1,0 +1,315 @@
+/*
+ * RFC Store — Admin Global CSS
+ * Applies to all /admin routes
+ * Design: Dark sidebar, clean white content, premium operational feel
+ */
+
+/* ── Admin Layout Variables ──────────────────────────────── */
+:root {
+  --admin-sidebar-width: 240px;
+  --admin-sidebar-bg: #0A0E14;
+  --admin-sidebar-border: rgba(255,255,255,0.06);
+  --admin-sidebar-text: rgba(255,255,255,0.65);
+  --admin-sidebar-text-active: #ffffff;
+  --admin-sidebar-accent: var(--color-secondary, #E63946);
+  --admin-header-height: 60px;
+  --admin-header-bg: #ffffff;
+  --admin-header-border: #e5e7eb;
+  --admin-content-bg: #f8f9fb;
+  --admin-radius: 10px;
+  --admin-shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+/* ── Admin Body Reset ─────────────────────────────────────── */
+.adminLayout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--admin-content-bg);
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.sidebar {
+  width: var(--admin-sidebar-width);
+  min-height: 100vh;
+  background: var(--admin-sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  border-right: 1px solid var(--admin-sidebar-border);
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+.sidebarLogo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--admin-sidebar-border);
+  flex-shrink: 0;
+}
+
+.sidebarLogoInner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.sidebarLogoText {
+  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.sidebarLogoSub {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--admin-sidebar-accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: block;
+}
+
+.sidebarNav {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navSection {
+  margin-top: 16px;
+  margin-bottom: 4px;
+  padding: 0 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--admin-sidebar-text);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.navItem:hover {
+  background: rgba(255,255,255,0.07);
+  color: var(--admin-sidebar-text-active);
+}
+
+.navItemActive {
+  background: rgba(230,57,70,0.15);
+  color: var(--admin-sidebar-text-active);
+  font-weight: 600;
+}
+
+.navItemActive::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 18px;
+  background: var(--admin-sidebar-accent);
+  border-radius: 0 2px 2px 0;
+}
+
+.navItemIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.navItemActive .navItemIcon { opacity: 1; }
+
+.sidebarFooter {
+  padding: 16px 12px;
+  border-top: 1px solid var(--admin-sidebar-border);
+  flex-shrink: 0;
+}
+
+.sidebarUser {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.sidebarUserAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--admin-sidebar-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.sidebarUserName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  truncate: true;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebarUserRole {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+}
+
+.logoutBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.logoutBtn:hover {
+  background: rgba(230,57,70,0.1);
+  border-color: rgba(230,57,70,0.3);
+  color: #ff6b75;
+}
+
+/* ── Main Content Area ───────────────────────────────────── */
+.main {
+  margin-left: var(--admin-sidebar-width);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.header {
+  height: var(--admin-header-height);
+  background: var(--admin-header-bg);
+  border-bottom: 1px solid var(--admin-header-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  gap: 16px;
+}
+
+.headerLeft { display: flex; align-items: center; gap: 12px; }
+
+.headerTitle {
+  font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+  font-size: 18px;
+  font-weight: 800;
+  color: #0A0E14;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.breadcrumb {
+  font-size: 12px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumbLink { color: #6b7280; text-decoration: none; }
+.breadcrumbLink:hover { color: #374151; }
+
+.headerRight { display: flex; align-items: center; gap: 8px; }
+
+/* Mobile hamburger */
+.mobileMenuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #374151;
+}
+
+/* ── Content ─────────────────────────────────────────────── */
+.content {
+  flex: 1;
+  padding: 24px;
+  max-width: 1400px;
+  width: 100%;
+}
+
+/* ── Mobile Overlay ──────────────────────────────────────── */
+.mobileOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 99;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .mobileOverlayVisible {
+    display: block;
+  }
+
+  .main {
+    margin-left: 0;
+  }
+
+  .mobileMenuBtn {
+    display: flex;
+  }
+}
+
+@media (max-width: 640px) {
+  .content { padding: 16px; }
+  .header { padding: 0 16px; }
+}

@@ -169,6 +169,11 @@
   background-color: rgba(11, 28, 48, 0.05);
 }
 
+/* Active state — when user is logged in */
+.iconBtn--active {
+  color: var(--color-secondary);
+}
+
 /* Cart badge */
 .cartBtn {
   position: relative;
