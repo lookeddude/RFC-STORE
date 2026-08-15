@@ -99,13 +99,20 @@ export function VariantSelector({ variants, onVariantChange }: VariantSelectorPr
                   data-available={available}
                   onClick={() => handleSelect(key, value)}
                   aria-pressed={selected}
-                  aria-label={`${key} ${value}${!available ? " — unavailable" : ""}`}
+                  aria-label={`${key} ${value}${!available ? " — sold out" : ""}`}
                   disabled={!available}
+                  title={!available ? "Sold Out" : undefined}
                 >
-                  {value}
-                  {!available && <span className={styles.strikethrough} aria-hidden="true" />}
+                  <span className={styles.pillValue}>{value}</span>
+                  {!available && (
+                    <>
+                      <span className={styles.strikethrough} aria-hidden="true" />
+                      <span className={styles.soldOutLabel}>Sold Out</span>
+                    </>
+                  )}
                 </button>
               );
+
             })}
           </div>
         </div>

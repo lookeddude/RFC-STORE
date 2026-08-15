@@ -82,6 +82,12 @@
   color: #ffffff;
 }
 
+.badge[data-variant="soldout"] {
+  background-color: #4b5563;
+  color: #ffffff;
+}
+
+
 /* ── Add To Cart Overlay ────────────────────────────────── */
 .addToCartOverlay {
   position: absolute;

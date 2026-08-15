@@ -78,7 +78,9 @@ export interface ProductCard {
   isFeatured: boolean;
   isBestseller: boolean;
   hasLowStock: boolean;
+  isOutOfStock: boolean;
 }
+
 
 /** A performance specification shown on product pages (from Stitch design) */
 export interface PerformanceSpec {

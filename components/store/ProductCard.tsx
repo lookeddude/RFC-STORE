@@ -45,13 +45,17 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
     category,
     isNew,
     isBestseller,
+    isOutOfStock,
   } = product;
+
 
   const href = `/shop/${slug}`;
 
-  // Determine badge — SALE takes priority, then BEST SELLER, then NEW
-  const badge: { label: string; variant: "sale" | "badge" } | null =
-    compareAtPrice !== null
+  // Determine badge — SOLD OUT takes priority, then SALE, BEST SELLER, NEW
+  const badge: { label: string; variant: "sale" | "badge" | "soldout" } | null =
+    isOutOfStock
+      ? { label: "SOLD OUT", variant: "soldout" }
+      : compareAtPrice !== null
       ? { label: "SALE", variant: "sale" }
       : isBestseller
       ? { label: "BEST SELLER", variant: "badge" }
@@ -59,8 +63,9 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
       ? { label: "NEW", variant: "badge" }
       : null;
 
+
   return (
-    <article className={styles.card}>
+    <article className={styles.card} data-sold-out={isOutOfStock}>
       {/* Image Area */}
       <Link href={href} className={styles.imageWrapper} tabIndex={-1} aria-hidden="true">
         {/* Badge */}
@@ -84,6 +89,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             className={styles.image}
             loading={priority ? "eager" : "lazy"}
             priority={priority}
+            style={isOutOfStock ? { opacity: 0.5, filter: 'grayscale(40%)' } : undefined}
           />
         ) : (
           <div className={styles.imagePlaceholder} aria-hidden="true">
@@ -91,10 +97,12 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           </div>
         )}
 
-        {/* ADD TO CART hover overlay — Phase 3: architectural placeholder */}
-        <div className={styles.addToCartOverlay} aria-hidden="true">
-          <span className={styles.addToCartLabel}>ADD TO CART</span>
-        </div>
+        {/* ADD TO CART hover overlay — hidden when sold out */}
+        {!isOutOfStock && (
+          <div className={styles.addToCartOverlay} aria-hidden="true">
+            <span className={styles.addToCartLabel}>ADD TO CART</span>
+          </div>
+        )}
       </Link>
 
       {/* Product Info */}

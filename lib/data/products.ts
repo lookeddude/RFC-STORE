@@ -43,6 +43,16 @@ interface DBProduct {
   product_images: DBProductImage[];
 }
 
+/** Lightweight shape used only for the shop listing card query */
+interface DBProductCard extends DBProduct {
+  product_variants?: Array<{
+    id: string;
+    is_available: boolean;
+    inventory: Array<{ quantity: number; reserved: number }> | null;
+  }>;
+}
+
+
 interface DBCategory {
   id: string;
   name: string;
@@ -109,7 +119,18 @@ function mapProductCard(raw: DBProduct): ProductCardType {
     isNew: raw.is_new_arrival,
     isFeatured: raw.is_featured,
     isBestseller: raw.is_bestseller,
-    hasLowStock: false, // Phase 5: compute from inventory table
+    hasLowStock: false,
+    isOutOfStock: (() => {
+      const variants = (raw as DBProductCard).product_variants ?? [];
+      if (variants.length === 0) return false;
+      return variants.every((v) => {
+        if (!v.is_available) return true;
+        const inv = Array.isArray(v.inventory) ? v.inventory[0] : null;
+        const available = inv ? Math.max(0, inv.quantity - inv.reserved) : 0;
+        return available <= 0;
+      });
+    })(),
+
   };
 }
 
@@ -151,8 +172,13 @@ const PRODUCT_CARD_SELECT = `
   ),
   product_images (
     id, url, alt_text, sort_order, is_primary
+  ),
+  product_variants (
+    id, is_available,
+    inventory (quantity, reserved)
   )
 `.trim();
+
 
 const DEFAULT_PAGE_SIZE = 12;
 
