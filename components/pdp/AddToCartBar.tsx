@@ -190,7 +190,7 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
         </div>
         <div className={styles.trustItem}>
           <TruckIcon />
-          <span>Free shipping on orders above ₹5,000</span>
+          <span>Free shipping on orders above ₹999</span>
         </div>
         <div className={styles.trustItem}>
           <ReturnIcon />
