@@ -152,6 +152,17 @@
   background-color: #1a7a3c;
 }
 
+/* Already in cart — GO TO CART state */
+.addBtn[data-in-cart="true"] {
+  background-color: #1a7a3c;
+  letter-spacing: 0.04em;
+}
+
+.addBtn[data-in-cart="true"]:hover {
+  background-color: #166534;
+}
+
+
 /* Wishlist button */
 .wishlistBtn {
   background-color: var(--rfc-dark);

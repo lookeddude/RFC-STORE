@@ -23,12 +23,14 @@
  *   noVariants + basePrice → "IN STOCK" (no inventory tracking on product level)
  */
 import React, { useState, useCallback, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import type { Product, ProductVariant } from "@/types/product";
 import { useCart } from "@/context/CartContext";
 import { addToCartAction } from "@/lib/actions/cart";
 import { VariantSelector } from "./VariantSelector";
 import { QuantitySelector } from "./QuantitySelector";
 import styles from "./AddToCartBar.module.css";
+
 
 interface AddToCartBarProps {
   product: Product;
@@ -44,13 +46,19 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
   const { variants } = product;
   const hasVariants = variants.length > 0;
 
-  const { addToCart } = useCart();
+  const router = useRouter();
+  const { addToCart, state } = useCart();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [wishlistActive, setWishlistActive] = useState(false);
   const [addedFeedback, setAddedFeedback] = useState(false);
   const [cartError, setCartError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  // Check if this product+variant is already in cart
+  const cartKey = `${product.id}:${selectedVariant?.id ?? "null"}`;
+  const isInCart = !!state.items.find((i) => i.key === cartKey);
+
 
   // Determine availability
   const availability: AvailabilityState = (() => {
@@ -137,11 +145,14 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
         <button
           type="button"
           className={styles.addBtn}
-          onClick={handleAddToCart}
-          disabled={!canAddToCart || isPending}
+          onClick={isInCart ? () => router.push("/cart") : handleAddToCart}
+          disabled={(!canAddToCart && !isInCart) || isPending}
           data-feedback={addedFeedback}
+          data-in-cart={isInCart}
           aria-label={
-            isPending
+            isInCart
+              ? "Go to cart"
+              : isPending
               ? "Adding to cart…"
               : !canAddToCart
               ? availability === "select-variant"
@@ -153,7 +164,9 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
           }
           aria-busy={isPending}
         >
-          {isPending
+          {isInCart
+            ? "GO TO CART →"
+            : isPending
             ? "ADDING…"
             : addedFeedback
             ? "✓ ADDED TO CART"
