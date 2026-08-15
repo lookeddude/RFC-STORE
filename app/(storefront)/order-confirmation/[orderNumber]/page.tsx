@@ -71,6 +71,7 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
     order_number: string;
     status: string;
     payment_status: string;
+    payment_method: string;
     user_id: string | null;
     customer_name: string;
     customer_email: string;
@@ -83,6 +84,7 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
     shipping_amount: number;
     tax_amount: number;
     discount_amount: number;
+    cod_fee: number;
     total_amount: number;
     currency: string;
     created_at: string;
@@ -96,6 +98,7 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
       line_total: number;
     }>;
   };
+
 
   // Security: if this order belongs to a specific user, verify session matches.
   // user_id is already available from the first query — no second DB round-trip needed.
