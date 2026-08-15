@@ -12,7 +12,8 @@ import React from "react";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils/format";
-import { SHIPPING_CONFIG, TAX_CONFIG } from "@/lib/config/shipping";
+import { SHIPPING_CONFIG, COD_CONFIG, TAX_CONFIG } from "@/lib/config/shipping";
+
 import styles from "./CheckoutSummary.module.css";
 
 export function CheckoutSummary() {
@@ -20,8 +21,10 @@ export function CheckoutSummary() {
   const { items, subtotal, isLoading } = state;
 
   const shipping = subtotal >= SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_CONFIG.STANDARD_RATE;
+  const codFee = COD_CONFIG.ENABLED ? COD_CONFIG.FEE : 0;
   const tax = Math.round(subtotal * TAX_CONFIG.RATE * 100) / 100;
-  const total = subtotal + shipping + tax;
+  const total = subtotal + shipping + codFee + tax;
+
 
   // Show skeleton during localStorage hydration to avoid ₹0 flash
   if (isLoading) {
@@ -88,6 +91,12 @@ export function CheckoutSummary() {
             {shipping === 0 ? "FREE" : formatPrice(shipping)}
           </span>
         </div>
+        {codFee > 0 && (
+          <div className={styles.row}>
+            <span>COD Handling Fee</span>
+            <span>{formatPrice(codFee)}</span>
+          </div>
+        )}
         {TAX_CONFIG.RATE > 0 && (
           <div className={styles.row}>
             <span>{TAX_CONFIG.LABEL}</span>

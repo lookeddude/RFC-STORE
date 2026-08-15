@@ -174,6 +174,12 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
                     {Number(order.shipping_amount) === 0 ? "FREE" : formatPrice(Number(order.shipping_amount))}
                   </span>
                 </div>
+                {Number(order.cod_fee) > 0 && (
+                  <div className={styles.totalRow}>
+                    <span>COD Handling Fee</span>
+                    <span>{formatPrice(Number(order.cod_fee))}</span>
+                  </div>
+                )}
                 {Number(order.tax_amount) > 0 && (
                   <div className={styles.totalRow}>
                     <span>Tax</span>
