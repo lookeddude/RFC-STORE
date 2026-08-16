@@ -5,14 +5,29 @@
 .slideshow {
   position: relative;
   width: 100%;
-  min-height: var(--hero-min-height, 60vh);
+  /* Mobile: 85vh — tall, immersive hero */
+  height: 85vh;
+  min-height: 480px;
+  max-height: 85vh;
   background-color: var(--rfc-dark, #111827);
   overflow: hidden;
 }
 
+/* Tablet */
+@media (min-width: 640px) {
+  .slideshow {
+    height: 90vh;
+    min-height: 560px;
+    max-height: 90vh;
+  }
+}
+
+/* Desktop — full viewport */
 @media (min-width: 1024px) {
   .slideshow {
-    min-height: var(--hero-min-height, 100vh);
+    height: 100vh;
+    min-height: 600px;
+    max-height: none;
   }
 }
 
