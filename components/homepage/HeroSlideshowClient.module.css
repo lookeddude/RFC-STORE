@@ -5,13 +5,13 @@
   background-color: var(--rfc-dark, #111827);
   overflow: hidden;
   /* Mobile: 85vh — tall, immersive */
-  height: 85svh;   /* svh = small viewport height — accounts for mobile browser chrome */
-  min-height: 480px;
+  height: 75svh;   /* svh = small viewport height — accounts for mobile browser chrome */
+  min-height: 420px;
 }
 
 /* Fallback for browsers without svh support */
 @supports not (height: 1svh) {
-  .slideshow { height: 85vh; }
+  .slideshow { height: 75vh; }
 }
 
 @media (min-width: 640px) {
