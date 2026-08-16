@@ -12,7 +12,20 @@ import type { Metadata, Viewport } from "next";
 import { defaultMetadata } from "@/config/site";
 import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
+import { Archivo_Narrow, Inter } from "next/font/google";
 import "@/app/globals.css";
+
+const archivo = Archivo_Narrow({
+  subsets: ["latin"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = defaultMetadata;
 
@@ -29,25 +42,11 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${archivo.variable} ${inter.variable}`} suppressHydrationWarning>
       <head>
-        {/*
-         * Google Fonts are loaded via globals.css @import.
-         * Preconnect + dns-prefetch to eliminate render-blocking latency.
-         */}
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.googleapis.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
       </head>
       <body>
+
         {/* Skip-to-content — keyboard accessibility */}
         <a href="#main-content" className="skip-to-content">
           Skip to content

@@ -1,4 +1,3 @@
-"use client";
 /**
  * RFC Store — Offer Strip
  *
