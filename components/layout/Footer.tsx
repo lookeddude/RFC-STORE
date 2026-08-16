@@ -72,9 +72,9 @@ export function Footer() {
 /* ── Static Data ─────────────────────────────────────────── */
 
 const SUPPORT_LINKS = [
-  { label: "Privacy Policy", href: "/privacy-policy" },
-  { label: "Terms & Conditions", href: "/terms" },
-  { label: "Returns", href: "/returns" },
-  { label: "Shipping", href: "/shipping-policy" },
-  { label: "Contact Us", href: "/contact" },
+  { label: "Privacy Policy",          href: "/privacy-policy" },
+  { label: "Terms & Conditions",      href: "/terms" },
+  { label: "Returns & Refund Policy", href: "/returns" },
+  { label: "Shipping Policy",         href: "/shipping-policy" },
+  { label: "Contact Us",              href: "/contact" },
 ] as const;

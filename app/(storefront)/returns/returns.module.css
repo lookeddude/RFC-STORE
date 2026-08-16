@@ -1,18 +1,21 @@
+/* RFC Store — Returns, Replacement & Refund Policy Page */
+
 .page {
-  min-height: 60vh;
+  min-height: 100vh;
   background: var(--rfc-bg);
-  padding: 64px 0 80px;
+  padding: 80px 0 100px;
 }
 
 .container {
-  max-width: 760px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
+/* ── Header ─────────────────────────────────────────────── */
 .header {
   margin-bottom: 48px;
-  padding-bottom: 32px;
+  padding-bottom: 40px;
   border-bottom: 2px solid var(--rfc-dark);
 }
 
@@ -20,71 +23,213 @@
   font-family: var(--font-label);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.2em;
   color: var(--rfc-accent);
   text-transform: uppercase;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.category::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--rfc-accent);
 }
 
 .title {
   font-family: var(--font-headline);
-  font-size: clamp(28px, 4vw, 40px);
+  font-size: clamp(28px, 4vw, 44px);
   font-weight: 900;
   color: var(--rfc-dark);
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 12px;
 }
 
 .updated {
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--rfc-text-muted);
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--rfc-text-subtle);
+  text-transform: uppercase;
+  margin-bottom: 20px;
 }
 
+.intro {
+  font-size: 16px;
+  color: var(--rfc-text-muted);
+  line-height: 1.75;
+  max-width: 600px;
+}
+
+/* ── Summary Cards Grid ─────────────────────────────────── */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--rfc-border);
+  margin-bottom: 60px;
+  border: 1px solid var(--rfc-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .summaryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.summaryCard {
+  background: var(--rfc-surface);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  transition: background 0.2s ease;
+}
+
+.summaryCard:hover {
+  background: var(--rfc-surface-subtle);
+}
+
+.summaryIcon {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.summaryNum {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--rfc-accent);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.summaryLabel {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rfc-text-muted);
+  line-height: 1.3;
+}
+
+/* ── Content sections ────────────────────────────────────── */
 .content {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 44px;
+}
+
+.section {
+  padding-bottom: 44px;
+  border-bottom: 1px solid var(--rfc-border);
+}
+
+.section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .section h2 {
   font-family: var(--font-headline);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   color: var(--rfc-dark);
-  margin-bottom: 14px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--rfc-border);
+  margin-bottom: 16px;
+  padding-left: 12px;
+  border-left: 3px solid var(--rfc-accent);
 }
 
 .section p {
   font-family: var(--font-body);
   font-size: 15px;
-  line-height: 1.75;
+  line-height: 1.8;
   color: var(--rfc-text);
-  margin-bottom: 12px;
-}
-
-.section ul {
-  padding-left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   margin-bottom: 14px;
 }
 
-.section li {
+.section p:last-child {
+  margin-bottom: 0;
+}
+
+.section p strong {
+  font-weight: 700;
+  color: var(--rfc-dark);
+}
+
+.section ul {
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  list-style: none;
+}
+
+.section ul li {
   font-family: var(--font-body);
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--rfc-text);
+  padding-left: 20px;
+  position: relative;
+}
+
+.section ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--rfc-accent);
+  font-weight: 700;
 }
 
 .section a {
   color: var(--rfc-accent);
   text-decoration: underline;
   text-underline-offset: 3px;
+  font-weight: 600;
+  transition: opacity 0.15s ease;
+}
+
+.section a:hover {
+  opacity: 0.75;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .page {
+    padding: 60px 0 80px;
+  }
+
+  .summaryNum {
+    font-size: 15px;
+  }
+
+  .summaryLabel {
+    font-size: 9px;
+  }
+
+  .section h2 {
+    font-size: 13px;
+  }
+
+  .section p,
+  .section ul li {
+    font-size: 14px;
+  }
 }
