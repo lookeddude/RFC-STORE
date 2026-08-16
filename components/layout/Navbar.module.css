@@ -274,14 +274,31 @@
 
 .searchInput::-webkit-search-cancel-button { display: none; }
 
-/* ── Mobile Search icon button ───────────────────────────── */
+/* ── Mobile Search icon button ─────────────────────────────
+   Self-contained — does NOT inherit .iconBtn to avoid
+   display:flex specificity conflict on desktop hide.          */
 .mobileSearchBtn {
-  display: flex;   /* visible on mobile */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  color: var(--rfc-text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.mobileSearchBtn:hover {
+  color: var(--rfc-dark);
+  background: rgba(0, 0, 0, 0.05);
 }
 
-/* Hide on desktop — search pill takes over at 768px */
+/* Hide on desktop — !important beats any cascade from other classes */
 @media (min-width: 768px) {
-  .mobileSearchBtn { display: none; }
+  .mobileSearchBtn { display: none !important; }
 }
 
 /* ── Mobile Search Expand Bar ────────────────────────────── */

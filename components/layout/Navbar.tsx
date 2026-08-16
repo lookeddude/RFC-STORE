@@ -153,9 +153,9 @@ export function Navbar() {
               />
             </div>
 
-            {/* Mobile: Search icon button (<768px) */}
+            {/* Mobile: Search icon button — hidden on desktop via CSS */}
             <button
-              className={cn(styles.iconBtn, styles.mobileSearchBtn)}
+              className={styles.mobileSearchBtn}
               aria-label="Search products"
               onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
             >
