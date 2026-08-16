@@ -266,6 +266,49 @@ function DrawerFilters({
         </label>
       </div>
 
+      {/* Price — right below In Stock */}
+      <div className={styles.filterGroup}>
+        <button
+          className={styles.filterGroupHeader}
+          onClick={() => setIsPriceOpen((v) => !v)}
+          type="button"
+          aria-expanded={isPriceOpen}
+        >
+          <span>Price (₹)</span>
+          <ChevronIcon open={isPriceOpen} />
+        </button>
+        {isPriceOpen && (
+          <div className={styles.filterGroupBody}>
+            <div className={styles.priceInputs}>
+              <input
+                type="number"
+                className={styles.priceInput}
+                placeholder="Min"
+                value={minInput}
+                onChange={(e) => setMinInput(e.target.value)}
+                min={0}
+                step={100}
+                aria-label="Minimum price"
+              />
+              <span className={styles.priceSep}>–</span>
+              <input
+                type="number"
+                className={styles.priceInput}
+                placeholder="Max"
+                value={maxInput}
+                onChange={(e) => setMaxInput(e.target.value)}
+                min={0}
+                step={100}
+                aria-label="Maximum price"
+              />
+            </div>
+            <button type="button" className={styles.applyBtn} onClick={handlePriceApply}>
+              Apply
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Product Type */}
       {categories.length > 0 && (
         <div className={styles.filterGroup}>
@@ -327,49 +370,6 @@ function DrawerFilters({
           )}
         </div>
       )}
-
-      {/* Price */}
-      <div className={styles.filterGroup}>
-        <button
-          className={styles.filterGroupHeader}
-          onClick={() => setIsPriceOpen((v) => !v)}
-          type="button"
-          aria-expanded={isPriceOpen}
-        >
-          <span>Price (₹)</span>
-          <ChevronIcon open={isPriceOpen} />
-        </button>
-        {isPriceOpen && (
-          <div className={styles.filterGroupBody}>
-            <div className={styles.priceInputs}>
-              <input
-                type="number"
-                className={styles.priceInput}
-                placeholder="Min"
-                value={minInput}
-                onChange={(e) => setMinInput(e.target.value)}
-                min={0}
-                step={100}
-                aria-label="Minimum price"
-              />
-              <span className={styles.priceSep}>–</span>
-              <input
-                type="number"
-                className={styles.priceInput}
-                placeholder="Max"
-                value={maxInput}
-                onChange={(e) => setMaxInput(e.target.value)}
-                min={0}
-                step={100}
-                aria-label="Maximum price"
-              />
-            </div>
-            <button type="button" className={styles.applyBtn} onClick={handlePriceApply}>
-              Apply
-            </button>
-          </div>
-        )}
-      </div>
 
       {/* Footer actions */}
       <div className={styles.drawerFooter}>

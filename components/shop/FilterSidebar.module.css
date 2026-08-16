@@ -97,15 +97,14 @@
   max-height: 0;
   opacity: 0;
   transition:
-    max-height 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
     opacity 0.22s ease;
-  /* Prevent interaction when collapsed */
   pointer-events: none;
 }
 
 .panelOpen {
-  /* Large enough to fit all content */
-  max-height: 1200px;
+  /* Large enough for any number of tags/categories — never clips */
+  max-height: 4000px;
   opacity: 1;
   pointer-events: auto;
 }
@@ -168,11 +167,13 @@
   text-align: left;
 }
 
+/* Group body — always single column, never wraps */
 .groupBody {
   margin-top: 14px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
 }
 
 /* ── In Stock Toggle ─────────────────────────────────────── */
@@ -182,6 +183,7 @@
   gap: 12px;
   cursor: pointer;
   user-select: none;
+  width: 100%;
 }
 
 .inStockCheckbox {
@@ -209,6 +211,8 @@
   align-items: center;
   gap: 12px;
   cursor: pointer;
+  /* Full width — ensures items stack vertically, never side-by-side */
+  width: 100%;
 }
 
 .checkbox {
