@@ -26,8 +26,8 @@ export async function updateInventoryAction(
   };
   if (lowThreshold !== undefined) payload.low_threshold = lowThreshold;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .from('inventory').update(payload as any).eq('id', inventoryId);
 
 

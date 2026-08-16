@@ -125,7 +125,9 @@ export default async function AdminProductsPage({
                   </tr>
                 </thead>
                 <tbody>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {products.map((p: any) => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const primaryImg = p.product_images?.find((i: any) => i.is_primary)
                       ?? p.product_images?.[0];
                     const cat = p.categories as { name: string } | null;

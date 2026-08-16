@@ -9,13 +9,15 @@
  * Zero client JS needed for the initial render.
  *
  * URL structure:
- *   /shop                    → All products
- *   /shop?category=boxing    → Filtered
- *   /shop?sort=price-asc     → Sorted
- *   /shop?q=gloves           → Searched
- *   /shop?minPrice=1000      → Min price
- *   /shop?maxPrice=5000      → Max price
- *   /shop?page=2             → Page 2
+ *   /shop                               → All products
+ *   /shop?category=boxing               → Category filter
+ *   /shop?sort=price-asc                → Sorted
+ *   /shop?q=gloves                      → Searched
+ *   /shop?minPrice=1000                 → Min price
+ *   /shop?maxPrice=5000                 → Max price
+ *   /shop?inStock=true                  → In-stock only
+ *   /shop?tags=muay-thai,sparring       → Tag filter
+ *   /shop?page=2                        → Page 2
  */
 import type { Metadata } from "next";
 import { Suspense } from "react";
@@ -25,10 +27,16 @@ import {
   CategoryTabs,
   FilterSidebar,
   ShopToolbar,
+  MobileFilterDrawer,
   ProductGrid,
   LoadMore,
 } from "@/components/shop";
-import { getProducts, getCategories, getCategoryBySlug } from "@/lib/data/products";
+import {
+  getProducts,
+  getCategories,
+  getCategoryBySlug,
+  getAvailableTags,
+} from "@/lib/data/products";
 import type { SortOption, ProductFilters } from "@/types/product";
 import styles from "./shop.module.css";
 
@@ -53,6 +61,8 @@ interface ShopPageProps {
     q?: string;
     minPrice?: string;
     maxPrice?: string;
+    inStock?: string;
+    tags?: string;
     page?: string;
   }>;
 }
@@ -61,40 +71,63 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   // Await searchParams (Next.js 16 requires awaiting this)
   const params = await searchParams;
 
-  // Parse & validate URL params
+  // ── Parse & validate URL params ────────────────────────
   const categorySlug = params.category ?? null;
   const rawSort = params.sort ?? "featured";
   const sort: SortOption = isValidSort(rawSort) ? rawSort : "featured";
   const searchQuery = params.q ?? "";
   const minPrice = params.minPrice ? parseFloat(params.minPrice) : undefined;
   const maxPrice = params.maxPrice ? parseFloat(params.maxPrice) : undefined;
+  const inStock = params.inStock === "true";
+  // Tags: split on comma, normalise to lowercase, trim, cap length + count
+  const rawTags = params.tags ?? "";
+  const tags = rawTags
+    .split(",")
+    .map((t) => t.trim().toLowerCase().slice(0, 50))
+    .filter((t) => t.length > 0)
+    .slice(0, 10);
   const page = Math.max(1, parseInt(params.page ?? "1", 10));
 
-  // Fetch categories (for tabs + sidebar filter)
-  const categories = await getCategories();
+  // ── Parallel data fetches ──────────────────────────────
+  const [categories, availableTags] = await Promise.all([
+    getCategories(),
+    getAvailableTags(),
+  ]);
 
-  // Resolve category to ID (filter uses category_id in DB)
+  // Resolve category slug → ID (DB filter uses category_id)
   let activeCategoryId: string | null = null;
   if (categorySlug) {
     const category = await getCategoryBySlug(categorySlug);
     activeCategoryId = category?.id ?? null;
   }
 
-  // Build filters
+  // ── Build filters ──────────────────────────────────────
   const filters: ProductFilters = {
     ...(activeCategoryId ? { categoryId: activeCategoryId } : {}),
     ...(searchQuery ? { search: searchQuery } : {}),
     ...(minPrice !== undefined ? { minPrice } : {}),
     ...(maxPrice !== undefined ? { maxPrice } : {}),
+    ...(inStock ? { inStock: true } : {}),
+    ...(tags.length > 0 ? { tags } : {}),
   };
 
   const hasFilters =
     activeCategoryId !== null ||
     !!searchQuery ||
     minPrice !== undefined ||
-    maxPrice !== undefined;
+    maxPrice !== undefined ||
+    inStock ||
+    tags.length > 0;
 
-  // Fetch products
+  // Active filter count for mobile drawer badge
+  const activeFilterCount =
+    (activeCategoryId !== null ? 1 : 0) +
+    (inStock ? 1 : 0) +
+    tags.length +
+    (minPrice !== undefined ? 1 : 0) +
+    (maxPrice !== undefined ? 1 : 0);
+
+  // ── Fetch products ─────────────────────────────────────
   const { products, total } = await getProducts(filters, sort, page, PAGE_SIZE);
 
   return (
@@ -110,22 +143,44 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
 
         {/* Main content: Sidebar + Grid */}
         <div className={styles.layout}>
-          {/* Left Sidebar Filters */}
+          {/* Left Sidebar Filters — hidden on mobile via CSS */}
           <Suspense fallback={null}>
             <FilterSidebar
               categories={categories}
               activeCategoryId={activeCategoryId}
               activeMinPrice={minPrice ?? null}
               activeMaxPrice={maxPrice ?? null}
+              availableTags={availableTags}
+              activeTags={tags}
+              activeInStock={inStock}
             />
           </Suspense>
 
           {/* Right: Toolbar + Product Grid + Load More */}
           <div className={styles.main}>
-            {/* Search + Sort Toolbar */}
-            <Suspense fallback={null}>
-              <ShopToolbar key={searchQuery} currentSort={sort} currentSearch={searchQuery} />
-            </Suspense>
+            {/* Toolbar row: Mobile filter trigger + Search + Sort */}
+            <div className={styles.toolbarRow}>
+              <Suspense fallback={null}>
+                <MobileFilterDrawer
+                  categories={categories}
+                  activeCategoryId={activeCategoryId}
+                  activeMinPrice={minPrice ?? null}
+                  activeMaxPrice={maxPrice ?? null}
+                  availableTags={availableTags}
+                  activeTags={tags}
+                  activeInStock={inStock}
+                  activeFilterCount={activeFilterCount}
+                />
+              </Suspense>
+              <Suspense fallback={null}>
+                <ShopToolbar
+                  key={searchQuery}
+                  currentSort={sort}
+                  currentSearch={searchQuery}
+                  total={total}
+                />
+              </Suspense>
+            </div>
 
             {/* Product Grid */}
             <ProductGrid products={products} hasFilters={hasFilters} />

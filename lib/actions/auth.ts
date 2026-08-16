@@ -13,6 +13,7 @@
  */
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { safeRedirectPath } from "@/lib/utils/validation";
 import type {
   LoginFormData,
   LoginFormErrors,
@@ -97,9 +98,9 @@ export async function loginAction(
     return { success: false, error: "Login failed. Please try again." };
   }
 
-  // Safe redirect — validate redirect param to prevent open redirect
-  const safeRedirect = redirectTo.startsWith("/") ? redirectTo : "/account";
-  redirect(safeRedirect);
+  // Validate redirect param to prevent open redirect attacks.
+  // safeRedirectPath rejects protocol-relative (//evil.com) and external URLs.
+  redirect(safeRedirectPath(redirectTo));
 }
 
 export async function signupAction(data: SignupFormData): Promise<AuthActionResult> {

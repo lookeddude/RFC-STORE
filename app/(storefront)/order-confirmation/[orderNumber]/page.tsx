@@ -50,10 +50,11 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
   const { data: orderRaw, error } = await admin
     .from("orders")
     .select(`
-      id, order_number, status, payment_status, user_id,
+      id, order_number, status, payment_status, payment_method, user_id,
       customer_name, customer_email, customer_phone,
       shipping_address, subtotal, shipping_amount, tax_amount,
-      discount_amount, total_amount, currency, created_at,
+      discount_amount, cod_fee, total_amount, currency, created_at,
+      razorpay_payment_id,
       order_items (
         id, product_name_snapshot, variant_name_snapshot,
         sku_snapshot, unit_price_snapshot, quantity, line_total
@@ -66,7 +67,7 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
     notFound();
   }
 
-  const order = orderRaw as {
+  const order = orderRaw as unknown as {
     id: string;
     order_number: string;
     status: string;
@@ -88,6 +89,7 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
     total_amount: number;
     currency: string;
     created_at: string;
+    razorpay_payment_id: string | null;
     order_items: Array<{
       id: string;
       product_name_snapshot: string;
@@ -100,11 +102,12 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
   };
 
 
-  // Security: if this order belongs to a specific user, verify session matches.
-  // user_id is already available from the first query — no second DB round-trip needed.
-  const { data: { session } } = await supabase.auth.getSession();
+  // Security: if this order belongs to a specific user, verify the authenticated user matches.
+  // getUser() re-validates the JWT with Supabase Auth server — cannot be forged.
+  // Never use getSession() for security decisions (reads cookie without server validation).
+  const { data: { user: sessionUser } } = await supabase.auth.getUser();
   if (order.user_id) {
-    if (!session?.user || session.user.id !== order.user_id) {
+    if (!sessionUser || sessionUser.id !== order.user_id) {
       notFound();
     }
   }
@@ -216,9 +219,9 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
                 <li className={styles.step}>
                   <div className={styles.stepNum}>2</div>
                   <div>
-                    <div className={styles.stepTitle}>Payment Processing</div>
+                    <div className={styles.stepTitle}>Order Processing</div>
                     <div className={styles.stepDesc}>
-                      Our team will contact you at <strong>{order.customer_email}</strong> to complete payment.
+                      A confirmation has been sent to <strong>{order.customer_email}</strong>. Your order is being prepared for dispatch.
                     </div>
                   </div>
                 </li>
@@ -269,24 +272,63 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
                 </div>
               </div>
 
-              {/* COD Payment Info */}
-              <div className={styles.codPaymentBlock}>
-                <div className={styles.codPaymentHeader}>
-                  <span className={styles.codPaymentIcon}>💵</span>
-                  <div>
-                    <p className={styles.codPaymentTitle}>Cash on Delivery</p>
-                    <p className={styles.codPaymentText}>
-                      Keep <strong>₹{Number(order.total_amount).toLocaleString('en-IN')}</strong> ready when your order arrives.
-                    </p>
+              {/* Payment Method Info */}
+              {order.payment_method === 'razorpay' ? (
+                <div className={styles.codPaymentBlock}>
+                  <div className={styles.codPaymentHeader}>
+                    <span className={styles.codPaymentIcon}>🔒</span>
+                    <div>
+                      <p className={styles.codPaymentTitle}>Online Payment — Paid</p>
+                      <p className={styles.codPaymentText}>
+                        Your payment of <strong>₹{Number(order.total_amount).toLocaleString('en-IN')}</strong> was processed securely via Razorpay.
+                      </p>
+                      {order.razorpay_payment_id && (
+                        <p style={{ fontSize: '11px', color: 'var(--rfc-text-muted)', marginTop: '4px', fontFamily: 'monospace' }}>
+                          Transaction ID: {order.razorpay_payment_id}
+                        </p>
+                      )}
+                    </div>
                   </div>
+                  <ul className={styles.codSteps}>
+                    <li>✓ Payment received &amp; verified</li>
+                    <li>✓ Order confirmed</li>
+                    <li>⏳ Processing &amp; dispatch (2–3 days)</li>
+                    <li>🚚 Delivered to your address</li>
+                  </ul>
+                  {/* Invoice download */}
+                  <a
+                    href={`/api/invoices/${order.id}`}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '6px',
+                      marginTop: '12px', padding: '8px 14px',
+                      background: 'rgba(255,255,255,0.06)',
+                      border: '1px solid rgba(255,255,255,0.12)',
+                      borderRadius: '6px', color: 'var(--rfc-text)',
+                      textDecoration: 'none', fontSize: '12px', fontWeight: 600,
+                    }}
+                  >
+                    📄 Download Invoice
+                  </a>
                 </div>
-                <ul className={styles.codSteps}>
-                  <li>✓ Order placed &amp; confirmed</li>
-                  <li>⏳ Processing &amp; dispatch (2–3 days)</li>
-                  <li>🚚 Out for delivery</li>
-                  <li>💵 Pay on delivery &amp; receive</li>
-                </ul>
-              </div>
+              ) : (
+                <div className={styles.codPaymentBlock}>
+                  <div className={styles.codPaymentHeader}>
+                    <span className={styles.codPaymentIcon}>💵</span>
+                    <div>
+                      <p className={styles.codPaymentTitle}>Cash on Delivery</p>
+                      <p className={styles.codPaymentText}>
+                        Keep <strong>₹{Number(order.total_amount).toLocaleString('en-IN')}</strong> ready when your order arrives.
+                      </p>
+                    </div>
+                  </div>
+                  <ul className={styles.codSteps}>
+                    <li>✓ Order placed &amp; confirmed</li>
+                    <li>⏳ Processing &amp; dispatch (2–3 days)</li>
+                    <li>🚚 Out for delivery</li>
+                    <li>💵 Pay on delivery &amp; receive</li>
+                  </ul>
+                </div>
+              )}
             </section>
 
             {/* Contact */}

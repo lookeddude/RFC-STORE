@@ -38,17 +38,27 @@ export default function ReturnsPage() {
           </section>
 
           <section className={styles.section}>
-            <h2>5. Refunds</h2>
+            <h2>5. Refunds (Cash on Delivery)</h2>
             <p>Processed within 5-7 business days after we receive item. COD orders: refunded via bank transfer. Shipping fee and COD fee (₹99) are non-refundable.</p>
           </section>
 
           <section className={styles.section}>
-            <h2>6. Damaged / Wrong Items</h2>
+            <h2>6. Refund for Online Payments</h2>
+            <p>If you paid online via Razorpay, refunds will be processed to your original payment method. Processing time: [CONFIRM: X-Y business days] from the date of refund approval.</p>
+          </section>
+
+          <section className={styles.section}>
+            <h2>7. Exchanges</h2>
+            <p>Exchanges require contacting support. Please email <a href="mailto:revivefightclub@gmail.com">revivefightclub@gmail.com</a> with your order number and exchange details.</p>
+          </section>
+
+          <section className={styles.section}>
+            <h2>8. Damaged / Wrong Items</h2>
             <p>We replace at no cost, contact within 48 hours of delivery.</p>
           </section>
 
           <section className={styles.section}>
-            <h2>7. Contact</h2>
+            <h2>9. Contact</h2>
             <p>Email: <a href="mailto:revivefightclub@gmail.com">revivefightclub@gmail.com</a></p>
           </section>
         </div>

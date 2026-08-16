@@ -9,6 +9,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { notifyOrderStatusChanged } from "@/lib/notifications";
+import { isValidUUID } from "@/lib/utils/validation";
 
 export async function POST(
   _req: NextRequest,
@@ -16,6 +17,10 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
+
+    if (!isValidUUID(id)) {
+      return NextResponse.json({ error: "Invalid order ID" }, { status: 400 });
+    }
 
     // Verify admin session
     const supabase = await createClient();
@@ -30,7 +35,7 @@ export async function POST(
       .eq("id", user.id)
       .single();
 
-    if (!profile || !["admin", "super_admin"].includes(profile.role)) {
+    if (!profile || !profile.role || !["admin", "super_admin"].includes(profile.role)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

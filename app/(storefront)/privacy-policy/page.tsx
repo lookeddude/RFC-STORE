@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
             <p>When you shop with Revive Fight Club, we collect the following information:</p>
             <ul>
               <li><strong>Account Information:</strong> Name, email address, and phone number when you register or place an order.</li>
-              <li><strong>Order Information:</strong> Shipping address, order history, and payment method (Cash on Delivery).</li>
+              <li><strong>Order Information:</strong> Shipping address, order history, and payment method (Cash on Delivery or online payment via Razorpay).</li>
               <li><strong>Technical Data:</strong> IP address, browser type, and pages visited on our website via standard server logs.</li>
             </ul>
           </section>
@@ -45,12 +45,17 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section className={styles.section}>
-            <h2>4. Cookies</h2>
+            <h2>4. Payment Processing</h2>
+            <p>When you pay online, your payment details are processed by Razorpay, a PCI-DSS compliant payment gateway. Revive Fight Club does not store card numbers, UPI credentials, or banking passwords. We only store payment confirmation references (transaction IDs) for order reconciliation.</p>
+          </section>
+
+          <section className={styles.section}>
+            <h2>5. Cookies</h2>
             <p>We use essential session cookies for authentication and cart persistence. We do not use third-party advertising or tracking cookies.</p>
           </section>
 
           <section className={styles.section}>
-            <h2>5. Your Rights</h2>
+            <h2>6. Your Rights</h2>
             <ul>
               <li>You may request access to your personal data at any time.</li>
               <li>You may request deletion of your account and associated data.</li>
@@ -60,10 +65,10 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section className={styles.section}>
-            <h2>6. Contact</h2>
+            <h2>7. Contact</h2>
             <p>Revive Fight Club<br />
             Email: <a href="mailto:revivefightclub@gmail.com">revivefightclub@gmail.com</a><br />
-            For privacy-related queries, please mention "Privacy" in your subject line.</p>
+            For privacy-related queries, please mention &quot;Privacy&quot; in your subject line.</p>
           </section>
         </div>
       </div>

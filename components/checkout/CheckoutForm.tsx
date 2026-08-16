@@ -22,6 +22,7 @@
 import React from "react";
 import type { CheckoutFormData, CheckoutFormErrors } from "@/types/order";
 import styles from "./CheckoutForm.module.css";
+import { PaymentMethodPicker, type PaymentMethodChoice } from './PaymentMethodPicker';
 
 const INDIAN_STATES = [
   "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh",
@@ -39,7 +40,11 @@ interface CheckoutFormProps {
   fieldErrors: CheckoutFormErrors;
   serverError: string | null;
   isPending: boolean;
+  paymentMethod: PaymentMethodChoice;
+  razorpayEnabled: boolean;
+  codFee: number;
   onChange: (field: keyof CheckoutFormData, value: string) => void;
+  onPaymentMethodChange: (method: PaymentMethodChoice) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
 
@@ -48,7 +53,11 @@ export function CheckoutForm({
   fieldErrors,
   serverError,
   isPending,
+  paymentMethod,
+  razorpayEnabled,
+  codFee,
   onChange,
+  onPaymentMethodChange,
   onSubmit,
 }: CheckoutFormProps) {
   return (
@@ -285,33 +294,45 @@ export function CheckoutForm({
         </div>
       )}
 
-      {/* ── Payment Method: Cash on Delivery ─────────── */}
-      <div className={styles.codBlock}>
-        <div className={styles.codHeader}>
-          <span className={styles.codIcon}>💵</span>
-          <div>
-            <p className={styles.codTitle}>Cash on Delivery</p>
-            <p className={styles.codSubtitle}>Pay when your order arrives. No advance required.</p>
+      {/* ── Payment Method Selector ───────────────────────── */}
+      <div className={styles.paymentSection}>
+        <PaymentMethodPicker
+          value={paymentMethod}
+          onChange={onPaymentMethodChange}
+          codFee={codFee}
+          razorpayEnabled={razorpayEnabled}
+        />
+
+        {/* COD details — shown when COD is selected or Razorpay not available */}
+        {(!razorpayEnabled || paymentMethod === 'cod') && (
+          <div className={styles.codBlock}>
+            <div className={styles.codHeader}>
+              <span className={styles.codIcon}>💵</span>
+              <div>
+                <p className={styles.codTitle}>Cash on Delivery</p>
+                <p className={styles.codSubtitle}>Pay when your order arrives. No advance required.</p>
+              </div>
+              <span className={styles.codBadge}>✓ Available</span>
+            </div>
+            <div className={styles.codDetails}>
+              <div className={styles.codRow}>
+                <span className={styles.codLabel}>COD Handling Fee</span>
+                <span className={styles.codValue}>₹{codFee}</span>
+              </div>
+              <div className={styles.codRow}>
+                <span className={styles.codLabel}>Free Shipping on orders above</span>
+                <span className={styles.codValue}>₹999</span>
+              </div>
+              <div className={styles.codRow}>
+                <span className={styles.codLabel}>Standard Shipping</span>
+                <span className={styles.codValue}>₹99</span>
+              </div>
+            </div>
+            <p className={styles.codNote}>
+              Keep exact change ready at the time of delivery. Our delivery partner will collect payment.
+            </p>
           </div>
-          <span className={styles.codBadge}>✓ Available</span>
-        </div>
-        <div className={styles.codDetails}>
-          <div className={styles.codRow}>
-            <span className={styles.codLabel}>COD Handling Fee</span>
-            <span className={styles.codValue}>₹99</span>
-          </div>
-          <div className={styles.codRow}>
-            <span className={styles.codLabel}>Free Shipping on orders above</span>
-            <span className={styles.codValue}>₹999</span>
-          </div>
-          <div className={styles.codRow}>
-            <span className={styles.codLabel}>Standard Shipping</span>
-            <span className={styles.codValue}>₹99</span>
-          </div>
-        </div>
-        <p className={styles.codNote}>
-          Keep exact change ready at the time of delivery. Our delivery partner will collect payment.
-        </p>
+        )}
       </div>
 
       {/* ── Submit ───────────────────────────────────────── */}
@@ -320,15 +341,15 @@ export function CheckoutForm({
         className={styles.placeOrderBtn}
         disabled={isPending}
         aria-busy={isPending}
-        aria-label={isPending ? "Placing your order…" : "Place order"}
+        aria-label={isPending ? 'Processing…' : (paymentMethod === 'razorpay' ? 'Proceed to payment' : 'Place order')}
       >
         {isPending ? (
           <>
             <Spinner />
-            PLACING ORDER…
+            {paymentMethod === 'razorpay' ? 'INITIALIZING PAYMENT…' : 'PLACING ORDER…'}
           </>
         ) : (
-          "PLACE ORDER"
+          paymentMethod === 'razorpay' ? 'PROCEED TO PAYMENT' : 'PLACE ORDER'
         )}
       </button>
 

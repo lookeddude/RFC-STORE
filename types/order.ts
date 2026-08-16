@@ -8,15 +8,24 @@
 // ── Order Status ───────────────────────────────────────────
 
 export type OrderStatus =
-  | "pending"
-  | "confirmed"
-  | "processing"
-  | "shipped"
-  | "delivered"
-  | "cancelled"
-  | "refunded";
+  | "pending_payment"   // Razorpay order created, awaiting payment
+  | "pending"           // Order confirmed (COD placed / Razorpay paid)
+  | "confirmed"         // Admin confirmed
+  | "processing"        // Being prepared
+  | "shipped"           // Dispatched
+  | "delivered"         // Delivered
+  | "cancelled"         // Cancelled (payment failed / admin cancelled)
+  | "refund_pending"    // Payment captured but fulfillment impossible; refund in progress
+  | "refunded";         // Fully refunded
 
-export type PaymentStatus = "pending" | "paid" | "failed" | "refunded";
+export type PaymentStatus =
+  | "pending"           // Awaiting payment (COD: awaiting delivery; Razorpay: awaiting capture)
+  | "paid"              // Payment confirmed
+  | "failed"            // Payment failed / cancelled
+  | "refund_pending"    // Money captured, refund not yet confirmed
+  | "refund_failed"     // Refund API failed — needs admin intervention
+  | "refunded";         // Fully refunded
+
 export type PaymentMethod = "cod" | "razorpay" | "cashfree" | "stripe" | "manual";
 
 // ── Checkout Form Data ─────────────────────────────────────
@@ -121,6 +130,32 @@ export interface PlaceOrderResult {
   error?: string;
   /** Field-level validation errors */
   fieldErrors?: CheckoutFormErrors;
+}
+
+/** Result from createRazorpayOrderAction — data needed to open Razorpay modal */
+export interface CreateRazorpayOrderResult {
+  success: boolean;
+  /** Razorpay order ID (rzp_order_xxx) — pass to Razorpay Checkout */
+  razorpayOrderId?: string;
+  /** Amount in paise (server-calculated, authoritative) */
+  amount?: number;
+  currency?: string;
+  /** RFC internal order ID */
+  orderId?: string;
+  orderNumber?: string;
+  /** Razorpay Key ID (safe to expose) */
+  keyId?: string;
+  /** Guest-only: one-time ownership token (never logged) */
+  guestToken?: string;
+  error?: string;
+  fieldErrors?: CheckoutFormErrors;
+}
+
+/** Result from verifyRazorpayPaymentAction */
+export interface VerifyRazorpayResult {
+  success: boolean;
+  orderNumber?: string;
+  error?: string;
 }
 
 // ── Order Record (from DB) ─────────────────────────────────

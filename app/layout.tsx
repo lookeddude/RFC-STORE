@@ -4,15 +4,14 @@
  * Applied to every page in the application.
  * Sets up fonts, global CSS, base SEO metadata, and accessibility foundation.
  *
- * CartProvider wraps the entire app so useCart() is available everywhere:
- *   - Navbar (cart count badge)
- *   - AddToCartBar (add item to cart)
- *   - Cart page (display and mutate cart)
+ * CartProvider    — cart state (guest: localStorage, auth: Supabase DB)
+ * WishlistProvider — wishlist state (authenticated users only)
  */
 import React from "react";
 import type { Metadata, Viewport } from "next";
 import { defaultMetadata } from "@/config/site";
 import { CartProvider } from "@/context/CartContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 import "@/app/globals.css";
 
 export const metadata: Metadata = defaultMetadata;
@@ -53,7 +52,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <a href="#main-content" className="skip-to-content">
           Skip to content
         </a>
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          <WishlistProvider>{children}</WishlistProvider>
+        </CartProvider>
       </body>
     </html>
   );

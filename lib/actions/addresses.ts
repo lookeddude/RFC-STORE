@@ -15,10 +15,12 @@
  */
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isValidUUID } from "@/lib/utils/validation";
 import type {
   AddressFormData,
   AddressFormErrors,
   AddressMutationResult,
+  AddressRow,
 } from "@/types/account";
 
 // ── Indian States (same set as checkout) ──────────────────
@@ -138,7 +140,7 @@ export async function updateAddressAction(
   addressId: string,
   data: AddressFormData
 ): Promise<AddressMutationResult> {
-  if (!addressId) return { success: false, error: "Invalid address." };
+  if (!isValidUUID(addressId)) return { success: false, error: "Invalid address." };
 
   const fieldErrors = validateAddress(data);
   if (Object.keys(fieldErrors).length > 0) {
@@ -177,7 +179,7 @@ export async function updateAddressAction(
 export async function deleteAddressAction(
   addressId: string
 ): Promise<AddressMutationResult> {
-  if (!addressId) return { success: false, error: "Invalid address." };
+  if (!isValidUUID(addressId)) return { success: false, error: "Invalid address." };
 
   const user = await getAuthUser();
   if (!user) return { success: false, error: "You must be logged in." };
@@ -200,7 +202,7 @@ export async function deleteAddressAction(
 export async function setDefaultAddressAction(
   addressId: string
 ): Promise<AddressMutationResult> {
-  if (!addressId) return { success: false, error: "Invalid address." };
+  if (!isValidUUID(addressId)) return { success: false, error: "Invalid address." };
 
   const user = await getAuthUser();
   if (!user) return { success: false, error: "You must be logged in." };
@@ -219,4 +221,37 @@ export async function setDefaultAddressAction(
   }
 
   return { success: true };
+}
+
+// ═══════════════════════════════════════════════════════════
+// getMyAddressesAction
+// ═══════════════════════════════════════════════════════════
+
+/**
+ * Fetch the authenticated user's saved addresses for checkout.
+ * Returns empty array for unauthenticated users (no error).
+ * Used by SavedAddressPicker on the checkout page.
+ */
+export async function getMyAddressesAction(): Promise<{
+  success: boolean;
+  addresses: AddressRow[];
+  error?: string;
+}> {
+  const user = await getAuthUser();
+  if (!user) return { success: true, addresses: [] };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('addresses')
+    .select('id, user_id, label, full_name, phone, line1, line2, city, state, postal_code, country, is_default, created_at, updated_at')
+    .eq('user_id', user.id)
+    .order('is_default', { ascending: false })
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('[RFC Store] getMyAddressesAction error:', error.message);
+    return { success: false, addresses: [], error: 'Failed to load addresses.' };
+  }
+
+  return { success: true, addresses: (data ?? []) as AddressRow[] };
 }

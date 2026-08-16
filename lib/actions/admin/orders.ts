@@ -34,9 +34,9 @@ export async function updateOrderStatusAction(
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await supabase
     .from('orders')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .update({ status: newStatus, updated_at: new Date().toISOString() } as any)
     .eq('id', orderId);
 

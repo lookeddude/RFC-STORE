@@ -66,7 +66,7 @@ export default async function AdminOrderDetailPage({
             ← Back to Orders
           </Link>
           <h1 className={styles.pageTitle} style={{ marginTop: 6 }}>Order {order.order_number}</h1>
-          <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
+          <div style={{ display: "flex", gap: 8, marginTop: 6, flexWrap: 'wrap', alignItems: 'center' }}>
             <AdminBadge label={oStatus.label} variant={oStatus.variant} size="md" />
             <AdminBadge label={pStatus.label} variant={pStatus.variant} size="md" />
             {order.payment_method === 'cod' && (
@@ -80,6 +80,33 @@ export default async function AdminOrderDetailPage({
                 💵 Cash on Delivery
               </span>
             )}
+            {order.payment_method === 'razorpay' && (
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: '4px',
+                padding: '3px 10px', background: '#eff6ff', color: '#1d4ed8',
+                border: '1px solid #3b82f6', borderRadius: '4px',
+                fontFamily: 'var(--font-label)', fontSize: '11px', fontWeight: 700,
+                textTransform: 'uppercase', letterSpacing: '0.05em',
+              }}>
+                🔒 Razorpay
+              </span>
+            )}
+            {/* Invoice download */}
+            <a
+              href={`/api/invoices/${order.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '4px',
+                padding: '4px 12px',
+                background: 'var(--rfc-surface)', color: 'var(--rfc-text)',
+                border: '1px solid var(--rfc-border)', borderRadius: '6px',
+                fontFamily: 'var(--font-label)', fontSize: '11px', fontWeight: 600,
+                textDecoration: 'none', cursor: 'pointer',
+              }}
+            >
+              📄 Download Invoice
+            </a>
           </div>
         </div>
       </div>
@@ -209,8 +236,48 @@ export default async function AdminOrderDetailPage({
             )}
           </div>
 
-          {/* Payment Info */}
-          {(order.payment_provider || order.payment_reference) && (
+          {/* Payment Info — Razorpay */}
+          {order.payment_method === 'razorpay' && (
+            <div className={detailStyles.card}>
+              <h2 className={detailStyles.cardTitle}>Razorpay Payment</h2>
+              {order.razorpay_order_id && (
+                <>
+                  <p className={detailStyles.fieldLabel}>Razorpay Order ID</p>
+                  <p className={detailStyles.fieldValue} style={{ fontFamily: "monospace", fontSize: 11 }}>
+                    {order.razorpay_order_id}
+                  </p>
+                </>
+              )}
+              {order.razorpay_payment_id && (
+                <>
+                  <p className={detailStyles.fieldLabel}>Payment ID (Transaction)</p>
+                  <p className={detailStyles.fieldValue} style={{ fontFamily: "monospace", fontSize: 11 }}>
+                    {order.razorpay_payment_id}
+                  </p>
+                  <a
+                    href={`https://dashboard.razorpay.com/app/payments/${order.razorpay_payment_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ fontSize: 12, color: '#2563eb', textDecoration: 'underline' }}
+                  >
+                    View on Razorpay Dashboard ↗
+                  </a>
+                </>
+              )}
+              {order.payment_amount && (
+                <>
+                  <p className={detailStyles.fieldLabel} style={{ marginTop: 12 }}>Verified Amount</p>
+                  <p className={detailStyles.fieldValue}>{formatPrice(order.payment_amount)}</p>
+                </>
+              )}
+              {!order.razorpay_payment_id && (
+                <p style={{ fontSize: 12, color: '#9ca3af' }}>Payment not yet captured.</p>
+              )}
+            </div>
+          )}
+
+          {/* Payment Info — COD (existing) */}
+          {order.payment_method === 'cod' && (order.payment_provider || order.payment_reference) && (
             <div className={detailStyles.card}>
               <h2 className={detailStyles.cardTitle}>Payment</h2>
               {order.payment_provider && (
@@ -226,6 +293,30 @@ export default async function AdminOrderDetailPage({
                     {order.payment_reference}
                   </p>
                 </>
+              )}
+            </div>
+          )}
+
+          {/* Refund Info */}
+          {(order.payment_status === 'refund_pending' || order.payment_status === 'refund_failed' || order.payment_status === 'refunded') && (
+            <div className={detailStyles.card} style={{ borderColor: '#ef4444' }}>
+              <h2 className={detailStyles.cardTitle} style={{ color: '#ef4444' }}>
+                {order.payment_status === 'refunded' ? '✓ Refund Complete' : '⚠ Refund In Progress'}
+              </h2>
+              <p style={{ fontSize: 12, color: '#9ca3af' }}>
+                {order.payment_status === 'refund_pending' && 'A refund has been initiated. Processing typically takes 5-7 business days.'}
+                {order.payment_status === 'refund_failed' && 'Refund failed. Please initiate manually via Razorpay Dashboard or contact support.'}
+                {order.payment_status === 'refunded' && 'Customer has been refunded.'}
+              </p>
+              {order.payment_status === 'refund_failed' && (
+                <a
+                  href={`https://dashboard.razorpay.com/app/payments/${order.razorpay_payment_id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 12, color: '#2563eb', textDecoration: 'underline', display: 'block', marginTop: 8 }}
+                >
+                  Process refund manually on Razorpay ↗
+                </a>
               )}
             </div>
           )}

@@ -1,0 +1,102 @@
+.container {
+  border-bottom: 1px solid var(--rfc-border);
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rfc-text-muted);
+  margin-bottom: 12px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card {
+  all: unset;
+  box-sizing: border-box;
+  border: 1.5px solid var(--rfc-border);
+  border-radius: var(--radius-md, 8px);
+  padding: 12px 16px;
+  cursor: pointer;
+  text-align: left;
+  min-width: 180px;
+  max-width: 260px;
+  transition: border-color 150ms;
+  background: var(--rfc-surface, #FFFFFF);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  border-color: var(--rfc-text-muted);
+}
+
+.card.selected {
+  border-color: var(--rfc-accent);
+  background: rgba(230, 57, 70, 0.04);
+}
+
+.cardTop {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.cardName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--rfc-text);
+  flex-grow: 1;
+}
+
+.defaultBadge {
+  font-size: 10px;
+  background: var(--rfc-accent);
+  color: white;
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.cardLabel {
+  font-size: 11px;
+  color: var(--rfc-text-subtle);
+}
+
+.cardAddress,
+.cardCity,
+.cardPhone {
+  font-size: 12px;
+  color: var(--rfc-text-muted);
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .list {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  .card {
+    max-width: 100%;
+    width: 100%;
+  }
+}

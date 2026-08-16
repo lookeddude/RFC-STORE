@@ -9,6 +9,7 @@
   gap: 0;
 }
 
+/* Desktop sidebar — sticky, fixed width */
 @media (min-width: 1024px) {
   .sidebar {
     width: 240px;
@@ -111,6 +112,34 @@
   gap: 12px;
 }
 
+/* ── In Stock Toggle ─────────────────────────────────────── */
+.inStockLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.inStockCheckbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  border: 1.5px solid var(--rfc-text-muted);
+  accent-color: var(--rfc-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.inStockText {
+  font-family: var(--font-label);
+  font-size: var(--font-label-bold-size);
+  font-weight: var(--font-label-bold-weight);
+  letter-spacing: var(--font-label-bold-letter-spacing);
+  text-transform: uppercase;
+  color: var(--rfc-text);
+}
+
 /* ── Checkbox ───────────────────────────────────────────── */
 .checkboxLabel {
   display: flex;
@@ -133,6 +162,7 @@
   font-family: var(--font-body);
   font-size: 14px;
   color: var(--rfc-text-muted);
+  text-transform: capitalize;
   transition: color var(--transition-fast);
 }
 

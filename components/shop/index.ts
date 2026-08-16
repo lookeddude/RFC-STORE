@@ -5,6 +5,7 @@ export { ShopHeader } from "./ShopHeader";
 export { CategoryTabs } from "./CategoryTabs";
 export { FilterSidebar } from "./FilterSidebar";
 export { ShopToolbar } from "./ShopToolbar";
+export { MobileFilterDrawer } from "./MobileFilterDrawer";
 export { ProductGrid } from "./ProductGrid";
 export { ProductGridSkeleton } from "./ProductGridSkeleton";
 export { EmptyState } from "./EmptyState";

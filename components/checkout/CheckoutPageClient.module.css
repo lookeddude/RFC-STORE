@@ -101,3 +101,51 @@
   transition: background-color var(--transition-fast);
 }
 .shopBtn:hover { background-color: var(--color-secondary-dark); }
+
+/* ── Mobile sticky Place Order bar ─────────────────────── */
+.stickyBar {
+  display: none; /* hidden on desktop */
+}
+
+@media (max-width: 768px) {
+  .stickyBar {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid var(--rfc-border);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .stickyBtn {
+    display: block;
+    width: 100%;
+    padding: 14px 20px;
+    background: var(--rfc-accent);
+    color: #fff;
+    font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: var(--radius-sm, 4px);
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+
+  .stickyBtn:hover:not(:disabled) {
+    background: var(--rfc-accent-dark, #C81D28);
+  }
+
+  .stickyBtn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}

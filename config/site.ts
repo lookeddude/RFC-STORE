@@ -6,8 +6,10 @@
  */
 import type { Metadata } from "next";
 
+// NEXT_PUBLIC_SITE_URL must be set to your production domain in all environments.
+// Example: https://rfcstore.in  (no trailing slash)
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://rfc-store.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
 export const siteConfig = {
   name: "REVIVE FIGHT CLUB",

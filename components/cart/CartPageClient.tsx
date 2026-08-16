@@ -64,6 +64,7 @@ export function CartPageClient() {
 
   useEffect(() => {
     if (!state.isLoading) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       validateStock();
     }
   }, [state.isLoading, validateStock]);

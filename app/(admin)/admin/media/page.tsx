@@ -41,6 +41,7 @@ export default function AdminMediaPage() {
     }
   }, []);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { loadImages(); }, [loadImages]);
 
   const handleUpload = async (files: FileList | null) => {

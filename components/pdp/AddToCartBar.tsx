@@ -26,6 +26,7 @@ import React, { useState, useCallback, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Product, ProductVariant } from "@/types/product";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { addToCartAction } from "@/lib/actions/cart";
 import { VariantSelector } from "./VariantSelector";
 import { QuantitySelector } from "./QuantitySelector";
@@ -48,12 +49,15 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
 
   const router = useRouter();
   const { addToCart, state } = useCart();
+  const { isWishlisted, toggleWishlist, isAuthenticated: wishlistAuth } = useWishlist();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
-  const [wishlistActive, setWishlistActive] = useState(false);
   const [addedFeedback, setAddedFeedback] = useState(false);
   const [cartError, setCartError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  // Real wishlist state from WishlistContext (DB-backed for auth users)
+  const wishlistActive = isWishlisted(product.id);
 
   // Check if this product+variant is already in cart
   const cartKey = `${product.id}:${selectedVariant?.id ?? "null"}`;
@@ -107,11 +111,15 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
     });
   }, [canAddToCart, isPending, product, selectedVariant, quantity, addToCart]);
 
-  // ── Phase 7 integration point ─────────────────────────────
-  const handleWishlist = useCallback(() => {
-    setWishlistActive((v) => !v);
-    // TODO Phase 7: persist to wishlist_items table via API route
-  }, []);
+  // ── Phase 2: Real wishlist integration ───────────────────
+  const handleWishlist = useCallback(async () => {
+    if (!wishlistAuth) {
+      // Unauthenticated: redirect to login with return path
+      router.push(`/login?redirect=${encodeURIComponent(`/shop/${product.slug}`)}`);
+      return;
+    }
+    await toggleWishlist(product.id);
+  }, [wishlistAuth, toggleWishlist, product.id, product.slug, router]);
 
   return (
     <div className={styles.bar}>

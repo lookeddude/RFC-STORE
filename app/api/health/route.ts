@@ -18,13 +18,10 @@ export const runtime = "nodejs";
 
 export async function GET() {
   const timestamp = new Date().toISOString();
-  const isDev = process.env.NODE_ENV === "development";
 
   const result = {
     status: "ok" as "ok" | "error",
     timestamp,
-    environment: isDev ? "development" : "production",
-    project: "efmwddxzsdiexzmyccvk",
     checks: {
       anonClient: false,
       adminClient: false,
@@ -42,7 +39,8 @@ export async function GET() {
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Unknown error";
     result.status = "error";
-    result.error = isDev ? `Anon client: ${msg}` : "Anon client check failed";
+    result.error = "Anon client check failed";
+    void msg; // suppress unused variable
   }
 
   // ── Check 2: Admin Client (service role) ─────────────
@@ -58,9 +56,8 @@ export async function GET() {
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Unknown error";
     result.status = "error";
-    result.error = isDev
-      ? `Admin client: ${msg}`
-      : "Admin client check failed. Ensure SUPABASE_SERVICE_ROLE_KEY is set.";
+    result.error = "Admin client check failed. Ensure SUPABASE_SERVICE_ROLE_KEY is set.";
+    void msg; // suppress unused variable
   }
 
   const httpStatus =

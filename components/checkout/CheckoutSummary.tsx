@@ -16,12 +16,12 @@ import { SHIPPING_CONFIG, COD_CONFIG, TAX_CONFIG } from "@/lib/config/shipping";
 
 import styles from "./CheckoutSummary.module.css";
 
-export function CheckoutSummary() {
+export function CheckoutSummary({ paymentMethod = 'cod' }: { paymentMethod?: 'cod' | 'razorpay' }) {
   const { state } = useCart();
   const { items, subtotal, isLoading } = state;
 
   const shipping = subtotal >= SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_CONFIG.STANDARD_RATE;
-  const codFee = COD_CONFIG.ENABLED ? COD_CONFIG.FEE : 0;
+  const codFee = COD_CONFIG.ENABLED && paymentMethod === 'cod' ? COD_CONFIG.FEE : 0;
   const tax = Math.round(subtotal * TAX_CONFIG.RATE * 100) / 100;
   const total = subtotal + shipping + codFee + tax;
 

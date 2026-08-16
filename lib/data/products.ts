@@ -7,7 +7,7 @@
  * Architecture:
  *   UI → data functions here → Supabase → PostgreSQL
  *
- * Reused by: /shop, /categories/[slug], search, homepage, Phase 4 product detail.
+ * Reused by: /shop, /categories/[slug], search, homepage, PDP.
  */
 
 import { createClient } from "@/lib/supabase/server";
@@ -159,6 +159,40 @@ function getSortConfig(sort: SortOption): {
   }
 }
 
+// ── Search Sanitisation ───────────────────────────────────
+
+/**
+ * Sanitises a raw user search string for safe use inside a PostgREST
+ * .or() ilike filter string.
+ *
+ * PostgREST parses .or() as a raw filter expression. If user input
+ * contains control characters (`,`, `.`, `(`, `)`) they would break
+ * the expression structure — this is a PostgREST-level injection vector.
+ *
+ * Strategy: replace PostgREST control characters with spaces.
+ * The search intent is preserved ("boxing,gloves" -> "boxing gloves").
+ *
+ * Sanitises:
+ *   \   -> stripped (escape prefix)
+ *   %   -> \% (ILIKE wildcard -> becomes literal percent)
+ *   _   -> \_ (ILIKE single-char wildcard -> becomes literal underscore)
+ *   ,   -> space (PostgREST .or() expression separator)
+ *   .   -> space (PostgREST column.operator.value separator)
+ *   (   -> space (PostgREST grouping open)
+ *   )   -> space (PostgREST grouping close)
+ *   '   -> space (PostgREST string quoting)
+ *   "   -> space (PostgREST string quoting)
+ */
+function sanitiseSearchTerm(raw: string): string {
+  return raw
+    .trim()
+    .replace(/\\/g, "")              // strip backslashes first
+    .replace(/[%_]/g, "\\$&")        // escape ILIKE wildcards to literals
+    .replace(/[,.()\'"]/g, " ")      // replace PostgREST-sensitive chars with space
+    .replace(/\s+/g, " ")            // collapse multiple spaces
+    .trim();
+}
+
 // ── Public API ────────────────────────────────────────────
 
 const PRODUCT_CARD_SELECT = `
@@ -184,7 +218,12 @@ const DEFAULT_PAGE_SIZE = 12;
 
 /**
  * Fetches paginated products for the Shop listing page.
- * Applies category filter, price range, search, and sort.
+ * Applies category filter, price range, tags, search, sort, and in-stock.
+ *
+ * When inStock=true: fetches all matching rows (no DB-level pagination),
+ * filters in application layer, then manually paginates. This ensures
+ * accurate total count and correct Load More / hasMore behaviour.
+ * At current catalog scale (<500 products) this is safe.
  */
 export async function getProducts(
   filters: ProductFilters = {},
@@ -196,19 +235,29 @@ export async function getProducts(
   const { column, ascending } = getSortConfig(sort);
   const offset = (page - 1) * limit;
 
+  // When inStock filter is active, we must fetch ALL matching rows to
+  // compute the true in-stock count and paginate correctly.
+  // Without this, total/hasMore would be based on the unfiltered DB count
+  // and the Load More button would show misleading remaining counts.
+  const fetchAll = !!filters.inStock;
+
   let query = supabase
     .from("products")
-    .select(PRODUCT_CARD_SELECT, { count: "exact" })
+    .select(PRODUCT_CARD_SELECT, fetchAll ? undefined : { count: "exact" })
     .eq("is_active", true)
-    .order(column, { ascending })
-    .range(offset, offset + limit - 1);
+    .order(column, { ascending });
 
-  // Category filter
+  // Apply DB-level pagination only when NOT doing fetch-all for inStock
+  if (!fetchAll) {
+    query = query.range(offset, offset + limit - 1);
+  }
+
+  // ── Category filter ───────────────────────────────────
   if (filters.categoryId) {
     query = query.eq("category_id", filters.categoryId);
   }
 
-  // Price filters
+  // ── Price filters ─────────────────────────────────────
   if (filters.minPrice !== undefined) {
     query = query.gte("base_price", filters.minPrice);
   }
@@ -216,9 +265,27 @@ export async function getProducts(
     query = query.lte("base_price", filters.maxPrice);
   }
 
-  // Text search
+  // ── Tags filter ───────────────────────────────────────
+  // .overlaps() is a fully SDK-parameterised method — tag values are
+  // passed as an array, never concatenated into a filter string.
+  // Returns products where tags array has ANY overlap with requested tags.
+  if (filters.tags && filters.tags.length > 0) {
+    query = query.overlaps("tags", filters.tags);
+  }
+
+  // ── Text search ───────────────────────────────────────
+  // Searches name and short_description via .or() with sanitised term.
+  // sanitiseSearchTerm() replaces PostgREST control characters with spaces
+  // to prevent filter string injection.
+  // Tags are NOT searched here — use the tags filter for tag selection.
   if (filters.search) {
-    query = query.ilike("name", `%${filters.search}%`);
+    const safe = sanitiseSearchTerm(filters.search);
+    if (safe.length > 0) {
+      const pattern = `%${safe}%`;
+      query = query.or(
+        `name.ilike.${pattern},short_description.ilike.${pattern}`
+      );
+    }
   }
 
   const { data, error, count } = await query;
@@ -228,8 +295,22 @@ export async function getProducts(
     throw new Error(`Failed to fetch products: ${error.message}`);
   }
 
+  const mapped = (data as unknown as DBProduct[]).map(mapProductCard);
+
+  // ── In-stock application-layer filter + pagination ────
+  // Applied after mapping because PostgREST cannot filter parent rows
+  // based on child join aggregates (inventory.quantity - inventory.reserved).
+  // The isOutOfStock flag is already computed by mapProductCard().
+  if (fetchAll) {
+    const inStockProducts = mapped.filter((p) => !p.isOutOfStock);
+    return {
+      products: inStockProducts.slice(offset, offset + limit),
+      total: inStockProducts.length, // accurate count for LoadMore/hasMore
+    };
+  }
+
   return {
-    products: (data as unknown as DBProduct[]).map(mapProductCard),
+    products: mapped,
     total: count ?? 0,
   };
 }
@@ -278,8 +359,36 @@ export async function getCategoryBySlug(
 }
 
 /**
+ * Fetches all distinct tags from active products.
+ * Used to populate the tags filter in the sidebar.
+ *
+ * Tags are normalised to lowercase on the read side only.
+ * Existing DB tag values are never modified.
+ * Mixed-casing in DB tags is a known Phase 1 limitation.
+ */
+export async function getAvailableTags(): Promise<string[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("tags")
+    .eq("is_active", true);
+
+  if (error) {
+    console.error("[getAvailableTags] Supabase error:", error.message);
+    return [];
+  }
+
+  const allTags = (data ?? []).flatMap(
+    (p: { tags: string[] | null }) => p.tags ?? []
+  );
+  // Normalise to lowercase, deduplicate, and sort alphabetically
+  return [...new Set(allTags.map((t) => t.toLowerCase().trim()))].filter(Boolean).sort();
+}
+
+/**
  * Fetches a single product by slug with all fields including inventory.
- * Used by Phase 4 Product Detail page.
+ * Used by the Product Detail Page.
  */
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const supabase = await createClient();
@@ -394,7 +503,6 @@ export async function getRelatedProducts(
 
 /**
  * Fetches featured products for the homepage.
- * Phase 3+: replaces homepage seed data.
  */
 export async function getFeaturedProducts(
   limit = 4
@@ -405,7 +513,6 @@ export async function getFeaturedProducts(
 
 /**
  * Fetches products on sale (compare_at_price is set) for the Best Deals section.
- * Sorted by biggest discount percentage descending.
  */
 export async function getBestDeals(
   limit = 8
@@ -453,7 +560,6 @@ export async function getBestsellers(
       return [];
     }
 
-    // Fallback to featured products if none flagged as bestseller
     if (!data || data.length === 0) {
       return getFeaturedProducts(limit);
     }
@@ -486,7 +592,6 @@ export async function getNewArrivals(
       return [];
     }
 
-    // Fallback: return most recently added active products
     if (!data || data.length === 0) {
       const { products } = await getProducts({}, "newest", 1, limit);
       return products;

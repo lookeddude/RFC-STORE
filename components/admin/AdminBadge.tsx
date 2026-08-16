@@ -19,23 +19,27 @@ export function AdminBadge({ label, variant = 'neutral', size = 'sm' }: AdminBad
 
 export function orderStatusBadge(status: string): AdminBadgeProps {
   const map: Record<string, AdminBadgeProps> = {
-    pending:    { label: 'Pending',    variant: 'warning' },
-    confirmed:  { label: 'Confirmed', variant: 'info' },
-    processing: { label: 'Processing', variant: 'info' },
-    shipped:    { label: 'Shipped',   variant: 'primary' },
-    delivered:  { label: 'Delivered', variant: 'success' },
-    cancelled:  { label: 'Cancelled', variant: 'error' },
-    refunded:   { label: 'Refunded',  variant: 'neutral' },
+    pending_payment: { label: 'Awaiting Payment', variant: 'warning' },
+    pending:         { label: 'Pending',           variant: 'warning' },
+    confirmed:       { label: 'Confirmed',          variant: 'info' },
+    processing:      { label: 'Processing',         variant: 'info' },
+    shipped:         { label: 'Shipped',            variant: 'primary' },
+    delivered:       { label: 'Delivered',          variant: 'success' },
+    cancelled:       { label: 'Cancelled',          variant: 'error' },
+    refund_pending:  { label: 'Refund Pending',     variant: 'warning' },
+    refunded:        { label: 'Refunded',           variant: 'neutral' },
   };
   return map[status] ?? { label: status, variant: 'neutral' };
 }
 
 export function paymentStatusBadge(status: string): AdminBadgeProps {
   const map: Record<string, AdminBadgeProps> = {
-    pending:  { label: 'Unpaid',   variant: 'warning' },
-    paid:     { label: 'Paid',     variant: 'success' },
-    failed:   { label: 'Failed',   variant: 'error' },
-    refunded: { label: 'Refunded', variant: 'neutral' },
+    pending:        { label: 'Unpaid',         variant: 'warning' },
+    paid:           { label: 'Paid',           variant: 'success' },
+    failed:         { label: 'Failed',         variant: 'error' },
+    refund_pending: { label: 'Refund Pending', variant: 'warning' },
+    refund_failed:  { label: 'Refund Failed',  variant: 'error' },
+    refunded:       { label: 'Refunded',       variant: 'neutral' },
   };
   return map[status] ?? { label: status, variant: 'neutral' };
 }

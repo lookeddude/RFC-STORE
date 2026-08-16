@@ -69,8 +69,8 @@ export async function updateCategoryAction(
   if (data.sortOrder !== undefined) payload.sort_order = parseInt(data.sortOrder) || 0;
   if (data.isActive !== undefined) payload.is_active = data.isActive;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .from('categories').update(payload as any).eq('id', categoryId);
 
 

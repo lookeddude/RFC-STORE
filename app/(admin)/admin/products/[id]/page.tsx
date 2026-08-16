@@ -45,6 +45,7 @@ export default async function AdminEditProductPage({
 
   if (!productRes.data) notFound();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const raw = productRes.data as any;
 
   // Map to AdminProductDetail
@@ -66,6 +67,7 @@ export default async function AdminEditProductPage({
     meta_description: raw.meta_description,
     created_at: raw.created_at,
     updated_at: raw.updated_at,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     variants: (raw.product_variants ?? []).map((v: any) => ({
       id: v.id,
       product_id: raw.id,
@@ -84,6 +86,7 @@ export default async function AdminEditProductPage({
         updated_at: "",
       } : undefined,
     })),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     images: (raw.product_images ?? []).sort((a: any, b: any) => a.sort_order - b.sort_order),
   };
 

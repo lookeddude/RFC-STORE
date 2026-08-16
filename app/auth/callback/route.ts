@@ -9,12 +9,13 @@
  */
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { safeRedirectPath } from "@/lib/utils/validation";
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  // Where to send user after login (defaults to /account)
-  const next = searchParams.get("next") ?? "/account";
+  // Validate next param to prevent open redirect attacks
+  const next = safeRedirectPath(searchParams.get("next"), "/account");
 
   if (code) {
     const supabase = await createClient();

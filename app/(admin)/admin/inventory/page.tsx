@@ -52,6 +52,7 @@ export default async function AdminInventoryPage({
     items = items.filter((i) => i.quantity <= i.low_threshold);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lowCount = (inventoryItems ?? []).filter((i: any) => i.quantity <= i.low_threshold).length;
 
   return (

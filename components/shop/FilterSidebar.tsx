@@ -3,13 +3,15 @@
  * RFC Store — Filter Sidebar Component
  *
  * Stitch design:
- *   - Active filter chips with ×
+ *   - Active filter chips with x
  *   - "Filters" heading + "Clear All" button
- *   - Product Type collapsible (category checkboxes)
+ *   - In Stock toggle
+ *   - Product Type collapsible (category checkboxes) — hidden when no categories passed
+ *   - Tags collapsible (multi-select checkboxes)
  *   - Price filter (min/max INR inputs)
  *   - All state in URL search params
  *
- * Server-readable: category=slug&minPrice=500&maxPrice=10000
+ * Server-readable: category=slug&minPrice=500&maxPrice=10000&inStock=true&tags=boxing,mma
  */
 import React, { useState, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
@@ -21,6 +23,9 @@ interface FilterSidebarProps {
   activeCategoryId: string | null;
   activeMinPrice: number | null;
   activeMaxPrice: number | null;
+  availableTags: string[];
+  activeTags: string[];
+  activeInStock: boolean;
 }
 
 export function FilterSidebar({
@@ -28,6 +33,9 @@ export function FilterSidebar({
   activeCategoryId,
   activeMinPrice,
   activeMaxPrice,
+  availableTags,
+  activeTags,
+  activeInStock,
 }: FilterSidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -35,14 +43,16 @@ export function FilterSidebar({
 
   const [isProductTypeOpen, setIsProductTypeOpen] = useState(true);
   const [isPriceOpen, setIsPriceOpen] = useState(true);
+  const [isTagsOpen, setIsTagsOpen] = useState(true);
   const [minInput, setMinInput] = useState(activeMinPrice?.toString() ?? "");
   const [maxInput, setMaxInput] = useState(activeMaxPrice?.toString() ?? "");
 
-  // Check if any filters are active
   const hasActiveFilters =
     activeCategoryId !== null ||
     activeMinPrice !== null ||
-    activeMaxPrice !== null;
+    activeMaxPrice !== null ||
+    activeInStock ||
+    activeTags.length > 0;
 
   const updateParams = useCallback(
     (updater: (params: URLSearchParams) => void) => {
@@ -60,6 +70,37 @@ export function FilterSidebar({
         params.delete("category");
       } else {
         params.set("category", categorySlug);
+      }
+    });
+  }
+
+  function handleInStockToggle() {
+    updateParams((params) => {
+      if (activeInStock) {
+        params.delete("inStock");
+      } else {
+        params.set("inStock", "true");
+      }
+    });
+  }
+
+  function handleTagToggle(tag: string) {
+    updateParams((params) => {
+      const current = params.get("tags") ?? "";
+      const currentTags = current
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
+      const idx = currentTags.indexOf(tag);
+      if (idx >= 0) {
+        currentTags.splice(idx, 1);
+      } else {
+        currentTags.push(tag);
+      }
+      if (currentTags.length > 0) {
+        params.set("tags", currentTags.join(","));
+      } else {
+        params.delete("tags");
       }
     });
   }
@@ -100,6 +141,25 @@ export function FilterSidebar({
     });
   }
 
+  function handleRemoveInStock() {
+    updateParams((params) => params.delete("inStock"));
+  }
+
+  function handleRemoveTag(tag: string) {
+    updateParams((params) => {
+      const current = params.get("tags") ?? "";
+      const remaining = current
+        .split(",")
+        .map((t) => t.trim())
+        .filter((t) => t && t !== tag);
+      if (remaining.length > 0) {
+        params.set("tags", remaining.join(","));
+      } else {
+        params.delete("tags");
+      }
+    });
+  }
+
   const activeCategory = categories.find((c) => c.id === activeCategoryId);
 
   return (
@@ -120,24 +180,51 @@ export function FilterSidebar({
 
       {/* Active Filter Chips */}
       {hasActiveFilters && (
-        <div className={styles.chips}>
+        <div className={styles.chips} role="list" aria-label="Active filters">
           {activeCategory && (
             <button
               onClick={handleRemoveCategory}
               className={styles.chip}
               type="button"
               aria-label={`Remove ${activeCategory.name} filter`}
+              role="listitem"
             >
               {activeCategory.name}
               <CloseIcon />
             </button>
           )}
+          {activeInStock && (
+            <button
+              onClick={handleRemoveInStock}
+              className={styles.chip}
+              type="button"
+              aria-label="Remove in stock filter"
+              role="listitem"
+            >
+              In Stock
+              <CloseIcon />
+            </button>
+          )}
+          {activeTags.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => handleRemoveTag(tag)}
+              className={styles.chip}
+              type="button"
+              aria-label={`Remove ${tag} tag filter`}
+              role="listitem"
+            >
+              {tag}
+              <CloseIcon />
+            </button>
+          ))}
           {(activeMinPrice !== null || activeMaxPrice !== null) && (
             <button
               onClick={handleRemovePrice}
               className={styles.chip}
               type="button"
               aria-label="Remove price filter"
+              role="listitem"
             >
               {activeMinPrice !== null ? `₹${activeMinPrice}` : "₹0"} –{" "}
               {activeMaxPrice !== null ? `₹${activeMaxPrice}` : "Any"}
@@ -147,35 +234,83 @@ export function FilterSidebar({
         </div>
       )}
 
-      {/* Product Type Filter */}
+      {/* In Stock Toggle */}
       <div className={styles.group}>
-        <button
-          className={styles.groupHeader}
-          onClick={() => setIsProductTypeOpen((v) => !v)}
-          aria-expanded={isProductTypeOpen}
-          type="button"
-        >
-          <span>Product Type</span>
-          <ChevronIcon open={isProductTypeOpen} />
-        </button>
-
-        {isProductTypeOpen && (
-          <div className={styles.groupBody}>
-            {categories.map((cat) => (
-              <label key={cat.id} className={styles.checkboxLabel}>
-                <input
-                  type="checkbox"
-                  className={styles.checkbox}
-                  checked={activeCategoryId === cat.id}
-                  onChange={() => handleCategoryToggle(cat.id, cat.slug)}
-                  aria-label={cat.name}
-                />
-                <span className={styles.checkboxText}>{cat.name}</span>
-              </label>
-            ))}
-          </div>
-        )}
+        <label className={styles.inStockLabel}>
+          <input
+            type="checkbox"
+            className={styles.inStockCheckbox}
+            checked={activeInStock}
+            onChange={handleInStockToggle}
+            aria-label="Show in-stock products only"
+          />
+          <span className={styles.inStockText}>In Stock Only</span>
+        </label>
       </div>
+
+      {/* Product Type Filter — only shown when categories are provided */}
+      {categories.length > 0 && (
+        <div className={styles.group}>
+          <button
+            className={styles.groupHeader}
+            onClick={() => setIsProductTypeOpen((v) => !v)}
+            aria-expanded={isProductTypeOpen}
+            type="button"
+          >
+            <span>Product Type</span>
+            <ChevronIcon open={isProductTypeOpen} />
+          </button>
+
+          {isProductTypeOpen && (
+            <div className={styles.groupBody}>
+              {categories.map((cat) => (
+                <label key={cat.id} className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    className={styles.checkbox}
+                    checked={activeCategoryId === cat.id}
+                    onChange={() => handleCategoryToggle(cat.id, cat.slug)}
+                    aria-label={cat.name}
+                  />
+                  <span className={styles.checkboxText}>{cat.name}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tags Filter — only shown when tags are available */}
+      {availableTags.length > 0 && (
+        <div className={styles.group}>
+          <button
+            className={styles.groupHeader}
+            onClick={() => setIsTagsOpen((v) => !v)}
+            aria-expanded={isTagsOpen}
+            type="button"
+          >
+            <span>Tags</span>
+            <ChevronIcon open={isTagsOpen} />
+          </button>
+
+          {isTagsOpen && (
+            <div className={styles.groupBody}>
+              {availableTags.map((tag) => (
+                <label key={tag} className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    className={styles.checkbox}
+                    checked={activeTags.includes(tag)}
+                    onChange={() => handleTagToggle(tag)}
+                    aria-label={tag}
+                  />
+                  <span className={styles.checkboxText}>{tag}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Price Filter */}
       <div className={styles.group}>
@@ -200,7 +335,7 @@ export function FilterSidebar({
                 onChange={(e) => setMinInput(e.target.value)}
                 min={0}
                 step={100}
-                aria-label="Minimum price"
+                aria-label="Minimum price in rupees"
               />
               <span className={styles.priceSep}>–</span>
               <input
@@ -211,7 +346,7 @@ export function FilterSidebar({
                 onChange={(e) => setMaxInput(e.target.value)}
                 min={0}
                 step={100}
-                aria-label="Maximum price"
+                aria-label="Maximum price in rupees"
               />
             </div>
             <button

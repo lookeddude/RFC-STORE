@@ -91,3 +91,19 @@ export function calculateTotal(
 ): number {
   return Math.max(0, subtotal + shippingAmount + taxAmount + codFee - discountAmount);
 }
+
+/**
+ * Razorpay Configuration
+ *
+ * RAZORPAY_ENABLED is derived from NEXT_PUBLIC_RAZORPAY_KEY_ID being set.
+ * No code changes needed to switch between test/live — only env vars.
+ * Set NEXT_PUBLIC_RAZORPAY_KEY_ID to undefined to disable online payment.
+ */
+export const RAZORPAY_CONFIG = {
+  /** Whether online payment via Razorpay is available */
+  ENABLED: typeof process !== 'undefined'
+    ? !!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID
+    : false,
+  /** COD fee for Razorpay orders (0 — no COD fee for online payments) */
+  COD_FEE: 0,
+} as const;

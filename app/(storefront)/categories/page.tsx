@@ -57,7 +57,7 @@ export default async function CategoriesPage() {
             return (
               <Link
                 key={cat.id}
-                href={`/shop?category=${cat.slug}`}
+                href={`/categories/${cat.slug}`}
                 className={styles.card}
                 style={{ '--accent': accent } as React.CSSProperties}
               >

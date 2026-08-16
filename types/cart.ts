@@ -64,6 +64,11 @@ export type CartAction =
   | { type: "REMOVE_ITEM"; payload: { key: string } }
   | { type: "CLEAR_CART" }
   | { type: "HYDRATE"; payload: CartItemData[] }
+  /**
+   * SYNC_COMPLETE — fired after merge/load from DB.
+   * Replaces the full cart state with the authoritative DB copy.
+   */
+  | { type: "SYNC_COMPLETE"; payload: CartItemData[] }
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_ERROR"; payload: string | null };
 
@@ -71,14 +76,24 @@ export type CartAction =
 
 export interface CartContextValue {
   state: CartState;
+  /** Whether a Supabase session is active (determines write target) */
+  isAuthenticated: boolean;
   /** Add product to cart. Merges if same key already exists. */
   addToCart: (item: Omit<CartItemData, "key" | "lineTotal">) => void;
   /** Update quantity for a cart line. Removes if qty reaches 0. */
   updateQuantity: (key: string, quantity: number) => void;
   /** Remove a specific cart line entirely. */
   removeItem: (key: string) => void;
-  /** Clear the entire cart. */
+  /**
+   * Clear the entire cart.
+   * Auth-aware: also calls clearCartAction() when authenticated.
+   */
   clearCart: () => void;
+  /**
+   * Re-fetch cart from DB and hydrate context.
+   * Called on cart page mount for cross-device sync.
+   */
+  syncFromDb: () => Promise<void>;
 }
 
 // ── Add To Cart Input ─────────────────────────────────────

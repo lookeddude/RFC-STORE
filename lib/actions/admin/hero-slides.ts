@@ -120,6 +120,7 @@ export async function updateHeroSlideAction(
 
   const { error } = await supabase
     .from('hero_slides')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .update(payload as any)
     .eq('id', id);
 

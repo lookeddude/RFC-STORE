@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { mapDBHeroSlide, type DBHeroSlide } from "@/lib/data/hero-slides";
 import { updateHeroSlideAction, deleteHeroSlideAction } from "@/lib/actions/admin/hero-slides";
+import { isValidUUID } from "@/lib/utils/validation";
 
 async function verifyAdmin() {
   const supabase = await createClient();
@@ -32,6 +33,9 @@ export async function GET(
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
+  if (!isValidUUID(id)) {
+    return NextResponse.json({ error: "Invalid slide ID" }, { status: 400 });
+  }
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -55,6 +59,9 @@ export async function PATCH(
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
+  if (!isValidUUID(id)) {
+    return NextResponse.json({ error: "Invalid slide ID" }, { status: 400 });
+  }
 
   let body: Record<string, unknown>;
   try {
@@ -63,6 +70,7 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const result = await updateHeroSlideAction(id, body as any);
   if (!result.success) {
     return NextResponse.json({ error: result.error }, { status: 400 });
@@ -79,6 +87,9 @@ export async function DELETE(
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
+  if (!isValidUUID(id)) {
+    return NextResponse.json({ error: "Invalid slide ID" }, { status: 400 });
+  }
   const result = await deleteHeroSlideAction(id);
 
   if (!result.success) {

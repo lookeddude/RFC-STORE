@@ -140,8 +140,8 @@ export async function updateProductAction(
   if (data.metaTitle !== undefined) updatePayload.meta_title = data.metaTitle;
   if (data.metaDescription !== undefined) updatePayload.meta_description = data.metaDescription;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .from('products').update(updatePayload as any).eq('id', productId);
 
   if (error) return { success: false, error: error.message };

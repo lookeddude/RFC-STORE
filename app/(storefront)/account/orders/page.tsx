@@ -50,7 +50,7 @@ export default async function MyOrdersPage({ searchParams }: MyOrdersPageProps) 
 
   // Fetch item counts for this page of orders
   const orderIds = (orders ?? []).map((o: { id: string }) => o.id);
-  let itemCounts: Record<string, number> = {};
+  const itemCounts: Record<string, number> = {};
 
   if (orderIds.length > 0) {
     const { data: itemRows } = await supabase
