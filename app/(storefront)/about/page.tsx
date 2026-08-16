@@ -27,12 +27,18 @@ export default function AboutPage() {
 
       {/* Hero */}
       <div className={styles.hero}>
-        <p className={styles.eyebrow}>OUR STORY</p>
-        <h1 className={styles.heroTitle}>Built for<br /><span className={styles.heroRed}>The Fight.</span></h1>
-        <p className={styles.heroSub}>
-          Revive Fight Club was born out of frustration — quality combat sports gear was either imported at sky-high prices
-          or cheap gear that fell apart after a month of hard training. We built RFC to fix that.
-        </p>
+        <div className={styles.heroContent}>
+          <p className={styles.eyebrow}>OUR STORY</p>
+          <h1 className={styles.heroTitle}>
+            Built for<br />
+            <span className={styles.heroRed}>The Fight.</span>
+          </h1>
+          <p className={styles.heroSub}>
+            Revive Fight Club was born out of frustration — quality combat sports gear was either imported at sky-high prices
+            or cheap gear that fell apart after a month of hard training. We built RFC to fix that.
+          </p>
+          <span className={styles.heroLine} aria-hidden="true" />
+        </div>
       </div>
 
       {/* Stats */}
@@ -94,8 +100,10 @@ export default function AboutPage() {
       {/* CTA */}
       <section className={styles.ctaSection}>
         <div className={styles.container}>
-          <div className={styles.ctaBox}>
-            <h2 className={styles.ctaTitle}>Join the Fight</h2>
+          <div className={styles.ctaInner}>
+            <h2 className={styles.ctaTitle}>
+              Join <span className={styles.ctaTitleAccent}>the Fight</span>
+            </h2>
             <p className={styles.ctaDesc}>Professional grade gear. Fighter tested. RFC approved.</p>
             <Link href="/shop" className={styles.ctaBtn}>SHOP NOW</Link>
           </div>
