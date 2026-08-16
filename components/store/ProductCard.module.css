@@ -8,14 +8,15 @@
   display: flex;
   flex-direction: column;
   background-color: var(--rfc-surface);
-  border-radius: var(--radius-sharp); /* Use sharp, engineered radius */
+  border-radius: var(--radius-sm);
   overflow: hidden;
-  transition: transform var(--transition-fast);
+  border: 1px solid var(--rfc-border);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 
-/* Remove hover shadow for a more premium, flat editorial feel */
 .card:hover {
-  /* Only image zoom and CTA reveal on hover */
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 /* ── Image Area ─────────────────────────────────────────── */
@@ -124,7 +125,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 16px 4px; /* More vertical padding, less horizontal to align with image */
+  padding: 14px 12px 12px;
   flex: 1;
   background: var(--rfc-surface);
 }
@@ -184,10 +185,10 @@
 
 .price {
   font-family: var(--font-label);
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  color: var(--rfc-accent); /* Price in Accent */
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--rfc-text);
 }
 
 .compareAt {

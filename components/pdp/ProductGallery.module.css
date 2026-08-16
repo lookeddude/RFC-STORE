@@ -145,32 +145,3 @@
 .thumbImage {
   object-fit: cover;
 }
-
-/* ── Mobile Indicator ───────────────────────────────────── */
-.mobileIndicator {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  z-index: 2;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-family: var(--font-label);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  display: block;
-}
-
-@media (min-width: 768px) {
-  .mobileIndicator {
-    display: none;
-  }
-}
-
-@media (max-width: 767px) {
-  .thumbs {
-    display: none;
-  }
-}

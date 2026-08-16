@@ -21,71 +21,85 @@ interface ProductTabsProps {
   product: Product;
 }
 
-type TabKey = "description" | "specifications" | "size-guide" | "shipping";
+type TabKey = "description" | "specifications" | "shipping";
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "description", label: "Description" },
   { key: "specifications", label: "Specifications" },
-  { key: "size-guide", label: "Size Guide" },
   { key: "shipping", label: "Shipping & Returns" },
 ];
 
 export function ProductTabs({ product }: ProductTabsProps) {
-  const [activeTab, setActiveTab] = useState<TabKey | null>("description");
-
-  const toggleTab = (key: TabKey) => {
-    setActiveTab((prev) => (prev === key ? null : key));
-  };
+  const [activeTab, setActiveTab] = useState<TabKey>("description");
 
   return (
     <div className={styles.container}>
-      {/* WHY YOU'LL LOVE IT Section */}
-      <div className={styles.loveIt}>
-        <h3 className={styles.loveItTitle}>WHY YOU&apos;LL LOVE IT</h3>
-        <ul className={styles.loveItList}>
-          <li>Engineered for peak performance and durability in the arena.</li>
-          <li>Premium materials for maximum comfort during intense sessions.</li>
-          <li>Tested and approved by professional athletes.</li>
-        </ul>
+      {/* Desktop tab bar */}
+      <div className={styles.tabBar} role="tablist" aria-label="Product information">
+        {TABS.map(({ key, label }) => (
+          <button
+            key={key}
+            role="tab"
+            aria-selected={activeTab === key}
+            aria-controls={`panel-${key}`}
+            id={`tab-${key}`}
+            className={styles.tab}
+            data-active={activeTab === key}
+            onClick={() => setActiveTab(key)}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
-      {/* Accordions */}
-      <div className={styles.accordions}>
-        {TABS.map(({ key, label }) => {
-          const isActive = activeTab === key;
-          return (
-            <div key={key} className={styles.accordionItem}>
-              <button
-                className={styles.accordionHeader}
-                onClick={() => toggleTab(key)}
-                aria-expanded={isActive}
-                aria-controls={`panel-${key}`}
-              >
-                {label}
-                <span className={styles.accordionIcon}>{isActive ? "−" : "+"}</span>
-              </button>
-              <div
-                id={`panel-${key}`}
-                className={styles.accordionPanel}
-                data-active={isActive}
-                hidden={!isActive}
-              >
-                <div className={styles.accordionContent}>
-                  {key === "description" && <DescriptionPanel product={product} />}
-                  {key === "specifications" && <SpecificationsPanel product={product} />}
-                  {key === "size-guide" && <SizeGuidePanel />}
-                  {key === "shipping" && <ShippingPanel />}
-                </div>
-              </div>
-            </div>
-          );
-        })}
+      {/* Tab panels */}
+      <div className={styles.panels}>
+        {/* Description */}
+        <TabPanel id="description" active={activeTab === "description"} label="Description">
+          <DescriptionPanel product={product} />
+        </TabPanel>
+
+        {/* Specifications */}
+        <TabPanel id="specifications" active={activeTab === "specifications"} label="Specifications">
+          <SpecificationsPanel product={product} />
+        </TabPanel>
+
+        {/* Shipping */}
+        <TabPanel id="shipping" active={activeTab === "shipping"} label="Shipping & Returns">
+          <ShippingPanel />
+        </TabPanel>
       </div>
     </div>
   );
 }
 
 // ── Individual Panels ─────────────────────────────────────
+
+function TabPanel({
+  id,
+  active,
+  label,
+  children,
+}: {
+  id: string;
+  active: boolean;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      id={`panel-${id}`}
+      role="tabpanel"
+      aria-labelledby={`tab-${id}`}
+      className={styles.panel}
+      data-active={active}
+      hidden={!active}
+    >
+      <h2 className={styles.panelHeading}>{label}</h2>
+      {children}
+    </div>
+  );
+}
 
 function DescriptionPanel({ product }: { product: Product }) {
   const desc = product.description ?? product.shortDescription;
@@ -164,42 +178,6 @@ function SpecificationsPanel({ product }: { product: Product }) {
         ))}
       </tbody>
     </table>
-  );
-}
-
-function SizeGuidePanel() {
-  return (
-    <div className={styles.sizeGuideText}>
-      <p className={styles.descText} style={{ marginBottom: "16px" }}>
-        Our gear fits true to size. If you are between sizes, we recommend sizing up for a more comfortable fit.
-      </p>
-      <table className={styles.specTable}>
-        <thead>
-          <tr className={styles.specRow}>
-            <th className={styles.specLabel}>Size</th>
-            <th className={styles.specLabel}>Chest / Fit</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className={styles.specRow}>
-            <td className={styles.specValue}>S (10oz)</td>
-            <td className={styles.specValue}>Small / Narrow</td>
-          </tr>
-          <tr className={styles.specRow}>
-            <td className={styles.specValue}>M (12oz)</td>
-            <td className={styles.specValue}>Medium / Average</td>
-          </tr>
-          <tr className={styles.specRow}>
-            <td className={styles.specValue}>L (14oz)</td>
-            <td className={styles.specValue}>Large / Broad</td>
-          </tr>
-          <tr className={styles.specRow}>
-            <td className={styles.specValue}>XL (16oz)</td>
-            <td className={styles.specValue}>Extra Large</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   );
 }
 

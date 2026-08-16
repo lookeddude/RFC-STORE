@@ -16,7 +16,7 @@
 @media (min-width: 1024px) {
   .layout {
     flex-direction: row;
-    gap: 64px;
+    gap: 40px;
     align-items: flex-start;
   }
 }

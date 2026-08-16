@@ -18,24 +18,23 @@
   right: 0;
   top: 0;
   z-index: 100;
-  height: 60px;
-  background: transparent;
-  border-bottom: 1px solid transparent;
+  height: 64px;
+  background: var(--rfc-surface);
+  border-bottom: 1px solid var(--rfc-border);
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.03),
+    0 2px 12px rgba(0,0,0,0.04);
   transition:
     transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    background 0.3s ease,
-    border-color 0.3s ease,
-    backdrop-filter 0.3s ease,
     box-shadow 0.3s ease,
     height 0.25s ease;
 }
 
 /* Scrolled state */
 .navbar--scrolled {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--rfc-border);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.06),
+    0 6px 20px rgba(0,0,0,0.09);
 }
 
 /* Auto-hide on scroll down */
@@ -47,7 +46,7 @@
 .nav {
   display: flex;
   align-items: center;
-  height: 60px;
+  height: 64px;
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 16px;
@@ -56,12 +55,12 @@
 
 @media (min-width: 768px) {
   .nav {
-    height: 64px;
-    padding: 0 40px;
+    height: 72px;
+    padding: 0 28px;
   }
 
   .navbar {
-    height: 64px;
+    height: 72px;
   }
 }
 
@@ -85,32 +84,33 @@
   }
 }
 
-/* RFC typography monogram (no red square) */
+/* RFC red square badge */
 .brandMonogram {
+  width: 34px;
+  height: 34px;
+  background: var(--rfc-accent);
+  border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(230,57,70,0.28);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
-
-.brandMonogramText {
-  font-family: var(--font-headline);
-  font-weight: 900;
-  font-size: 24px;
-  letter-spacing: -0.04em;
-  color: var(--rfc-text);
-  line-height: 1;
-}
-
-/* Invert monogram to white when scrolled if we wanted a dark header, 
-   but our header is light when scrolled, so it stays dark. */
 
 .brand:hover .brandMonogram {
   box-shadow: 0 5px 16px rgba(230,57,70,0.42);
   transform: scale(1.04);
 }
 
-
+.brandMonogramText {
+  font-family: var(--font-headline);
+  font-size: 12px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
 
 /* Brand name + tagline stack */
 .brandStack {
@@ -429,21 +429,22 @@
 .shopCta {
   display: none;
   align-items: center;
-  justify-content: center;
-  height: 32px;
-  padding: 0 20px;
+  height: 36px;
+  padding: 0 18px;
   background: var(--rfc-dark);
-  color: #ffffff;
+  color: var(--rfc-text-inv);
   font-family: var(--font-label);
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  border-radius: var(--radius-sharp);
-  transition:
-    background 0.2s ease,
-    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+  margin-left: 4px;
 }
 
 .shopCta:hover {

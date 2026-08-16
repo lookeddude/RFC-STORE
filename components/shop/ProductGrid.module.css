@@ -7,26 +7,24 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
-  margin-bottom: 64px;
+  margin-bottom: 48px;
 }
 
 @media (min-width: 640px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
+    gap: 24px;
   }
 }
 
 @media (min-width: 1024px) {
   .grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
   }
 }
 
 @media (min-width: 1280px) {
   .grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 40px;
   }
 }

@@ -12,7 +12,7 @@
 /* Desktop sidebar — sticky, fixed width */
 @media (min-width: 1024px) {
   .sidebar {
-    width: 260px;
+    width: 240px;
     flex-shrink: 0;
     position: sticky;
     top: 132px; /* AnnouncementBar + Navbar */

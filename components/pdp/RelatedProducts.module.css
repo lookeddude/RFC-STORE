@@ -19,43 +19,19 @@
 }
 
 .grid {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding-bottom: 16px;
-  scroll-snap-type: x mandatory;
-  /* hide scrollbar */
-  -ms-overflow-style: none;
-}
-
-.grid::-webkit-scrollbar {
-  display: none;
-}
-
-.grid > div {
-  flex-shrink: 0;
-  width: 75vw;
-  scroll-snap-align: start;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
 }
 
 @media (min-width: 640px) {
-  .grid > div {
-    width: 45vw;
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
   .grid {
-    display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 32px;
-    overflow-x: visible;
-    padding-bottom: 0;
-    scroll-snap-type: none;
-  }
-  .grid > div {
-    width: auto;
-    flex-shrink: 1;
   }
 }

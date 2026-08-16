@@ -96,14 +96,9 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
 
   // Resolve category slug → ID (DB filter uses category_id)
   let activeCategoryId: string | null = null;
-  let activeCategoryName: string | null = null;
-  let activeCategoryDesc: string | null = null;
-  
   if (categorySlug) {
     const category = await getCategoryBySlug(categorySlug);
     activeCategoryId = category?.id ?? null;
-    activeCategoryName = category?.name ?? null;
-    activeCategoryDesc = category?.description ?? null;
   }
 
   // ── Build filters ──────────────────────────────────────
@@ -135,17 +130,11 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   // ── Fetch products ─────────────────────────────────────
   const { products, total } = await getProducts(filters, sort, page, PAGE_SIZE);
 
-  const defaultDescription = "Engineered for the arena. Discover our complete collection of premium fight gear, apparel, and training equipment designed for peak performance.";
-
   return (
     <Container>
       <div className={styles.page}>
         {/* Page Header — breadcrumbs + title + count */}
-        <ShopHeader 
-          totalProducts={total} 
-          title={activeCategoryName ? `${activeCategoryName} - GEAR BUILT FOR EVERY ROUND` : "Shop"}
-          description={activeCategoryDesc || defaultDescription}
-        />
+        <ShopHeader totalProducts={total} />
 
         {/* Category Tab Bar */}
         <Suspense fallback={null}>

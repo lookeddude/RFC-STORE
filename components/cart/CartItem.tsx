@@ -57,7 +57,7 @@ export function CartItem({ item, stockStatus }: CartItemProps) {
               src={item.imageUrl}
               alt={item.imageAlt ?? item.productName}
               fill
-              sizes="120px"
+              sizes="96px"
               className={`${styles.image} ${isOutOfStock ? styles.imageGrayscale : ""}`}
             />
           ) : (

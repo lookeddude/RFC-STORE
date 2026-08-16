@@ -23,13 +23,13 @@ import type { Metadata } from "next";
 import {
   HeroSlideshow,
   OfferStrip,
-  DisciplineGrid,
+  CategoryRail,
   BestDeals,
   MiniPromoBanner,
   BestSellers,
   NewArrivals,
   TrustBar,
-  BrandStory,
+  EditorialBanner,
 } from "@/components/homepage";
 
 export const metadata: Metadata = {
@@ -60,8 +60,8 @@ export default function HomePage() {
         <OfferStrip />
       </div>
 
-      {/* Shop by Discipline Grid */}
-      <DisciplineGrid />
+      {/* Category Rail — swipeable circles on mobile */}
+      <CategoryRail />
 
       {/* Best Deals — discounted products */}
       <BestDeals />
@@ -83,8 +83,8 @@ export default function HomePage() {
       {/* Trust Bar — value propositions */}
       <TrustBar />
 
-      {/* Brand Story — Built Different */}
-      <BrandStory />
+      {/* Brand Editorial + campaign image */}
+      <EditorialBanner />
     </>
   );
 }
