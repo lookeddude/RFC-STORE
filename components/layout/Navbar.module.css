@@ -251,7 +251,7 @@
   box-shadow: 0 0 0 3px rgba(230,57,70,0.08);
 }
 
-@media (min-width: 960px) {
+@media (min-width: 768px) {
   .searchBar { display: flex; }
 }
 
@@ -279,8 +279,9 @@
   display: flex;   /* visible on mobile */
 }
 
-@media (min-width: 960px) {
-  .mobileSearchBtn { display: none; } /* hidden once desktop search pill shows */
+/* Hide on desktop — search pill takes over at 768px */
+@media (min-width: 768px) {
+  .mobileSearchBtn { display: none; }
 }
 
 /* ── Mobile Search Expand Bar ────────────────────────────── */
