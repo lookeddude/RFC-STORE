@@ -242,21 +242,28 @@
 
 .priceInput {
   flex: 1;
-  background: var(--rfc-surface);
-  border: 1px solid var(--rfc-border);
-  border-radius: var(--radius-sm);
+  background: #fff;
+  border: 1.5px solid var(--rfc-border, #E5E7EB);
+  border-radius: var(--radius-sm, 4px);
   padding: 8px 10px;
   font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--rfc-text);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--rfc-text, #111827);
   text-align: center;
   outline: none;
   min-width: 0;
   transition: border-color var(--transition-fast);
 }
 
+.priceInput::placeholder {
+  color: var(--rfc-text-subtle, #9CA3AF);
+  font-weight: 400;
+}
+
 .priceInput:focus {
-  border-color: var(--rfc-accent);
+  border-color: var(--rfc-accent, #E63946);
+  box-shadow: 0 0 0 2px rgba(230,57,70,0.08);
 }
 
 .priceSep {

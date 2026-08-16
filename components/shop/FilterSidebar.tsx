@@ -281,6 +281,57 @@ export function FilterSidebar({
             </label>
           </div>
 
+          {/* Price — right below In Stock */}
+          <div className={styles.group}>
+            <button
+              className={styles.groupHeader}
+              onClick={() => setIsPriceOpen((v) => !v)}
+              aria-expanded={isPriceOpen}
+              type="button"
+              tabIndex={isPanelOpen ? 0 : -1}
+            >
+              <span>Price (₹)</span>
+              <ChevronIcon open={isPriceOpen} />
+            </button>
+            {isPriceOpen && (
+              <div className={styles.groupBody}>
+                <div className={styles.priceInputs}>
+                  <input
+                    type="number"
+                    className={styles.priceInput}
+                    placeholder="Min"
+                    value={minInput}
+                    onChange={(e) => setMinInput(e.target.value)}
+                    min={0}
+                    step={100}
+                    aria-label="Minimum price in rupees"
+                    tabIndex={isPanelOpen ? 0 : -1}
+                  />
+                  <span className={styles.priceSep}>–</span>
+                  <input
+                    type="number"
+                    className={styles.priceInput}
+                    placeholder="Max"
+                    value={maxInput}
+                    onChange={(e) => setMaxInput(e.target.value)}
+                    min={0}
+                    step={100}
+                    aria-label="Maximum price in rupees"
+                    tabIndex={isPanelOpen ? 0 : -1}
+                  />
+                </div>
+                <button
+                  type="button"
+                  className={styles.applyBtn}
+                  onClick={handlePriceApply}
+                  tabIndex={isPanelOpen ? 0 : -1}
+                >
+                  Apply
+                </button>
+              </div>
+            )}
+          </div>
+
           {/* Product Type */}
           {categories.length > 0 && (
             <div className={styles.group}>
@@ -346,57 +397,6 @@ export function FilterSidebar({
               )}
             </div>
           )}
-
-          {/* Price */}
-          <div className={styles.group}>
-            <button
-              className={styles.groupHeader}
-              onClick={() => setIsPriceOpen((v) => !v)}
-              aria-expanded={isPriceOpen}
-              type="button"
-              tabIndex={isPanelOpen ? 0 : -1}
-            >
-              <span>Price (₹)</span>
-              <ChevronIcon open={isPriceOpen} />
-            </button>
-            {isPriceOpen && (
-              <div className={styles.groupBody}>
-                <div className={styles.priceInputs}>
-                  <input
-                    type="number"
-                    className={styles.priceInput}
-                    placeholder="Min"
-                    value={minInput}
-                    onChange={(e) => setMinInput(e.target.value)}
-                    min={0}
-                    step={100}
-                    aria-label="Minimum price in rupees"
-                    tabIndex={isPanelOpen ? 0 : -1}
-                  />
-                  <span className={styles.priceSep}>–</span>
-                  <input
-                    type="number"
-                    className={styles.priceInput}
-                    placeholder="Max"
-                    value={maxInput}
-                    onChange={(e) => setMaxInput(e.target.value)}
-                    min={0}
-                    step={100}
-                    aria-label="Maximum price in rupees"
-                    tabIndex={isPanelOpen ? 0 : -1}
-                  />
-                </div>
-                <button
-                  type="button"
-                  className={styles.applyBtn}
-                  onClick={handlePriceApply}
-                  tabIndex={isPanelOpen ? 0 : -1}
-                >
-                  Apply
-                </button>
-              </div>
-            )}
-          </div>
 
         </div>
       </div>
