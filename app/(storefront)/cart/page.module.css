@@ -1,0 +1,34 @@
+.crossSellSection {
+  margin-top: 64px;
+  margin-bottom: 80px;
+}
+
+.crossSellTitle {
+  font-family: var(--font-headline);
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--rfc-dark, var(--rfc-text));
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.crossSellGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .crossSellGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .crossSellGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}

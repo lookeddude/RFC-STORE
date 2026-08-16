@@ -1,146 +1,121 @@
 /**
- * RFC Store — Offer Strip
+ * RFC Store — RFC Standard Strip
  *
- * Animated marquee banner. Light theme — matches the website's
- * commerce surface. Dark text on white/light bg with RFC red accents.
+ * Premium information strip replacing the old marquee.
+ * Horizontal composition on desktop, scroll/snap on mobile.
  */
 
 const OFFERS = [
-  { icon: "🚚", label: "FREE SHIPPING ON ORDERS ABOVE ₹999" },
-  { icon: "⚡", label: "FAST DISPATCH WITHIN 24 HOURS" },
-  { icon: "🏆", label: "TRUSTED BY 10,000+ FIGHTERS" },
-  { icon: "🔄", label: "EASY 7-DAY RETURNS" },
-  { icon: "🛡️", label: "100% AUTHENTIC PRODUCTS" },
-  { icon: "🥊", label: "PREMIUM FIGHT GEAR — PRO QUALITY" },
+  { icon: "🛡️", label: "PRO-GRADE" },
+  { icon: "⚡", label: "FAST DISPATCH" },
+  { icon: "🔄", label: "EASY RETURNS" },
+  { icon: "✓", label: "AUTHENTIC GEAR" },
 ];
-
-// Duplicate for seamless infinite loop
-const ITEMS = [...OFFERS, ...OFFERS];
 
 export function OfferStrip() {
   return (
-    <div className="offer-strip-root" aria-label="Store offers and benefits">
-      {/* Left fade */}
-      <div className="offer-strip-fade offer-strip-fade--left" aria-hidden="true" />
-
-      {/* Scrolling track */}
-      <div className="offer-strip-track" aria-hidden="true">
-        <ul className="offer-strip-list" role="list">
-          {ITEMS.map((item, i) => (
-            <li key={i} className="offer-strip-item">
-              <span className="offer-strip-icon">{item.icon}</span>
-              <span className="offer-strip-label">{item.label}</span>
-              <span className="offer-strip-sep" aria-hidden="true">★</span>
+    <div className="rfc-standard-root" aria-label="RFC Standard Benefits">
+      <div className="rfc-standard-container">
+        <div className="rfc-standard-heading">
+          RFC STANDARD
+        </div>
+        
+        <ul className="rfc-standard-list" role="list">
+          {OFFERS.map((item, i) => (
+            <li key={i} className="rfc-standard-item">
+              <span className="rfc-standard-icon" aria-hidden="true">{item.icon}</span>
+              <span className="rfc-standard-label">{item.label}</span>
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Right fade */}
-      <div className="offer-strip-fade offer-strip-fade--right" aria-hidden="true" />
-
       <style>{`
         /* ── Root ─────────────────────────────────────────── */
-        .offer-strip-root {
-          position: relative;
+        .rfc-standard-root {
           width: 100%;
-          background-color: var(--rfc-surface, #ffffff);
-          border-top: 1px solid var(--rfc-border, #E5E7EB);
-          border-bottom: 1px solid var(--rfc-border, #E5E7EB);
-          overflow: hidden;
-          height: 44px;
-          display: flex;
-          align-items: center;
-        }
-
-        /* ── Fades ─────────────────────────────────────────── */
-        .offer-strip-fade {
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          width: 60px;
-          z-index: 2;
-          pointer-events: none;
-        }
-
-        .offer-strip-fade--left {
-          left: 0;
-          background: linear-gradient(to right, var(--rfc-surface, #ffffff) 0%, transparent 100%);
-        }
-
-        .offer-strip-fade--right {
-          right: 0;
-          background: linear-gradient(to left, var(--rfc-surface, #ffffff) 0%, transparent 100%);
-        }
-
-        /* ── Track ─────────────────────────────────────────── */
-        .offer-strip-track {
-          display: flex;
-          align-items: center;
-          width: 100%;
+          background-color: var(--rfc-dark, #171717);
+          color: var(--rfc-text-inv, #fff);
+          border-top: 1px solid var(--rfc-border-dark, rgba(255,255,255,0.08));
+          border-bottom: 1px solid var(--rfc-border-dark, rgba(255,255,255,0.08));
           overflow: hidden;
         }
 
-        /* ── List ───────────────────────────────────────────── */
-        .offer-strip-list {
+        .rfc-standard-container {
+          max-width: 1400px;
+          margin: 0 auto;
+          display: flex;
+          align-items: center;
+          height: 48px;
+        }
+
+        /* ── Heading ──────────────────────────────────────── */
+        .rfc-standard-heading {
+          font-family: var(--font-headline);
+          font-size: 13px;
+          font-weight: 900;
+          letter-spacing: 0.1em;
+          padding: 0 24px;
+          background-color: var(--rfc-accent, #D62828);
+          color: #ffffff;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          flex-shrink: 0;
+        }
+
+        /* ── List ─────────────────────────────────────────── */
+        .rfc-standard-list {
           display: flex;
           align-items: center;
           list-style: none;
           margin: 0;
-          padding: 0;
-          white-space: nowrap;
-          animation: offer-marquee 40s linear infinite;
-          will-change: transform;
+          padding: 0 16px;
+          gap: 32px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+          flex: 1;
+          height: 100%;
+        }
+        
+        .rfc-standard-list::-webkit-scrollbar {
+          display: none;
         }
 
-        .offer-strip-root:hover .offer-strip-list {
-          animation-play-state: paused;
-        }
-
-        /* ── Item ───────────────────────────────────────────── */
-        .offer-strip-item {
+        /* ── Item ─────────────────────────────────────────── */
+        .rfc-standard-item {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          padding: 0 18px;
           flex-shrink: 0;
+          scroll-snap-align: start;
         }
 
-        /* ── Icon ───────────────────────────────────────────── */
-        .offer-strip-icon {
-          font-size: 13px;
-          line-height: 1;
-          flex-shrink: 0;
+        /* ── Icon & Label ─────────────────────────────────── */
+        .rfc-standard-icon {
+          font-size: 12px;
+          color: var(--rfc-text-inv-muted, #9ca3af);
         }
 
-        /* ── Label ──────────────────────────────────────────── */
-        .offer-strip-label {
-          font-family: var(--font-label, 'Inter', sans-serif);
-          font-size: 10.5px;
+        .rfc-standard-label {
+          font-family: var(--font-label);
+          font-size: 11px;
           font-weight: 700;
-          letter-spacing: 0.1em;
+          letter-spacing: 0.08em;
           text-transform: uppercase;
-          color: var(--rfc-text, #0D1B2A);
-          flex-shrink: 0;
         }
 
-        /* ── Separator star ─────────────────────────────────── */
-        .offer-strip-sep {
-          font-size: 8px;
-          color: var(--rfc-accent, #E63946);
-          flex-shrink: 0;
-          line-height: 1;
-        }
-
-        /* ── Keyframes ──────────────────────────────────────── */
-        @keyframes offer-marquee {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-
-        /* ── Reduced motion ─────────────────────────────────── */
-        @media (prefers-reduced-motion: reduce) {
-          .offer-strip-list { animation: none; }
+        @media (max-width: 768px) {
+          .rfc-standard-heading {
+            padding: 0 16px;
+            font-size: 12px;
+          }
+          .rfc-standard-list {
+            gap: 24px;
+            padding: 0 16px;
+          }
         }
       `}</style>
     </div>

@@ -87,7 +87,7 @@ export function CartPageClient() {
     <div className={styles.page}>
       {/* Page Header */}
       <div className={styles.header}>
-        <h1 className={styles.title}>Your Cart</h1>
+        <h1 className={styles.title}>YOUR FIGHT KIT</h1>
         <span className={styles.count} aria-live="polite">
           {state.itemCount} {state.itemCount === 1 ? "item" : "items"}
         </span>

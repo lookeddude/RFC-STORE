@@ -190,17 +190,22 @@ export function HeroSlideshowClient({ slides }: HeroSlideshowClientProps) {
         </div>
       )}
 
-      {/* Navigation Dots (Only if multiple slides) */}
+      {/* Navigation Progress & Dots */}
       {slides.length > 1 && (
-        <div className={styles.dotsContainer}>
-          {slides.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentIndex(i)}
-              className={`${styles.dot} ${i === currentIndex ? styles.dotActive : ''}`}
-              aria-label={`Go to slide ${i + 1}`}
-            />
-          ))}
+        <div className={styles.progressWrapper}>
+          <span className={styles.progressIndicator}>
+            {String(currentIndex + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
+          </span>
+          <div className={styles.dotsContainer}>
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentIndex(i)}
+                className={`${styles.dot} ${i === currentIndex ? styles.dotActive : ''}`}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            ))}
+          </div>
         </div>
       )}
     </section>

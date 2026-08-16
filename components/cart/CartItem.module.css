@@ -5,7 +5,7 @@
 
 .row {
   display: grid;
-  grid-template-columns: 96px 1fr auto auto auto;
+  grid-template-columns: 120px 1fr auto auto auto;
   align-items: center;
   gap: 20px;
   padding: 20px 0;
@@ -20,7 +20,7 @@
 
 @media (max-width: 640px) {
   .row {
-    grid-template-columns: 80px 1fr auto;
+    grid-template-columns: 100px 1fr auto;
     grid-template-rows: auto auto;
     gap: 12px;
   }
@@ -34,17 +34,17 @@
 
 .imageWrap {
   position: relative;
-  width: 96px;
-  height: 120px; /* 4:5 ratio */
+  width: 120px;
+  height: 150px; /* 4:5 ratio */
   background: var(--rfc-surface);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   overflow: hidden;
-  border: 1px solid var(--rfc-border);
+  border: 1px solid var(--rfc-dark, var(--rfc-border));
   flex-shrink: 0;
 }
 
 @media (max-width: 640px) {
-  .imageWrap { width: 80px; height: 100px; }
+  .imageWrap { width: 100px; height: 125px; }
 }
 
 .image { object-fit: cover; }
@@ -185,10 +185,10 @@
 .qtyControl {
   display: inline-flex;
   align-items: center;
-  border: 1.5px solid var(--rfc-border);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--rfc-dark, var(--rfc-border));
+  border-radius: 0;
   overflow: hidden;
-  background: var(--rfc-surface);
+  background: var(--rfc-bg);
 }
 
 /* Disabled qty control for out-of-stock */
@@ -227,8 +227,8 @@
   font-size: 14px;
   font-weight: 700;
   color: var(--rfc-text);
-  border-left: 1px solid var(--rfc-border);
-  border-right: 1px solid var(--rfc-border);
+  border-left: 1px solid var(--rfc-dark, var(--rfc-border));
+  border-right: 1px solid var(--rfc-dark, var(--rfc-border));
   line-height: 36px;
   user-select: none;
 }

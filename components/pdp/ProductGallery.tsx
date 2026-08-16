@@ -110,6 +110,12 @@ export function ProductGallery({ images, productName, badge }: ProductGalleryPro
             </button>
           </>
         )}
+        {/* Mobile Numeric Indicator */}
+        {hasMultiple && (
+          <div className={styles.mobileIndicator} aria-hidden="true">
+            {activeIdx + 1} / {images.length}
+          </div>
+        )}
       </div>
 
       {/* Thumbnail Strip */}

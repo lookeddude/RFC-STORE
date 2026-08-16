@@ -19,7 +19,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
   return (
     <section className={styles.section} aria-labelledby="related-heading">
       <h2 id="related-heading" className={styles.heading}>
-        You May Also Like
+        COMPLETE THE KIT
       </h2>
 
       <div className={styles.grid} role="list">

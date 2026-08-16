@@ -12,3 +12,4 @@ export { BestSellers } from "./BestSellers";
 export { NewArrivals } from "./NewArrivals";
 export { MiniPromoBanner } from "./MiniPromoBanner";
 export { TrustBar } from "./TrustBar";
+export { BrandStory } from "./BrandStory";
