@@ -1,208 +1,220 @@
 'use client';
 
 /**
- * RFC Store — Hero Slideshow Client Engine
+ * RFC Store — Hero Slideshow (Complete Rewrite)
  *
- * Fully responsive carousel with:
- * - <picture> responsive device image fallback
- * - Touch swipe (mobile)
- * - Keyboard (← / →)
- * - Autoplay & Pause-on-hover
- * - Multiple transition styles & speeds
+ * Clean, responsive hero carousel with:
+ *  - Mobile: full image, text anchored to bottom-left, bottom-to-top gradient
+ *  - Desktop: full image, text left/center/right, left-to-right gradient
+ *  - Autoplay + pause-on-hover
+ *  - Touch swipe (mobile)
+ *  - Keyboard arrow navigation
+ *  - Dot indicators + prev/next arrows
+ *  - All slide fields supported: eyebrow, heading, description,
+ *    primaryBtn, secondaryBtn, overlayStrength, textPosition,
+ *    transitionStyle, transitionSpeed, slideDuration
  */
+
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { HeroSlide } from '@/types/hero-slide';
 import styles from './HeroSlideshowClient.module.css';
 
-interface HeroSlideshowClientProps {
+interface Props {
   slides: HeroSlide[];
 }
 
-export function HeroSlideshowClient({ slides }: HeroSlideshowClientProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const touchStartX = useRef<number | null>(null);
-  const touchEndX = useRef<number | null>(null);
+export function HeroSlideshowClient({ slides }: Props) {
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused]   = useState(false);
+  const touchStart             = useRef<number | null>(null);
 
-  const currentSlide = slides[currentIndex] || slides[0];
+  const slide = slides[current];
 
-  const goToNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % slides.length);
-  }, [slides.length]);
+  const goTo     = useCallback((i: number) => setCurrent(i), []);
+  const goNext   = useCallback(() => setCurrent(p => (p + 1) % slides.length), [slides.length]);
+  const goPrev   = useCallback(() => setCurrent(p => (p - 1 + slides.length) % slides.length), [slides.length]);
 
-  const goToPrev = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
-  }, [slides.length]);
-
-  // Autoplay timer
+  /* ── Autoplay ──────────────────────────────────────────── */
   useEffect(() => {
-    if (!currentSlide || !currentSlide.autoplay || isPaused || slides.length <= 1) {
-      return;
-    }
+    if (!slide?.autoplay || paused || slides.length < 2) return;
+    const t = setInterval(goNext, slide.slideDuration ?? 5000);
+    return () => clearInterval(t);
+  }, [current, paused, slide, slides.length, goNext]);
 
-    const duration = currentSlide.slideDuration || 5000;
-    const timer = setInterval(() => {
-      goToNext();
-    }, duration);
-
-    return () => clearInterval(timer);
-  }, [currentIndex, isPaused, currentSlide, slides.length, goToNext]);
-
-  // Keyboard navigation
+  /* ── Keyboard ──────────────────────────────────────────── */
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') goToNext();
-      if (e.key === 'ArrowLeft') goToPrev();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') goNext();
+      if (e.key === 'ArrowLeft')  goPrev();
     };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [goNext, goPrev]);
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToNext, goToPrev]);
-
-  // Touch Swipe Handlers
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
+  /* ── Touch swipe ───────────────────────────────────────── */
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart.current === null) return;
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (diff > 50)  goNext();
+    if (diff < -50) goPrev();
+    touchStart.current = null;
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.touches[0].clientX;
-  };
+  if (!slides.length) return null;
 
-  const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-    const diff = touchStartX.current - touchEndX.current;
+  /* ── Image sources ─────────────────────────────────────── */
+  const getImg = (s: HeroSlide) =>
+    s.desktopImageUrl ?? s.tabletImageUrl ?? s.mobileImageUrl ?? '';
+  const getMobileImg = (s: HeroSlide) =>
+    s.mobileImageUrl ?? s.tabletImageUrl ?? s.desktopImageUrl ?? '';
 
-    // Minimum 50px swipe threshold
-    if (diff > 50) {
-      goToNext();
-    } else if (diff < -50) {
-      goToPrev();
-    }
+  /* ── Transition speed ──────────────────────────────────── */
+  const speedMs = { fast: 300, normal: 550, slow: 900 }[slide.transitionSpeed ?? 'normal'] ?? 550;
 
-    touchStartX.current = null;
-    touchEndX.current = null;
-  };
+  /* ── Text alignment class ──────────────────────────────── */
+  const alignClass = {
+    left:   styles.alignLeft,
+    center: styles.alignCenter,
+    right:  styles.alignRight,
+  }[slide.textAlignment ?? 'left'] ?? styles.alignLeft;
 
-  if (!slides || slides.length === 0) return null;
+  const posClass = {
+    left:   styles.posLeft,
+    center: styles.posCenter,
+    right:  styles.posRight,
+  }[slide.textPosition ?? 'left'] ?? styles.posLeft;
 
   return (
     <section
-      className={styles.slideshow}
-      aria-label="Homepage Hero Carousel"
-      onMouseEnter={() => currentSlide?.pauseOnHover && setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      className={styles.hero}
+      aria-label="Hero slideshow"
+      onMouseEnter={() => slide?.pauseOnHover && setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
     >
-      <div className={styles.slideTrack}>
-        {slides.map((slide, index) => {
-          const isActive = index === currentIndex;
-          const speedMs =
-            slide.transitionSpeed === 'fast'
-              ? 300
-              : slide.transitionSpeed === 'slow'
-              ? 900
-              : 600;
+      {/* ── Slides ── */}
+      {slides.map((s, i) => {
+        const isActive = i === current;
+        const transitionClass = {
+          fade:      styles.transFade,
+          slide:     styles.transSlide,
+          crossfade: styles.transFade,
+          zoom:      styles.transZoom,
+          none:      styles.transNone,
+        }[s.transitionStyle ?? 'fade'] ?? styles.transFade;
 
-          // Image fallback chain
-          const desktopSrc = slide.desktopImageUrl || slide.tabletImageUrl || slide.mobileImageUrl;
-          const tabletSrc = slide.tabletImageUrl || slide.desktopImageUrl || slide.mobileImageUrl;
-          const mobileSrc = slide.mobileImageUrl || slide.tabletImageUrl || slide.desktopImageUrl;
+        return (
+          <div
+            key={s.id}
+            className={`${styles.slide} ${transitionClass} ${isActive ? styles.slideActive : ''}`}
+            style={{ '--speed': `${speedMs}ms` } as React.CSSProperties}
+            aria-hidden={!isActive}
+          >
+            {/* Background image — <picture> for responsive sources */}
+            {getImg(s) && (
+              <picture className={styles.picture}>
+                <source media="(max-width: 767px)" srcSet={getMobileImg(s)} />
+                <img
+                  src={getImg(s)}
+                  alt={s.desktopImageAlt ?? s.heading}
+                  className={styles.img}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={i === 0 ? 'high' : undefined}
+                />
+              </picture>
+            )}
 
-          return (
-            <div
-              key={slide.id}
-              className={`
-                ${styles.slide}
-                ${styles[`style-${slide.transitionStyle || 'fade'}`]}
-                ${isActive ? styles.slideActive : ''}
-              `}
-              style={{ '--trans-speed': `${speedMs}ms` } as React.CSSProperties}
-              aria-hidden={!isActive}
-            >
-              {/* Responsive Image via <picture> */}
-              {desktopSrc && (
-                <picture className={styles.pictureWrap}>
-                  {/* Mobile portrait */}
-                  <source media="(max-width: 767px)" srcSet={mobileSrc!} />
-                  {/* Tablet */}
-                  <source media="(max-width: 1023px)" srcSet={tabletSrc!} />
-                  {/* Desktop */}
-                  <img
-                    src={desktopSrc}
-                    alt={slide.desktopImageAlt || slide.heading}
-                    className={styles.slideImage}
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                  />
-                </picture>
-              )}
+            {/* Overlay */}
+            <div className={`${styles.overlay} ${styles[`overlay${s.overlayStrength?.charAt(0).toUpperCase()}${s.overlayStrength?.slice(1)}` as keyof typeof styles] ?? styles.overlayMedium}`} />
 
-              {/* Dynamic Overlay */}
-              <div className={`${styles.overlay} ${styles[`overlay-${slide.overlayStrength || 'medium'}`]}`} />
+            {/* Text content */}
+            <div className={`${styles.content} ${posClass}`}>
+              <div className={`${styles.textBox} ${alignClass}`}>
+                {s.eyebrow && (
+                  <p className={styles.eyebrow}>{s.eyebrow}</p>
+                )}
 
-              {/* Text Content */}
-              <div className={`${styles.contentContainer} ${styles[`pos-${slide.textPosition || 'left'}`]}`}>
-                <div className={`${styles.contentBox} ${styles[`align-${slide.textAlignment || 'left'}`]}`}>
-                  {slide.eyebrow && <p className={styles.eyebrow}>{slide.eyebrow}</p>}
+                <h1 className={styles.heading}>{s.heading}</h1>
 
-                  <h1 className={styles.heading}>{slide.heading}</h1>
+                {s.description && (
+                  <p className={styles.description}>{s.description}</p>
+                )}
 
-                  {slide.description && <p className={styles.description}>{slide.description}</p>}
-
-                  <div className={styles.btnGroup}>
-                    {slide.primaryButtonText && slide.primaryButtonUrl && (
-                      <Link href={slide.primaryButtonUrl} className={styles.btnPrimary}>
-                        {slide.primaryButtonText}
+                {(s.primaryButtonText || s.secondaryButtonText) && (
+                  <div className={styles.buttons}>
+                    {s.primaryButtonText && s.primaryButtonUrl && (
+                      <Link href={s.primaryButtonUrl} className={styles.btnPrimary}>
+                        {s.primaryButtonText}
                       </Link>
                     )}
-                    {slide.secondaryButtonText && slide.secondaryButtonUrl && (
-                      <Link href={slide.secondaryButtonUrl} className={styles.btnSecondary}>
-                        {slide.secondaryButtonText}
+                    {s.secondaryButtonText && s.secondaryButtonUrl && (
+                      <Link href={s.secondaryButtonUrl} className={styles.btnSecondary}>
+                        {s.secondaryButtonText}
                       </Link>
                     )}
                   </div>
-                </div>
+                )}
               </div>
             </div>
-          );
-        })}
-      </div>
+          </div>
+        );
+      })}
 
-      {/* Navigation Arrows (Only if multiple slides) */}
+      {/* ── Prev / Next arrows (hidden when only 1 slide) ── */}
       {slides.length > 1 && (
-        <div className={styles.navArrows}>
+        <>
           <button
-            onClick={goToPrev}
-            className={styles.arrowBtn}
+            className={`${styles.arrow} ${styles.arrowPrev}`}
+            onClick={goPrev}
             aria-label="Previous slide"
+            type="button"
           >
-            ←
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="m15 18-6-6 6-6" />
+            </svg>
           </button>
           <button
-            onClick={goToNext}
-            className={styles.arrowBtn}
+            className={`${styles.arrow} ${styles.arrowNext}`}
+            onClick={goNext}
             aria-label="Next slide"
+            type="button"
           >
-            →
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="m9 18 6-6-6-6" />
+            </svg>
           </button>
-        </div>
+        </>
       )}
 
-      {/* Navigation Dots (Only if multiple slides) */}
+      {/* ── Dot indicators ── */}
       {slides.length > 1 && (
-        <div className={styles.dotsContainer}>
-          {slides.map((_, i) => (
+        <div className={styles.dots} role="tablist" aria-label="Slide indicators">
+          {slides.map((s, i) => (
             <button
-              key={i}
-              onClick={() => setCurrentIndex(i)}
-              className={`${styles.dot} ${i === currentIndex ? styles.dotActive : ''}`}
+              key={s.id}
+              className={`${styles.dot} ${i === current ? styles.dotActive : ''}`}
+              onClick={() => goTo(i)}
+              role="tab"
+              aria-selected={i === current}
               aria-label={`Go to slide ${i + 1}`}
+              type="button"
             />
           ))}
         </div>
       )}
+
+      {/* ── Scroll cue ── */}
+      <div className={styles.scrollCue} aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </div>
     </section>
   );
 }
