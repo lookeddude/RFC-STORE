@@ -46,6 +46,8 @@ export function FilterSidebar({
   const [isTagsOpen, setIsTagsOpen] = useState(true);
   const [minInput, setMinInput] = useState(activeMinPrice?.toString() ?? "");
   const [maxInput, setMaxInput] = useState(activeMaxPrice?.toString() ?? "");
+  // Outer panel: collapsed by default, auto-open when filters are active
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const hasActiveFilters =
     activeCategoryId !== null ||
@@ -164,9 +166,31 @@ export function FilterSidebar({
 
   return (
     <aside className={styles.sidebar} aria-label="Product filters">
-      {/* Header */}
-      <div className={styles.header}>
-        <h2 className={styles.heading}>Filters</h2>
+
+      {/* ── Top bar: Filters toggle + active count + Clear All ── */}
+      <div className={styles.topBar}>
+        <button
+          type="button"
+          className={styles.panelToggle}
+          onClick={() => setIsPanelOpen((v) => !v)}
+          aria-expanded={isPanelOpen}
+          aria-controls="filter-panel"
+        >
+          <FilterIcon />
+          <span>Filters</span>
+          {hasActiveFilters && (
+            <span className={styles.activeCount}>
+              {[
+                activeCategoryId ? 1 : 0,
+                activeInStock ? 1 : 0,
+                activeTags.length,
+                (activeMinPrice !== null || activeMaxPrice !== null) ? 1 : 0,
+              ].reduce((a, b) => a + b, 0)}
+            </span>
+          )}
+          <ChevronIcon open={isPanelOpen} />
+        </button>
+
         {hasActiveFilters && (
           <button
             onClick={handleClearAll}
@@ -178,7 +202,7 @@ export function FilterSidebar({
         )}
       </div>
 
-      {/* Active Filter Chips */}
+      {/* Active filter chips — always visible above the panel */}
       {hasActiveFilters && (
         <div className={styles.chips} role="list" aria-label="Active filters">
           {activeCategory && (
@@ -234,130 +258,147 @@ export function FilterSidebar({
         </div>
       )}
 
-      {/* In Stock Toggle */}
-      <div className={styles.group}>
-        <label className={styles.inStockLabel}>
-          <input
-            type="checkbox"
-            className={styles.inStockCheckbox}
-            checked={activeInStock}
-            onChange={handleInStockToggle}
-            aria-label="Show in-stock products only"
-          />
-          <span className={styles.inStockText}>In Stock Only</span>
-        </label>
-      </div>
+      {/* ── Collapsible Filter Panel ── */}
+      <div
+        id="filter-panel"
+        className={`${styles.panel} ${isPanelOpen ? styles.panelOpen : ""}`}
+        aria-hidden={!isPanelOpen}
+      >
+        <div className={styles.panelInner}>
 
-      {/* Product Type Filter — only shown when categories are provided */}
-      {categories.length > 0 && (
-        <div className={styles.group}>
-          <button
-            className={styles.groupHeader}
-            onClick={() => setIsProductTypeOpen((v) => !v)}
-            aria-expanded={isProductTypeOpen}
-            type="button"
-          >
-            <span>Product Type</span>
-            <ChevronIcon open={isProductTypeOpen} />
-          </button>
-
-          {isProductTypeOpen && (
-            <div className={styles.groupBody}>
-              {categories.map((cat) => (
-                <label key={cat.id} className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    className={styles.checkbox}
-                    checked={activeCategoryId === cat.id}
-                    onChange={() => handleCategoryToggle(cat.id, cat.slug)}
-                    aria-label={cat.name}
-                  />
-                  <span className={styles.checkboxText}>{cat.name}</span>
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Tags Filter — only shown when tags are available */}
-      {availableTags.length > 0 && (
-        <div className={styles.group}>
-          <button
-            className={styles.groupHeader}
-            onClick={() => setIsTagsOpen((v) => !v)}
-            aria-expanded={isTagsOpen}
-            type="button"
-          >
-            <span>Tags</span>
-            <ChevronIcon open={isTagsOpen} />
-          </button>
-
-          {isTagsOpen && (
-            <div className={styles.groupBody}>
-              {availableTags.map((tag) => (
-                <label key={tag} className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    className={styles.checkbox}
-                    checked={activeTags.includes(tag)}
-                    onChange={() => handleTagToggle(tag)}
-                    aria-label={tag}
-                  />
-                  <span className={styles.checkboxText}>{tag}</span>
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Price Filter */}
-      <div className={styles.group}>
-        <button
-          className={styles.groupHeader}
-          onClick={() => setIsPriceOpen((v) => !v)}
-          aria-expanded={isPriceOpen}
-          type="button"
-        >
-          <span>Price (₹)</span>
-          <ChevronIcon open={isPriceOpen} />
-        </button>
-
-        {isPriceOpen && (
-          <div className={styles.groupBody}>
-            <div className={styles.priceInputs}>
+          {/* In Stock Toggle */}
+          <div className={styles.group}>
+            <label className={styles.inStockLabel}>
               <input
-                type="number"
-                className={styles.priceInput}
-                placeholder="Min"
-                value={minInput}
-                onChange={(e) => setMinInput(e.target.value)}
-                min={0}
-                step={100}
-                aria-label="Minimum price in rupees"
+                type="checkbox"
+                className={styles.inStockCheckbox}
+                checked={activeInStock}
+                onChange={handleInStockToggle}
+                aria-label="Show in-stock products only"
+                tabIndex={isPanelOpen ? 0 : -1}
               />
-              <span className={styles.priceSep}>–</span>
-              <input
-                type="number"
-                className={styles.priceInput}
-                placeholder="Max"
-                value={maxInput}
-                onChange={(e) => setMaxInput(e.target.value)}
-                min={0}
-                step={100}
-                aria-label="Maximum price in rupees"
-              />
-            </div>
-            <button
-              type="button"
-              className={styles.applyBtn}
-              onClick={handlePriceApply}
-            >
-              Apply
-            </button>
+              <span className={styles.inStockText}>In Stock Only</span>
+            </label>
           </div>
-        )}
+
+          {/* Product Type */}
+          {categories.length > 0 && (
+            <div className={styles.group}>
+              <button
+                className={styles.groupHeader}
+                onClick={() => setIsProductTypeOpen((v) => !v)}
+                aria-expanded={isProductTypeOpen}
+                type="button"
+                tabIndex={isPanelOpen ? 0 : -1}
+              >
+                <span>Product Type</span>
+                <ChevronIcon open={isProductTypeOpen} />
+              </button>
+              {isProductTypeOpen && (
+                <div className={styles.groupBody}>
+                  {categories.map((cat) => (
+                    <label key={cat.id} className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        className={styles.checkbox}
+                        checked={activeCategoryId === cat.id}
+                        onChange={() => handleCategoryToggle(cat.id, cat.slug)}
+                        aria-label={cat.name}
+                        tabIndex={isPanelOpen ? 0 : -1}
+                      />
+                      <span className={styles.checkboxText}>{cat.name}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Tags */}
+          {availableTags.length > 0 && (
+            <div className={styles.group}>
+              <button
+                className={styles.groupHeader}
+                onClick={() => setIsTagsOpen((v) => !v)}
+                aria-expanded={isTagsOpen}
+                type="button"
+                tabIndex={isPanelOpen ? 0 : -1}
+              >
+                <span>Tags</span>
+                <ChevronIcon open={isTagsOpen} />
+              </button>
+              {isTagsOpen && (
+                <div className={styles.groupBody}>
+                  {availableTags.map((tag) => (
+                    <label key={tag} className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        className={styles.checkbox}
+                        checked={activeTags.includes(tag)}
+                        onChange={() => handleTagToggle(tag)}
+                        aria-label={tag}
+                        tabIndex={isPanelOpen ? 0 : -1}
+                      />
+                      <span className={styles.checkboxText}>{tag}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Price */}
+          <div className={styles.group}>
+            <button
+              className={styles.groupHeader}
+              onClick={() => setIsPriceOpen((v) => !v)}
+              aria-expanded={isPriceOpen}
+              type="button"
+              tabIndex={isPanelOpen ? 0 : -1}
+            >
+              <span>Price (₹)</span>
+              <ChevronIcon open={isPriceOpen} />
+            </button>
+            {isPriceOpen && (
+              <div className={styles.groupBody}>
+                <div className={styles.priceInputs}>
+                  <input
+                    type="number"
+                    className={styles.priceInput}
+                    placeholder="Min"
+                    value={minInput}
+                    onChange={(e) => setMinInput(e.target.value)}
+                    min={0}
+                    step={100}
+                    aria-label="Minimum price in rupees"
+                    tabIndex={isPanelOpen ? 0 : -1}
+                  />
+                  <span className={styles.priceSep}>–</span>
+                  <input
+                    type="number"
+                    className={styles.priceInput}
+                    placeholder="Max"
+                    value={maxInput}
+                    onChange={(e) => setMaxInput(e.target.value)}
+                    min={0}
+                    step={100}
+                    aria-label="Maximum price in rupees"
+                    tabIndex={isPanelOpen ? 0 : -1}
+                  />
+                </div>
+                <button
+                  type="button"
+                  className={styles.applyBtn}
+                  onClick={handlePriceApply}
+                  tabIndex={isPanelOpen ? 0 : -1}
+                >
+                  Apply
+                </button>
+              </div>
+            )}
+          </div>
+
+        </div>
       </div>
     </aside>
   );
@@ -367,6 +408,16 @@ function CloseIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
       <path d="M18 6 6 18M6 6l12 12" />
+    </svg>
+  );
+}
+
+function FilterIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="7" y1="12" x2="17" y2="12" />
+      <line x1="10" y1="18" x2="14" y2="18" />
     </svg>
   );
 }
