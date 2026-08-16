@@ -161,53 +161,48 @@
 
 .eyebrow {
   font-family: var(--font-label, 'Inter');
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--rfc-accent, #E63946);
-  margin-bottom: 10px;
-}
-
-/* Hide eyebrow on very small screens to reduce clutter */
-@media (max-width: 480px) {
-  .eyebrow { display: none; }
+  margin-bottom: 8px;
 }
 
 .heading {
   font-family: var(--font-headline, 'Archivo Narrow');
-  /* Mobile: 26px → scales up fluidly → 80px max on large screens */
-  font-size: clamp(26px, 6vw, 80px);
+  /* 20px on smallest phones, scales with viewport, max 80px on large screens */
+  font-size: clamp(20px, 5.5vw, 80px);
   font-weight: 900;
   line-height: 0.95;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   color: var(--rfc-text-inv, #F9FAFB);
-  margin-bottom: 14px;
-}
-
-/* Tighten heading even more on very small phones */
-@media (max-width: 380px) {
-  .heading { font-size: 22px; }
+  margin-bottom: 10px;
 }
 
 .description {
   font-family: var(--font-body, 'Inter');
-  /* Mobile: 13px floor, scales to 16px max */
-  font-size: clamp(13px, 1.6vw, 16px);
-  line-height: 1.6;
+  font-size: clamp(12px, 1.5vw, 15px);
+  line-height: 1.55;
   color: var(--rfc-text-inv-muted, #9CA3AF);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   max-width: 480px;
+  /* Cap at 2 lines on mobile */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* On mobile: limit description to 2 lines to keep hero clean */
-@media (max-width: 767px) {
+@media (min-width: 768px) {
+  .eyebrow { font-size: 11px; margin-bottom: 14px; }
+  .heading { margin-bottom: 16px; }
   .description {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    font-size: clamp(14px, 1.6vw, 17px);
+    margin-bottom: 32px;
+    display: block; /* restore full text on desktop */
+    overflow: visible;
   }
 }
 
