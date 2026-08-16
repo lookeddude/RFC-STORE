@@ -112,13 +112,19 @@
   line-height: 1;
 }
 
-/* Brand name + tagline stack */
+/* Brand name + tagline stack — desktop ONLY, hidden on all mobile */
 .brandStack {
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 1px;
   min-width: 0;
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .brandStack {
+    display: flex;
+  }
 }
 
 .brandText {
