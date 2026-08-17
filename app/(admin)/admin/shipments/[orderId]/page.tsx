@@ -7,11 +7,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { TrackingUpdater } from '../../../admin/orders/[id]/TrackingUpdater';
-import { OrderStatusUpdater } from '../../../admin/orders/[id]/OrderStatusUpdater';
+import { TrackingUpdater } from '@/components/admin/TrackingUpdater';
+import { OrderStatusUpdater } from '@/components/admin/OrderStatusUpdater';
 import { AdminBadge, orderStatusBadge, paymentStatusBadge } from '@/components/admin/AdminBadge';
 import styles from '@/components/admin/admin-page.module.css';
-import detailStyles from '../../admin/orders/[id]/orderDetail.module.css';
+import detailStyles from '@/components/admin/orderDetail.module.css';
 
 export const metadata: Metadata = {
   title: 'Shipment Detail - Admin RFC Store',

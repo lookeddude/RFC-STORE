@@ -11,7 +11,7 @@ import { AdminBadge, orderStatusBadge, paymentStatusBadge } from "@/components/a
 import { OrderStatusUpdater } from "./OrderStatusUpdater";
 import { TrackingUpdater } from "./TrackingUpdater";
 import styles from "@/components/admin/admin-page.module.css";
-import detailStyles from "./orderDetail.module.css";
+import detailStyles from "@/components/admin/orderDetail.module.css";
 
 export const metadata: Metadata = {
   title: "Order Details — Admin RFC Store",
