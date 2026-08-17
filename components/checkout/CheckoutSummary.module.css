@@ -30,6 +30,7 @@
   padding: 20px 16px;
   position: sticky;
   top: 120px;
+  box-shadow: var(--shadow-sm);
 }
 
 @media (min-width: 640px) {
@@ -106,8 +107,8 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--rfc-text);
-  color: var(--rfc-surface);
+  background: var(--rfc-accent);
+  color: #ffffff;
   font-family: var(--font-label);
   font-size: 11px;
   font-weight: 700;
@@ -203,7 +204,7 @@
   font-family: var(--font-label);
   font-size: 22px;
   font-weight: 700;
-  color: var(--rfc-text);
+  color: var(--rfc-accent);
 }
 
 .priceNote {

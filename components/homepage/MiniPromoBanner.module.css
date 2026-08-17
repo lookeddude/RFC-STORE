@@ -5,7 +5,7 @@
 
 .banner {
   position: relative;
-  background-color: var(--rfc-dark);
+  background-color: var(--rfc-dark-promo);
   overflow: hidden;
   padding-block: clamp(24px, 3vw, 36px);
 }

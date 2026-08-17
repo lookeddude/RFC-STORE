@@ -24,33 +24,37 @@
      LIGHT SURFACE SYSTEM (Commerce — The Lab)
      ───────────────────────────────────────────────────────── */
 
-  /* Page background — warm neutral (NOT blue-tinted) */
-  --rfc-bg:               #F5F6F8;
+  /* Page background — warm paper (slightly warmer than before) */
+  --rfc-bg:               #F3F3F1;
   /* Primary surface — cards, inputs, panels */
   --rfc-surface:          #FFFFFF;
   /* Elevated surface — modals, dropdowns */
   --rfc-surface-elevated: #FFFFFF;
   /* Subtle surface — alternate rows, table headers */
-  --rfc-surface-subtle:   #F0F1F3;
+  --rfc-surface-subtle:   #EDEDE9;
+  /* Warm parchment surface — alternating section rhythm */
+  --rfc-surface-warm:     #EAE8E2;
   /* Border — light dividers */
-  --rfc-border:           #E5E7EB;
+  --rfc-border:           #E2E2DE;
   /* Border strong — emphasized dividers */
-  --rfc-border-strong:    #D1D5DB;
+  --rfc-border-strong:    #CCCCC6;
 
   /* ─────────────────────────────────────────────────────────
      DARK SURFACE SYSTEM (Brand — The Arena)
      ───────────────────────────────────────────────────────── */
 
   /* Primary dark — page/section background */
-  --rfc-dark:             #111827;
+  --rfc-dark:             #0E1520;
+  /* Deep promo dark — editorial/promo banners — warms up from pure charcoal */
+  --rfc-dark-promo:       #160A0A;
   /* Dark surface — panels, cards on dark */
-  --rfc-dark-surface:     #1F2937;
+  --rfc-dark-surface:     #172234;
   /* Dark card — elevated cards on dark */
-  --rfc-dark-card:        #374151;
-  /* Dark border */
-  --rfc-border-dark:      rgba(255, 255, 255, 0.08);
+  --rfc-dark-card:        #1E2E44;
+  /* Dark border — warmer, more crimson-touched */
+  --rfc-border-dark:      rgba(255, 245, 242, 0.07);
   /* Dark border strong */
-  --rfc-border-dark-strong: rgba(255, 255, 255, 0.14);
+  --rfc-border-dark-strong: rgba(255, 245, 242, 0.13);
 
   /* ─────────────────────────────────────────────────────────
      TEXT SYSTEM
@@ -75,8 +79,16 @@
   --rfc-accent:           #E63946;    /* The one RFC red */
   --rfc-accent-dark:      #C81D28;    /* Hover / pressed */
   --rfc-accent-deeper:    #A01525;    /* Active / intense */
-  --rfc-accent-light:     #FEE2E4;    /* Light tint — bg for tags/chips */
-  --rfc-accent-muted:     rgba(230, 57, 70, 0.12); /* Ghost tint */
+  --rfc-accent-light:     #FAE4E6;    /* Light tint — warm parchment-red for tags/chips */
+  --rfc-accent-muted:     rgba(230, 57, 70, 0.09); /* Ghost tint — reduced opacity on warm bg */
+
+  /* Discipline sport identity tints (for category circles / icons) */
+  --rfc-sport-boxing:     #1A1210;    /* Rich dark leather */
+  --rfc-sport-mma:        #0E1A14;    /* Dark forest */
+  --rfc-sport-muaythai:   #1A100E;    /* Deep ember */
+  --rfc-sport-bjj:        #0E1018;    /* Midnight navy */
+  --rfc-sport-wrestling:  #141018;    /* Deep slate */
+  --rfc-sport-default:    #111827;    /* Fallback */
 
   /* ─────────────────────────────────────────────────────────
      SEMANTIC COLORS

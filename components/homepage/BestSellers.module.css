@@ -29,7 +29,7 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--rfc-text-muted);
+  color: var(--rfc-accent);
   margin-bottom: 4px;
 }
 .title {
@@ -56,9 +56,9 @@
   gap: 4px;
   transition: color 150ms ease, gap 150ms ease;
   padding-bottom: 2px;
-  border-bottom: 1.5px solid var(--rfc-border);
+  border-bottom: 1.5px solid var(--rfc-border-strong);
 }
-.viewAll:hover { color: var(--rfc-text); gap: 8px; }
+.viewAll:hover { color: var(--rfc-accent); border-bottom-color: var(--rfc-accent); gap: 8px; }
 
 /* Grid */
 .grid {

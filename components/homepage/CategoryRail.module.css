@@ -103,7 +103,7 @@
   height: 72px;
   border-radius: 50%;
   overflow: hidden;
-  background: var(--rfc-dark-surface, #1F2937);
+  background: var(--rfc-dark-surface, #172234);
   display: flex;
   align-items: center;
   justify-content: center;

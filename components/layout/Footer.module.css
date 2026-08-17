@@ -1,6 +1,6 @@
 /*
  * RFC Store — Footer
- * Dark charcoal bg (#111827). Premium, clean, confident.
+ * Darkest surface on page — below the arena. Premium, clean, confident.
  */
 
 .footer {
@@ -8,6 +8,18 @@
   color: var(--rfc-text-inv);
   padding-block: var(--space-20);
   border-top: 1px solid var(--rfc-border-dark);
+  position: relative;
+}
+
+/* Red accent line at the very top */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--rfc-accent);
 }
 
 /* ── Grid ─────────────────────────────────────────────────── */
@@ -106,7 +118,7 @@
 }
 
 .footerLink:hover {
-  color: var(--rfc-text-inv);
+  color: var(--rfc-accent);
 }
 
 /* ── Newsletter Column ───────────────────────────────────── */

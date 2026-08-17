@@ -71,7 +71,7 @@
   text-transform: uppercase;
   text-decoration: none;
   color: var(--rfc-text);
-  border: 1.5px solid var(--rfc-border-strong, #D1D5DB);
+  border: 1.5px solid var(--rfc-border-strong, #CCCCC6);
   border-radius: var(--radius-sharp);
   background: var(--rfc-surface);
   transition:

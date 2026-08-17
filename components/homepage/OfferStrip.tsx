@@ -93,9 +93,9 @@ export function OfferStrip() {
         .offer-strip-root {
           position: relative;
           width: 100%;
-          background-color: var(--rfc-surface, #ffffff);
-          border-top: 1px solid var(--rfc-border, #E5E7EB);
-          border-bottom: 1px solid var(--rfc-border, #E5E7EB);
+          background-color: var(--rfc-surface-warm, #EAE8E2);
+          border-top: 1px solid var(--rfc-border, #E2E2DE);
+          border-bottom: 1px solid var(--rfc-border, #E2E2DE);
           overflow: hidden;
           height: 44px;
           display: flex;
@@ -111,11 +111,11 @@ export function OfferStrip() {
         }
         .offer-strip-fade--left {
           left: 0;
-          background: linear-gradient(to right, var(--rfc-surface, #ffffff) 0%, transparent 100%);
+          background: linear-gradient(to right, var(--rfc-surface-warm, #EAE8E2) 0%, transparent 100%);
         }
         .offer-strip-fade--right {
           right: 0;
-          background: linear-gradient(to left, var(--rfc-surface, #ffffff) 0%, transparent 100%);
+          background: linear-gradient(to left, var(--rfc-surface-warm, #EAE8E2) 0%, transparent 100%);
         }
 
         .offer-strip-track {

@@ -16,18 +16,18 @@ import styles from './CategoryRail.module.css';
 
 // Brand-palette gradient backgrounds per discipline slug (no emoji)
 const DISCIPLINE_BG: Record<string, string> = {
-  boxing:           'linear-gradient(135deg, #C81D28 0%, #111827 100%)',
-  mma:              'linear-gradient(135deg, #1F2937 0%, #0D1117 100%)',
-  'muay-thai':      'linear-gradient(135deg, #7C2D12 0%, #111827 100%)',
-  kickboxing:       'linear-gradient(135deg, #1E3A5F 0%, #111827 100%)',
-  bjj:              'linear-gradient(135deg, #1A3A2A 0%, #111827 100%)',
-  'training-gear':  'linear-gradient(135deg, #374151 0%, #111827 100%)',
-  protection:       'linear-gradient(135deg, #4B5563 0%, #111827 100%)',
-  apparel:          'linear-gradient(135deg, #1F2937 0%, #0D1117 100%)',
-  accessories:      'linear-gradient(135deg, #374151 0%, #111827 100%)',
+  boxing:           'linear-gradient(135deg, #A01525 0%, #3D0A0E 60%, #160304 100%)',
+  mma:              'linear-gradient(135deg, #152030 0%, #0A151F 60%, #050D14 100%)',
+  'muay-thai':      'linear-gradient(135deg, #8B3000 0%, #4A1200 60%, #1A0600 100%)',
+  kickboxing:       'linear-gradient(135deg, #12346B 0%, #071A40 60%, #020C22 100%)',
+  bjj:              'linear-gradient(135deg, #0E3320 0%, #051A0F 60%, #020C07 100%)',
+  'training-gear':  'linear-gradient(135deg, #2D3748 0%, #1A2030 60%, #0D1018 100%)',
+  protection:       'linear-gradient(135deg, #3D4551 0%, #1F2533 60%, #0D1018 100%)',
+  apparel:          'linear-gradient(135deg, #1E2A40 0%, #0E1520 60%, #05080F 100%)',
+  accessories:      'linear-gradient(135deg, #2A2535 0%, #12101A 60%, #080510 100%)',
 };
 
-const DEFAULT_BG = 'linear-gradient(135deg, #374151 0%, #111827 100%)';
+const DEFAULT_BG = 'linear-gradient(135deg, #1E2030 0%, #0D1018 100%)';
 
 export async function CategoryRail() {
   let categories: Category[] = [];

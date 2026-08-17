@@ -248,7 +248,7 @@
   font-family: var(--font-body);
   font-size: 15px;
   font-weight: 500;
-  color: #111827;
+  color: var(--rfc-text);
   text-align: center;
   outline: none;
   min-width: 0;

@@ -230,7 +230,7 @@
   display: none;
   align-items: center;
   gap: 8px;
-  background: #F0F1F3;
+  background: var(--rfc-surface-subtle);
   border: 1.5px solid transparent;
   border-radius: 100px;
   padding: 0 14px;
@@ -397,7 +397,7 @@
 }
 
 .iconBtn:hover {
-  background: #F0F1F3;
+  background: var(--rfc-surface-subtle);
   border-color: var(--rfc-border);
   transform: translateY(-1px);
 }
@@ -573,7 +573,7 @@
 /* ── Mobile Menu Footer ──────────────────────────────────── */
 .mobileMenuFooter {
   padding: 20px 24px;
-  background: var(--rfc-bg, #F5F6F8);
+  background: var(--rfc-bg, #F3F3F1);
   border-top: 1px solid var(--rfc-border);
 }
 

@@ -7,7 +7,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: var(--rfc-dark, #111827);
+  background: var(--rfc-dark, #0E1520);
   /* Mobile — 75% of visible viewport */
   height: 75svh;
   min-height: 440px;
