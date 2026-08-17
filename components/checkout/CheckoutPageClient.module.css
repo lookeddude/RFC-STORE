@@ -3,9 +3,15 @@
  */
 
 .page {
-  padding-block: 40px 120px;
+  padding-block: 24px max(130px, calc(90px + env(safe-area-inset-bottom)));
   max-width: 1200px;
   margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding-block: 40px 120px;
+  }
 }
 
 /* ── Page Header ────────────────────────────────────────── */
@@ -13,9 +19,16 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 40px;
+  gap: 12px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .pageHeader {
+    gap: 16px;
+    margin-bottom: 40px;
+  }
 }
 
 .pageTitle {
@@ -122,7 +135,7 @@
     left: 0;
     right: 0;
     z-index: 100;
-    padding: 12px 16px;
+    padding: 12px 16px max(12px, env(safe-area-inset-bottom));
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);

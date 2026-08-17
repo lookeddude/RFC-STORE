@@ -62,11 +62,36 @@
 .nameGroup { display: flex; flex-direction: column; gap: 8px; }
 .nameSk { height: 16px; width: 180px; }
 .varSk { height: 13px; width: 100px; }
-.qtySk { height: 36px; width: 120px; border-radius: 4px; }
+.qtySk { height: 38px; width: 114px; border-radius: 4px; }
 .totalSk { height: 16px; width: 80px; }
-.removeSk { height: 36px; width: 36px; border-radius: 4px; }
+.removeSk { height: 38px; width: 38px; border-radius: 4px; }
 
 .summarySk { height: 300px; border-radius: 4px; }
+
+@media (max-width: 640px) {
+  .page { padding-block: 24px 80px; }
+  .itemRow {
+    grid-template-columns: 80px 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 8px 12px;
+    padding: 16px 0;
+  }
+  .imgSk {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+    width: 80px;
+    height: 100px;
+  }
+  .qtySk {
+    grid-column: 2 / 3;
+    grid-row: 2;
+  }
+  .removeSk {
+    grid-column: 3 / 4;
+    grid-row: 2;
+    justify-self: end;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .title,

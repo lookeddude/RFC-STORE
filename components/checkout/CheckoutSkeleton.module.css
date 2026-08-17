@@ -56,6 +56,12 @@
   gap: 20px;
 }
 
+@media (max-width: 640px) {
+  .page { padding-block: 24px 80px; }
+  .grid { grid-template-columns: 1fr; }
+  .section { padding: 20px 16px; }
+}
+
 .fieldGroup { display: flex; flex-direction: column; gap: 6px; }
 .label { height: 12px; width: 80px; }
 .input { height: 44px; }

@@ -5,16 +5,29 @@
  */
 
 .page {
-  padding-block: 40px 120px;
+  padding-block: 24px 80px;
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding-block: 40px 120px;
+  }
 }
 
 /* ── Header ─────────────────────────────────────────────── */
 .header {
   display: flex;
   align-items: baseline;
-  gap: 16px;
-  margin-bottom: 28px;
+  gap: 12px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .header {
+    gap: 16px;
+    margin-bottom: 28px;
+  }
 }
 
 .title {

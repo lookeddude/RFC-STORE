@@ -25,7 +25,7 @@ import { placeOrderAction } from "@/lib/actions/checkout";
 import { CheckoutForm } from "./CheckoutForm";
 import { CheckoutSummary } from "./CheckoutSummary";
 import type { CheckoutFormData, CheckoutFormErrors, CreateRazorpayOrderResult } from "@/types/order";
-import { RAZORPAY_CONFIG, COD_CONFIG } from '@/lib/config/shipping';
+import { RAZORPAY_CONFIG, COD_CONFIG, SHIPPING_CONFIG } from '@/lib/config/shipping';
 import { createRazorpayOrderAction } from '@/lib/actions/razorpay';
 import { RazorpayCheckout } from './RazorpayCheckout';
 import type { PaymentMethodChoice } from './PaymentMethodPicker';
@@ -249,18 +249,25 @@ export function CheckoutPageClient() {
       )}
 
       {/* Mobile sticky CTA — only shown when form is visible */}
-      {!cartState.isLoading && cartState.items.length > 0 && !isOrdered && (
-        <div className={styles.stickyBar} aria-hidden="true">
-          <button
-            type="button"
-            className={styles.stickyBtn}
-            disabled={isPending}
-            onClick={handleSubmit as unknown as React.MouseEventHandler}
-          >
-            {isPending ? 'PLACING ORDER...' : `PLACE ORDER · ${formatPrice(cartState.subtotal)}`}
-          </button>
-        </div>
-      )}
+      {!cartState.isLoading && cartState.items.length > 0 && !isOrdered && (() => {
+        const stickyShipping = cartState.subtotal >= SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_CONFIG.STANDARD_RATE;
+        const stickyCodFee = COD_CONFIG.ENABLED && paymentMethod === 'cod' ? COD_CONFIG.FEE : 0;
+        const stickyTotal = cartState.subtotal + stickyShipping + stickyCodFee;
+
+        return (
+          <div className={styles.stickyBar}>
+            <button
+              type="button"
+              className={styles.stickyBtn}
+              disabled={isPending}
+              aria-label={`Place order for ${formatPrice(stickyTotal)}`}
+              onClick={handleSubmit as unknown as React.MouseEventHandler}
+            >
+              {isPending ? 'PLACING ORDER...' : `PLACE ORDER · ${formatPrice(stickyTotal)}`}
+            </button>
+          </div>
+        );
+      })()}
     </div>
   );
 }

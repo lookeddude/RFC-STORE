@@ -27,20 +27,33 @@
   background: var(--rfc-surface);
   border: 1px solid var(--rfc-border);
   border-radius: var(--radius-md);
-  padding: 28px;
+  padding: 20px 16px;
   position: sticky;
   top: 120px;
 }
 
+@media (min-width: 640px) {
+  .panel {
+    padding: 28px;
+  }
+}
+
 .heading {
   font-family: var(--font-headline);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   line-height: 1.1;
   color: var(--rfc-text);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 640px) {
+  .heading {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
 }
 
 /* ── Item List ──────────────────────────────────────────── */
