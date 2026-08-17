@@ -12,6 +12,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { EDITORIAL_CONTENT } from "@/lib/content/homepage.content";
+import { StatsRow } from "./StatsRow";
 import styles from "./EditorialBanner.module.css";
 
 const STATS = [
@@ -56,15 +57,8 @@ export function EditorialBanner() {
           </div>
         </div>
 
-        {/* Stats row */}
-        <div className={styles.stats}>
-          {STATS.map((stat, i) => (
-            <div key={i} className={styles.stat}>
-              <p className={styles.statValue}>{stat.value}</p>
-              <p className={styles.statLabel}>{stat.label}</p>
-            </div>
-          ))}
-        </div>
+        {/* Stats row — animated entrance via StatsRow client component */}
+        <StatsRow stats={STATS} />
       </div>
 
       {/* ── BOTTOM ROW — Full-Width Image Strip ─────────── */}

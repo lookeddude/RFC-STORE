@@ -1,0 +1,84 @@
+/*
+ * RFC Store - StatsRow
+ * Staggered entrance animation for editorial stat items.
+ * Stat items start hidden (translateY + opacity:0) and animate
+ * to final position when data-visible="true" is set by JS.
+ */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--rfc-border-dark);
+  margin-top: clamp(32px, 4vw, 48px);
+  padding-top: clamp(24px, 3vw, 32px);
+  gap: 0;
+}
+
+@media (min-width: 640px) {
+  .stats { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ---- Stat item ---- */
+.stat {
+  text-align: center;
+  padding-inline: 8px;
+  border-right: 1px solid var(--rfc-border-dark);
+
+  /* Entrance state: shifted down, invisible */
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 400ms ease,
+    transform 500ms var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+/* Visible state: triggered by JS */
+.stat[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* mobile: bottom-border on first 2, no right on 2nd */
+@media (max-width: 639px) {
+  .stat:nth-child(2) { border-right: none; }
+  .stat:nth-child(1),
+  .stat:nth-child(2) {
+    border-bottom: 1px solid var(--rfc-border-dark);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+}
+.stat:last-child { border-right: none; }
+
+.statValue {
+  font-family: var(--font-headline);
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 900;
+  color: var(--rfc-text-inv);
+  line-height: 1;
+  margin: 0 0 5px;
+  letter-spacing: -0.02em;
+}
+
+.statLabel {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rfc-text-inv-muted);
+  margin: 0;
+}
+
+/* Reduced motion: skip transform, keep opacity transition short */
+@media (prefers-reduced-motion: reduce) {
+  .stat {
+    transform: none;
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+  .stat[data-visible="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}

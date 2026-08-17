@@ -78,7 +78,11 @@
   text-decoration: none;
   cursor: pointer;
   background-color: var(--rfc-dark-surface);
+  border: 1.5px solid transparent;
+  transition: border-color 300ms var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1));
 }
+
+.card:hover { border-color: rgba(230, 57, 70, 0.4); }
 
 .card:hover .cardImage {
   transform: scale(1.04);
@@ -94,7 +98,7 @@
 /* ── Card Image ─────────────────────────────────────────── */
 .cardImage {
   object-fit: cover;
-  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 600ms var(--ease-in-out, cubic-bezier(0.4, 0, 0.2, 1));
 }
 
 /* ── Gradient Overlay ───────────────────────────────────── */
@@ -116,6 +120,17 @@
   left: 20px;
   right: 20px;
   z-index: 1;
+  /* Authored moment: text rests below, lifts into position on hover */
+  transform: translateY(8px);
+  opacity: 0.82;
+  transition:
+    transform 380ms var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+    opacity 280ms ease;
+}
+
+.card:hover .cardContent {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .cardTitle {
@@ -139,4 +154,17 @@
   font-size: 13px;
   color: var(--rfc-text-inv-muted);
   line-height: 1.4;
+}
+
+/* ── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+  .cardImage { transition: none; }
+  .card:hover .cardImage { transform: none; }
+  .cardContent {
+    transform: none;
+    opacity: 1;
+    transition: none;
+  }
+  .card:hover .cardContent { transform: none; }
 }

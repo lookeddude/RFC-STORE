@@ -98,11 +98,15 @@
   border-radius: var(--radius-sharp);
   border: 1.5px solid var(--rfc-accent);
   box-shadow: 0 4px 16px rgba(230, 57, 70, 0.3);
-  transition: background-color 150ms ease, box-shadow 150ms ease;
+  transition:
+    background-color 150ms ease,
+    box-shadow 200ms ease,
+    transform 200ms var(--ease-out-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
 }
 .ctaPrimary:hover {
   background-color: var(--rfc-accent-dark);
-  box-shadow: 0 6px 20px rgba(230, 57, 70, 0.45);
+  box-shadow: 0 8px 24px rgba(230, 57, 70, 0.42);
+  transform: translateY(-2px);
 }
 
 .ctaSecondary {
@@ -121,63 +125,16 @@
   text-decoration: none;
   border-radius: var(--radius-sharp);
   border: 1.5px solid rgba(255, 255, 255, 0.2);
-  transition: border-color 150ms ease, background-color 150ms ease;
+  transition:
+    border-color 200ms var(--ease-out-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+    background-color 200ms ease;
 }
 .ctaSecondary:hover {
   border-color: rgba(255, 255, 255, 0.55);
   background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* ── Stats row ─────────────────────────────────────────── */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  border-top: 1px solid var(--rfc-border-dark);
-  margin-top: clamp(32px, 4vw, 48px);
-  padding-top: clamp(24px, 3vw, 32px);
-  gap: 0;
-}
-
-@media (min-width: 640px) {
-  .stats { grid-template-columns: repeat(4, 1fr); }
-}
-
-.stat {
-  text-align: center;
-  padding-inline: 8px;
-  border-right: 1px solid var(--rfc-border-dark);
-}
-/* mobile: bottom-border on first 2, no right on 2nd */
-@media (max-width: 639px) {
-  .stat:nth-child(2) { border-right: none; }
-  .stat:nth-child(1),
-  .stat:nth-child(2) {
-    border-bottom: 1px solid var(--rfc-border-dark);
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-  }
-}
-.stat:last-child { border-right: none; }
-
-.statValue {
-  font-family: var(--font-headline);
-  font-size: clamp(24px, 3vw, 36px);
-  font-weight: 900;
-  color: var(--rfc-text-inv);
-  line-height: 1;
-  margin: 0 0 5px;
-  letter-spacing: -0.02em;
-}
-
-.statLabel {
-  font-family: var(--font-label);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--rfc-text-inv-muted);
-  margin: 0;
-}
+/* ── Stats — styles live in StatsRow.module.css ───────────── */
 
 /* ── Image strip ───────────────────────────────────────── */
 .imageStrip {
@@ -212,4 +169,11 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(to right, rgba(17, 24, 39, 0.35) 0%, transparent 20%, transparent 80%, rgba(17, 24, 39, 0.35) 100%);
+}
+
+/* ── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ctaPrimary { transition: background-color 150ms ease; }
+  .ctaPrimary:hover { transform: none; }
+  .ctaSecondary { transition: border-color 150ms ease; }
 }
