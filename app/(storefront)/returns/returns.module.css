@@ -145,14 +145,12 @@
 
 .section h2 {
   font-family: var(--font-headline);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   color: var(--rfc-dark);
   margin-bottom: 16px;
-  padding-left: 12px;
-  border-left: 3px solid var(--rfc-accent);
 }
 
 .section p {

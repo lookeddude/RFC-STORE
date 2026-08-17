@@ -38,7 +38,6 @@
   height: 100%;
   background-color: var(--rfc-accent);
   border-radius: var(--radius-sm, 2px);
-  transition: width var(--transition-fast, 0.2s) ease-out;
 }
 
 .completeMessage {

@@ -202,7 +202,7 @@ export function HeroSection() {
           flexDirection: "column",
           alignItems: "center",
           gap: "4px",
-          animation: "hero-bounce 2s ease-in-out infinite",
+          animation: "hero-scroll 2.5s ease-in-out infinite",
         }}
         aria-hidden="true"
       >
@@ -210,15 +210,15 @@ export function HeroSection() {
           <path d="M5 8l5 5 5-5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         <style>{`
-          @keyframes hero-bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(5px); }
+          @keyframes hero-scroll {
+            0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+            50% { transform: translateX(-50%) translateY(4px); opacity: 0.9; }
           }
           @media (min-width: 768px) {
             [aria-label="Hero — Built For The Fight"] > div:last-child { display: none; }
           }
           @media (prefers-reduced-motion: reduce) {
-            @keyframes hero-bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } }
+            [aria-label="Hero — Built For The Fight"] > div:last-child { animation: none; }
           }
         `}</style>
       </div>

@@ -350,24 +350,9 @@
   cursor: default;
 }
 
-/* Left accent bar — grows on hover */
-.valueCard::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 0;
-  background: var(--rfc-accent);
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 .valueCard:hover {
   background: var(--rfc-surface-subtle);
-}
-
-.valueCard:hover::before {
-  width: 4px;
+  border-color: var(--rfc-text-subtle);
 }
 
 .valueIcon {
@@ -407,18 +392,6 @@
   position: relative;
   overflow: hidden;
   text-align: center;
-}
-
-/* Subtle texture */
-.ctaSection::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: 
-    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-  background-size: 80px 80px;
-  pointer-events: none;
 }
 
 .ctaInner {

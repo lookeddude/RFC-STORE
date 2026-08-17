@@ -25,7 +25,7 @@
   display: flex;
   min-height: 100vh;
   background: var(--admin-content-bg);
-  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  font-family: var(--font-body), -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* ── Sidebar ─────────────────────────────────────────────── */
