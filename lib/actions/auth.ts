@@ -14,6 +14,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { safeRedirectPath } from "@/lib/utils/validation";
+import { claimGuestOrders } from "@/lib/actions/orders";
 import type {
   LoginFormData,
   LoginFormErrors,
@@ -100,6 +101,14 @@ export async function loginAction(
 
   // Validate redirect param to prevent open redirect attacks.
   // safeRedirectPath rejects protocol-relative (//evil.com) and external URLs.
+
+  // Claim any guest orders placed with this email before redirecting.
+  // Must run before redirect() since redirect() throws internally.
+  const { data: { user: loggedInUser } } = await supabase.auth.getUser();
+  if (loggedInUser?.email) {
+    await claimGuestOrders(loggedInUser.id, loggedInUser.email);
+  }
+
   redirect(safeRedirectPath(redirectTo));
 }
 
@@ -135,6 +144,15 @@ export async function signupAction(data: SignupFormData): Promise<AuthActionResu
     return { success: false, error: "Registration failed. Please try again." };
   }
 
-  // Profile auto-created by DB trigger on_auth_user_created
+  // Profile auto-created by DB trigger on_auth_user_created.
+  // Claim any guest orders placed with this email.
+  // After signUp, the user may have an immediate session (if email confirmation
+  // is disabled) or may need to confirm first. We attempt getUser() and claim
+  // only if a session exists — otherwise claiming will happen on first login.
+  const { data: { user: newUser } } = await supabase.auth.getUser();
+  if (newUser?.email) {
+    await claimGuestOrders(newUser.id, newUser.email);
+  }
+
   redirect("/account");
 }
