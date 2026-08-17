@@ -49,18 +49,9 @@
 /* ── Content (left side) ─────────────────────────────── */
 .content {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  gap: 6px;
   flex: 1;
-}
-
-.accentBar {
-  display: block;
-  width: 4px;
-  height: 40px;
-  background: var(--rfc-accent);
-  border-radius: 2px;
-  flex-shrink: 0;
 }
 
 .headline {

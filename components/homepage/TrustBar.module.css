@@ -42,21 +42,27 @@
 }
 
 .icon {
-  font-size: 20px;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  color: var(--rfc-accent);
+  width: 20px;
+  height: 20px;
 }
 
 .text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .title {
   font-family: var(--font-label);
   font-size: 12px;
   font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--rfc-text);
   line-height: 1.2;
 }
