@@ -48,7 +48,7 @@ const nextConfig: NextConfig = {
       "img-src 'self' data: blob: https://efmwddxzsdiexzmyccvk.supabase.co https://lh3.googleusercontent.com",
       "connect-src 'self' https://efmwddxzsdiexzmyccvk.supabase.co wss://efmwddxzsdiexzmyccvk.supabase.co https://*.sentry.io https://api.razorpay.com https://checkout.razorpay.com",
       "media-src 'self'",
-      "frame-src https://api.razorpay.com",
+      "frame-src https://api.razorpay.com https://checkout.razorpay.com",
       "frame-ancestors 'none'",
       "form-action 'self'",
       "base-uri 'self'",
