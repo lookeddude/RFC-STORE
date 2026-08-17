@@ -117,6 +117,10 @@
 .addBtn {
   flex: 1;
   height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-family: var(--font-label);
   font-size: 14px;
   font-weight: 700;
@@ -147,26 +151,24 @@
   cursor: not-allowed;
 }
 
-/* Added feedback state */
+/* Added feedback state — success green */
 .addBtn[data-feedback="true"] {
-  background-color: #1a7a3c;
+  background-color: var(--rfc-success, #1a7a3c);
 }
 
 /* Already in cart — GO TO CART state */
 .addBtn[data-in-cart="true"] {
-  background-color: #1a7a3c;
+  background-color: var(--rfc-success, #1a7a3c);
   letter-spacing: 0.04em;
 }
 
 .addBtn[data-in-cart="true"]:hover {
-  background-color: #166534;
+  background-color: var(--rfc-success-dark, #166534);
 }
 
 
 /* Wishlist button */
 .wishlistBtn {
-  background-color: var(--rfc-dark);
-  color: var(--rfc-surface);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -175,7 +177,7 @@
   border: 1.5px solid var(--rfc-border);
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--rfc-text-inv-muted);
+  color: var(--rfc-text-muted);
   cursor: pointer;
   flex-shrink: 0;
   transition:
@@ -213,4 +215,9 @@
 .trustItem svg {
   flex-shrink: 0;
   color: var(--rfc-text-subtle);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .addBtn { transition: none; }
+  .wishlistBtn { transition: none; }
 }

@@ -173,11 +173,11 @@ export function AddToCartBar({ product }: AddToCartBarProps) {
           aria-busy={isPending}
         >
           {isInCart
-            ? "GO TO CART →"
+            ? <><span>GO TO CART</span><ArrowIcon /></>
             : isPending
             ? "ADDING…"
             : addedFeedback
-            ? "✓ ADDED TO CART"
+            ? <><CheckIcon /> ADDED TO CART</>
             : availability === "out-of-stock"
             ? "OUT OF STOCK"
             : "ADD TO CART"}
@@ -253,6 +253,22 @@ function AvailabilityBadge({
 }
 
 // ── Icons ──────────────────────────────────────────────────
+
+function CheckIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M5 12h14M12 5l7 7-7 7" />
+    </svg>
+  );
+}
 
 function HeartIcon({ filled }: { filled: boolean }) {
   return (

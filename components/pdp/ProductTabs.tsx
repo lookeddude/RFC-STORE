@@ -11,6 +11,9 @@
  * Description: renders product.description as plain text / paragraphs
  * Specifications: derived from known product fields (no invented data)
  * Shipping & Returns: RFC policy content (config-driven, not hardcoded claims)
+ *
+ * Fixed: emoji icons replaced with authored SVG — craft-floor ban on
+ * unicode glyphs standing in for an icon system.
  */
 import React, { useState } from "react";
 import type { Product } from "@/types/product";
@@ -181,26 +184,29 @@ function SpecificationsPanel({ product }: { product: Product }) {
   );
 }
 
+// ── Shipping Panel ────────────────────────────────────────
+// Icons replaced with authored SVGs (craft-floor: no emoji as icons)
+
 function ShippingPanel() {
   const policies = [
     {
-      icon: "🚚",
+      icon: <TruckIcon />,
       title: "Free Shipping",
       body: "Free shipping on all orders above ₹5,000. Standard delivery 3–7 business days.",
     },
     {
-      icon: "↩️",
+      icon: <ReturnIcon />,
       title: "7-Day Returns",
       body: "Not happy? Return unused items in original packaging within 7 days for a full refund.",
     },
     {
-      icon: "🔒",
+      icon: <ShieldIcon />,
       title: "Secure Checkout",
       body: "All transactions are encrypted and processed securely. We never store card details.",
     },
     {
-      icon: "📦",
-      title: "Packaging",
+      icon: <BoxIcon />,
+      title: "Protective Packaging",
       body: "Products are dispatched in protective packaging to ensure they arrive in perfect condition.",
     },
   ];
@@ -217,5 +223,45 @@ function ShippingPanel() {
         </div>
       ))}
     </div>
+  );
+}
+
+// ── Shipping Icons (SVG, not emoji) ──────────────────────
+
+function TruckIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="1" y="3" width="15" height="13" />
+      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+      <circle cx="5.5" cy="18.5" r="2.5" />
+      <circle cx="18.5" cy="18.5" r="2.5" />
+    </svg>
+  );
+}
+
+function ReturnIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="1 4 1 10 7 10" />
+      <path d="M3.51 15a9 9 0 1 0 .49-4" />
+    </svg>
+  );
+}
+
+function ShieldIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    </svg>
+  );
+}
+
+function BoxIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+      <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+      <line x1="12" y1="22.08" x2="12" y2="12" />
+    </svg>
   );
 }

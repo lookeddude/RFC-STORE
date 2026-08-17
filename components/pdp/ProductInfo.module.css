@@ -21,10 +21,10 @@
 
 .name {
   font-family: var(--font-headline);
-  font-size: clamp(24px, 3.5vw, 36px);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
+  font-size: clamp(24px, 3.5vw, 40px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
   color: var(--rfc-text);
   margin-bottom: 20px;
   text-transform: uppercase;

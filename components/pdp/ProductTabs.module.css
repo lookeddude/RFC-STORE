@@ -146,10 +146,11 @@
 }
 
 .shippingIcon {
-  font-size: 22px;
   flex-shrink: 0;
-  line-height: 1;
+  color: var(--rfc-text-subtle);
   margin-top: 2px;
+  display: flex;
+  align-items: flex-start;
 }
 
 .shippingTitle {
@@ -167,4 +168,8 @@
   font-size: 14px;
   line-height: 1.6;
   color: var(--rfc-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab { transition: none; }
 }

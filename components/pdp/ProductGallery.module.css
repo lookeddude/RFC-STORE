@@ -145,3 +145,9 @@
 .thumbImage {
   object-fit: cover;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .mainImage { transition: none; }
+  .thumb { transition: none; }
+  .arrow { transition: none; }
+}
