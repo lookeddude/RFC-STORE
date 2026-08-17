@@ -113,3 +113,45 @@ export async function updateTrackingAction(
   revalidatePath('/account/orders');
   return { success: true };
 }
+
+/**
+ * Mark a COD order as paid (collected on delivery).
+ * Sets payment_status: 'paid'. Safe to call repeatedly — idempotent.
+ */
+export async function markCodPaidAction(
+  orderId: string
+): Promise<AdminActionResult> {
+  const adminUser = await getAdminUser();
+  if (!adminUser) return UNAUTHORIZED;
+
+  const supabase = await createClient();
+
+  const { data: order, error } = await supabase
+    .from('orders')
+    .update({
+      payment_status: 'paid',
+      updated_at: new Date().toISOString(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any)
+    .eq('id', orderId)
+    .eq('payment_method', 'cod')
+    .select('order_number, customer_email, customer_name, status')
+    .maybeSingle();
+
+  if (error) return { success: false, error: error.message };
+  if (!order) return { success: false, error: 'Order not found or already paid.' };
+
+  // Notify customer (non-blocking)
+  void notifyOrderStatusChanged({
+    orderNumber:    order.order_number as string,
+    orderId,
+    customerEmail:  order.customer_email as string,
+    customerName:   (order.customer_name ?? 'Customer') as string,
+    previousStatus: 'confirmed' as AdminOrderStatus,
+    newStatus:      'payment_received' as AdminOrderStatus,
+  });
+
+  revalidatePath(`/admin/orders/${orderId}`);
+  revalidatePath('/admin/orders');
+  return { success: true };
+}

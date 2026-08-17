@@ -9,7 +9,8 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AdminBadge, orderStatusBadge, paymentStatusBadge } from "@/components/admin/AdminBadge";
 import { OrderStatusUpdater } from "./OrderStatusUpdater";
-import { TrackingUpdater } from "./TrackingUpdater";
+import { TrackingUpdater } from "@/components/admin/TrackingUpdater";
+import { MarkPaidButton } from "@/components/admin/MarkPaidButton";
 import styles from "@/components/admin/admin-page.module.css";
 import detailStyles from "@/components/admin/orderDetail.module.css";
 
@@ -189,17 +190,9 @@ export default async function AdminOrderDetailPage({
               <p className={detailStyles.fieldLabel}>Payment Status</p>
               <AdminBadge label={pStatus.label} variant={pStatus.variant} size="md" />
               {order.payment_method === 'cod' && order.payment_status === 'pending' && (
-                <form action={`/api/admin/orders/${order.id}/mark-paid`} method="POST" style={{display:'inline', marginLeft: '12px'}}>
-                  <button type="submit" style={{
-                    padding: '8px 16px',
-                    background: '#15803d', color: '#fff', border: 'none',
-                    borderRadius: '6px', fontFamily: 'var(--font-label)',
-                    fontSize: '12px', fontWeight: 700, textTransform: 'uppercase',
-                    letterSpacing: '0.05em', cursor: 'pointer',
-                  }}>
-                    ✓ Mark as Paid (COD)
-                  </button>
-                </form>
+                <div style={{ marginLeft: '12px', display: 'inline-block' }}>
+                  <MarkPaidButton orderId={order.id} />
+                </div>
               )}
               <p className={detailStyles.readonlyHint}>
                 Payment status is set by the payment provider and cannot be manually changed.
