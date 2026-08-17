@@ -58,3 +58,58 @@ export async function updateOrderStatusAction(
   return { success: true };
 }
 
+/**
+ * Save shipment tracking number + courier to the order.
+ * Sends "Shipped" notification email if order is in shipped state.
+ */
+export async function updateTrackingAction(
+  orderId: string,
+  trackingNumber: string,
+  trackingCourier: string
+): Promise<AdminActionResult> {
+  const admin = await getAdminUser();
+  if (!admin) return UNAUTHORIZED;
+
+  const trimmedNumber  = trackingNumber.trim();
+  const trimmedCourier = trackingCourier.trim();
+
+  if (!trimmedNumber) return { success: false, error: 'Tracking number is required.' };
+
+  const supabase = await createClient();
+
+  const { data: order } = await supabase
+    .from('orders')
+    .select('status, order_number, customer_email, customer_name')
+    .eq('id', orderId)
+    .maybeSingle();
+
+  if (!order) return { success: false, error: 'Order not found.' };
+
+  const { error } = await supabase
+    .from('orders')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .update({
+      tracking_number:  trimmedNumber,
+      tracking_courier: trimmedCourier || null,
+      updated_at: new Date().toISOString(),
+    } as any)
+    .eq('id', orderId);
+
+  if (error) return { success: false, error: error.message };
+
+  // If order is shipped, resend the shipped email with the new tracking info
+  if (order.status === 'shipped') {
+    void notifyOrderStatusChanged({
+      orderNumber:   order.order_number as string,
+      orderId,
+      customerEmail: order.customer_email as string,
+      customerName:  (order.customer_name ?? 'Customer') as string,
+      previousStatus: 'confirmed' as AdminOrderStatus,
+      newStatus:      'shipped'   as AdminOrderStatus,
+    });
+  }
+
+  revalidatePath(`/admin/orders/${orderId}`);
+  revalidatePath('/account/orders');
+  return { success: true };
+}

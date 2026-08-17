@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AdminBadge, orderStatusBadge, paymentStatusBadge } from "@/components/admin/AdminBadge";
 import { OrderStatusUpdater } from "./OrderStatusUpdater";
+import { TrackingUpdater } from "./TrackingUpdater";
 import styles from "@/components/admin/admin-page.module.css";
 import detailStyles from "./orderDetail.module.css";
 
@@ -204,6 +205,30 @@ export default async function AdminOrderDetailPage({
                 Payment status is set by the payment provider and cannot be manually changed.
               </p>
             </div>
+          </div>
+
+          {/* Tracking Information */}
+          <div className={detailStyles.card}>
+            <h2 className={detailStyles.cardTitle}>Shipment Tracking</h2>
+            {order.tracking_number && (
+              <div style={{ marginBottom: 12 }}>
+                <p className={detailStyles.fieldLabel}>Tracking Number</p>
+                <p className={detailStyles.fieldValue} style={{ fontFamily: 'monospace', fontSize: 12 }}>
+                  {order.tracking_number}
+                </p>
+                {order.tracking_courier && (
+                  <>
+                    <p className={detailStyles.fieldLabel} style={{ marginTop: 8 }}>Courier</p>
+                    <p className={detailStyles.fieldValue}>{order.tracking_courier}</p>
+                  </>
+                )}
+              </div>
+            )}
+            <TrackingUpdater
+              orderId={order.id}
+              currentTrackingNumber={order.tracking_number ?? null}
+              currentCourier={order.tracking_courier ?? null}
+            />
           </div>
 
           {/* Customer */}
