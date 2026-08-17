@@ -127,12 +127,20 @@
 }
 .guideHeader { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
 .guideIcon {
-  font-size: 32px;
+  font-family: var(--font-headline);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: var(--accent, var(--rfc-accent));
   flex-shrink: 0;
-  width: 56px; height: 56px;
-  background: color-mix(in srgb, var(--rfc-text) 5%, transparent);
+  width: 52px;
+  height: 52px;
+  background: var(--rfc-bg);
+  border: 1.5px solid var(--rfc-border);
   border-radius: var(--radius-sm);
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .guideTag {
   display: block;
@@ -190,3 +198,14 @@
   border-radius: var(--radius-sm); transition: background 0.2s, transform 0.15s;
 }
 .ctaBtn:hover { background: var(--rfc-accent-dark); transform: translateY(-2px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .heroCta,
+  .principleCard,
+  .guideCard,
+  .ctaBtn {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+

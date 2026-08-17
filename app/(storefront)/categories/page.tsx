@@ -8,16 +8,15 @@ export const metadata: Metadata = {
   description: 'Browse all combat sports categories — Boxing, MMA, Muay Thai, Kickboxing, Training Gear, Apparel and more.',
 };
 
-// Category emoji icons (since no images for categories)
-const CATEGORY_ICONS: Record<string, string> = {
-  boxing: '🥊',
-  mma: '🤼',
-  'muay-thai': '🦵',
-  kickboxing: '🦶',
-  'training-gear': '🏋️',
-  protection: '🛡️',
-  apparel: '👕',
-  accessories: '🎽',
+const CATEGORY_INITIALS: Record<string, string> = {
+  boxing: 'BX',
+  mma: 'MMA',
+  'muay-thai': 'MT',
+  kickboxing: 'KB',
+  'training-gear': 'TG',
+  protection: 'PR',
+  apparel: 'AP',
+  accessories: 'AC',
 };
 
 const CATEGORY_ACCENT: Record<string, string> = {
@@ -52,7 +51,7 @@ export default async function CategoriesPage() {
       <div className={styles.container}>
         <div className={styles.grid}>
           {(categories ?? []).map((cat) => {
-            const icon = CATEGORY_ICONS[cat.slug] ?? '⚡';
+            const initials = CATEGORY_INITIALS[cat.slug] ?? cat.name.slice(0, 2).toUpperCase();
             const accent = CATEGORY_ACCENT[cat.slug] ?? '#E63946';
             return (
               <Link
@@ -61,12 +60,14 @@ export default async function CategoriesPage() {
                 className={styles.card}
                 style={{ '--accent': accent } as React.CSSProperties}
               >
-                <div className={styles.cardIcon}>{icon}</div>
+                <div className={styles.cardIcon} aria-hidden="true">
+                  <span className={styles.cardInitial}>{initials}</span>
+                </div>
                 <div className={styles.cardBody}>
                   <h2 className={styles.cardTitle}>{cat.name}</h2>
                   {cat.description && <p className={styles.cardDesc}>{cat.description}</p>}
                 </div>
-                <div className={styles.cardArrow}>
+                <div className={styles.cardArrow} aria-hidden="true">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                   </svg>

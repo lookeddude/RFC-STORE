@@ -53,11 +53,11 @@ export default function NotFound() {
           style={{
             fontFamily: "var(--font-label)",
             fontSize: "12px",
-            fontWeight: 600,
-            letterSpacing: "0.12em",
+            fontWeight: 700,
+            letterSpacing: "0.15em",
             textTransform: "uppercase",
-            color: "var(--color-secondary)",
-            marginBottom: "var(--space-4)",
+            color: "var(--rfc-accent)",
+            marginBottom: "16px",
           }}
         >
           {RFC_BRAND.shortName} — Page Not Found
@@ -67,12 +67,12 @@ export default function NotFound() {
           style={{
             fontFamily: "var(--font-headline)",
             fontSize: "clamp(40px, 6vw, 80px)",
-            fontWeight: 700,
+            fontWeight: 900,
             textTransform: "uppercase",
-            letterSpacing: "-0.02em",
-            color: "var(--color-on-primary)",
-            marginBottom: "var(--space-4)",
-            lineHeight: 1,
+            letterSpacing: "-0.025em",
+            color: "var(--rfc-text-inv)",
+            marginBottom: "16px",
+            lineHeight: 0.95,
           }}
         >
           Out of Bounds
@@ -81,10 +81,10 @@ export default function NotFound() {
         <p
           style={{
             fontFamily: "var(--font-body)",
-            fontSize: "var(--font-body-lg-size)",
-            color: "rgba(255,255,255,0.55)",
-            maxWidth: "400px",
-            margin: "0 auto var(--space-8)",
+            fontSize: "16px",
+            color: "var(--rfc-text-inv-muted)",
+            maxWidth: "420px",
+            margin: "0 auto 32px",
             lineHeight: 1.6,
           }}
         >

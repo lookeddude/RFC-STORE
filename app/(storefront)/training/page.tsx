@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const TRAINING_GUIDES = [
   {
     discipline: 'Boxing',
-    icon: '🥊',
+    monogram: 'BOX',
     tag: 'BEGINNER — ADVANCED',
     title: 'The Complete Boxing Fundamentals Guide',
     desc: 'Master the jab, cross, hook and uppercut. Build the foundation every boxer needs — footwork, guard, head movement and punch combinations.',
@@ -19,7 +19,7 @@ const TRAINING_GUIDES = [
   },
   {
     discipline: 'MMA',
-    icon: '🤼',
+    monogram: 'MMA',
     tag: 'INTERMEDIATE — ADVANCED',
     title: 'MMA Conditioning & Grappling Drills',
     desc: 'Build the gas tank, strength and technical grappling skills that separate average fighters from champions. 12-week structured program.',
@@ -28,7 +28,7 @@ const TRAINING_GUIDES = [
   },
   {
     discipline: 'Muay Thai',
-    icon: '🦵',
+    monogram: 'MT',
     tag: 'ALL LEVELS',
     title: 'Muay Thai Striking System — 8 Limbs',
     desc: 'Learn the art of the 8 limbs. Punches, kicks, elbows and knees. The complete striking system used by champions across Southeast Asia.',
@@ -37,7 +37,7 @@ const TRAINING_GUIDES = [
   },
   {
     discipline: 'Kickboxing',
-    icon: '🦶',
+    monogram: 'KB',
     tag: 'BEGINNER — INTERMEDIATE',
     title: 'Kickboxing Power & Speed Development',
     desc: 'Build explosive kicks and devastating punch combinations. The kickboxing system for fighters who want knockout power with elite cardio.',
@@ -93,7 +93,9 @@ export default function TrainingPage() {
                 style={{ '--accent': guide.accentColor } as React.CSSProperties}
               >
                 <div className={styles.guideHeader}>
-                  <span className={styles.guideIcon}>{guide.icon}</span>
+                  <span className={styles.guideIcon} aria-hidden="true">
+                    {guide.monogram}
+                  </span>
                   <div>
                     <span className={styles.guideTag}>{guide.tag}</span>
                     <h3 className={styles.guideTitle}>{guide.title}</h3>

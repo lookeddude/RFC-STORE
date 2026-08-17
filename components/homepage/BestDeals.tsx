@@ -31,7 +31,10 @@ export async function BestDeals() {
             <h2 className={styles.title}>BEST DEALS</h2>
           </div>
           <Link href="/shop?sort=price-asc" className={styles.viewAll}>
-            VIEW ALL <span aria-hidden="true">→</span>
+            VIEW ALL
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
           </Link>
         </div>
 

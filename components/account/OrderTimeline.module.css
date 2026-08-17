@@ -199,3 +199,10 @@
     white-space: normal;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .current .dot::before {
+    animation: none;
+  }
+}
+

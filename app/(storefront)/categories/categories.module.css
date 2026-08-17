@@ -99,20 +99,29 @@
 .card:hover .cardGlow { opacity: 0.08; }
 
 .cardIcon {
-  font-size: 36px;
   flex-shrink: 0;
-  width: 64px;
-  height: 64px;
-  background: #F0F1F3;
+  width: 56px;
+  height: 56px;
+  background: var(--rfc-bg);
+  border: 1.5px solid var(--rfc-border);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.25s ease;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.cardInitial {
+  font-family: var(--font-headline);
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: var(--accent, var(--rfc-accent));
 }
 
 .card:hover .cardIcon {
-  background: color-mix(in srgb, var(--accent, var(--rfc-accent)) 15%, transparent);
+  border-color: var(--accent, var(--rfc-accent));
+  background: color-mix(in srgb, var(--accent, var(--rfc-accent)) 10%, transparent);
 }
 
 .cardBody { flex: 1; min-width: 0; }
@@ -147,3 +156,14 @@
   color: var(--accent, var(--rfc-accent));
   transform: translateX(4px);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .cardGlow,
+  .cardIcon,
+  .cardArrow {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
