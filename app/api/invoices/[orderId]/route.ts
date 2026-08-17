@@ -113,7 +113,8 @@ export async function GET(
       },
     });
   } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
     console.error('[Invoice] Generation error:', err);
-    return NextResponse.json({ error: 'Failed to generate invoice' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to generate invoice', detail: message }, { status: 500 });
   }
 }

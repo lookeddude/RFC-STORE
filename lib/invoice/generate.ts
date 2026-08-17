@@ -41,7 +41,8 @@ export async function buildInvoicePdf(orderId: string): Promise<Buffer> {
   const order = rawOrder as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const items = (order.order_items ?? []) as any[];
-  const addr = order.shipping_address as Record<string, string>;
+  // shipping_address can be null for edge-case orders
+  const addr = (order.shipping_address ?? {}) as Record<string, string>;
 
   const invoiceItems: InvoiceItem[] = items.map((item) => ({
     productName: item.product_name_snapshot,
@@ -53,8 +54,8 @@ export async function buildInvoicePdf(orderId: string): Promise<Buffer> {
   }));
 
   const address: InvoiceAddress = {
-    fullName: addr.fullName ?? addr.full_name ?? '',
-    phone: order.customer_phone ?? '',
+    fullName: addr.fullName ?? addr.full_name ?? order.customer_name ?? '',
+    phone: addr.phone ?? order.customer_phone ?? '',
     line1: addr.line1 ?? '',
     line2: addr.line2 ?? null,
     city: addr.city ?? '',
@@ -74,14 +75,14 @@ export async function buildInvoicePdf(orderId: string): Promise<Buffer> {
     address,
     items: invoiceItems,
     subtotal: Number(order.subtotal),
-    shippingAmount: Number(order.shipping_amount),
-    taxAmount: Number(order.tax_amount),
+    shippingAmount: Number(order.shipping_amount ?? 0),
+    taxAmount: Number(order.tax_amount ?? 0),
     taxRate: Number(order.tax_rate ?? 0),
     cgstAmount: Number(order.cgst_amount ?? 0),
     sgstAmount: Number(order.sgst_amount ?? 0),
     igstAmount: Number(order.igst_amount ?? 0),
-    discountAmount: Number(order.discount_amount),
-    codFee: Number(order.cod_fee),
+    discountAmount: Number(order.discount_amount ?? 0),
+    codFee: Number(order.cod_fee ?? 0),
     totalAmount: Number(order.total_amount),
     currency: order.currency ?? 'INR',
     paymentMethod: order.payment_method,
@@ -111,6 +112,11 @@ export async function buildInvoicePdf(orderId: string): Promise<Buffer> {
  * Pure function — no DB calls.
  */
 async function generatePdf(data: InvoiceData): Promise<Buffer> {
+  // pdf-lib StandardFonts use WinAnsiEncoding (Latin-1 only, codepoints 0-255).
+  // Any character outside that range crashes drawText. Strip them safely.
+  const safeText = (s: string): string =>
+    s.replace(/[^\x00-\xFF]/g, '?').replace(/[\x80-\x9F]/g, '?');
+
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([595, 842]); // A4
   const { width, height } = page.getSize();
@@ -131,7 +137,7 @@ async function generatePdf(data: InvoiceData): Promise<Buffer> {
   // ── Header bar ───────────────────────────────────────────
   page.drawRectangle({ x: 0, y: height - 80, width, height: 80, color: dark });
 
-  page.drawText(data.businessName.toUpperCase(), {
+  page.drawText(safeText(data.businessName.toUpperCase()), {
     x: margin, y: height - 52,
     size: 18, font: boldFont, color: white,
   });
@@ -145,8 +151,8 @@ async function generatePdf(data: InvoiceData): Promise<Buffer> {
 
   // ── Invoice meta ─────────────────────────────────────────
   const drawLabelValue = (label: string, value: string, x: number, yPos: number) => {
-    page.drawText(label, { x, y: yPos, size: 8, font: boldFont, color: gray });
-    page.drawText(value, { x, y: yPos - 14, size: 10, font: regularFont, color: dark });
+    page.drawText(safeText(label), { x, y: yPos, size: 8, font: boldFont, color: gray });
+    page.drawText(safeText(value), { x, y: yPos - 14, size: 10, font: regularFont, color: dark });
   };
 
   drawLabelValue('INVOICE NO', data.invoiceNumber, margin, y);
@@ -173,7 +179,7 @@ async function generatePdf(data: InvoiceData): Promise<Buffer> {
   page.drawText('SHIPPING & BILLING ADDRESS', { x: margin, y, size: 8, font: boldFont, color: gray });
   y -= 14;
   for (const line of addrLines) {
-    page.drawText(line, { x: margin, y, size: 10, font: regularFont, color: dark });
+    page.drawText(safeText(line), { x: margin, y, size: 10, font: regularFont, color: dark });
     y -= 14;
   }
 
@@ -189,7 +195,7 @@ async function generatePdf(data: InvoiceData): Promise<Buffer> {
   let bizRowY = bizY - 14;
   for (const line of bizLines) {
     if (line) {
-      page.drawText(line, { x: colRight - 180, y: bizRowY, size: 9, font: regularFont, color: dark });
+      page.drawText(safeText(line), { x: colRight - 180, y: bizRowY, size: 9, font: regularFont, color: dark });
       bizRowY -= 12;
     }
   }
@@ -221,12 +227,12 @@ async function generatePdf(data: InvoiceData): Promise<Buffer> {
 
   // ── Items ─────────────────────────────────────────────────
   for (const item of data.items) {
-    const name = item.variantName ? `${item.productName} — ${item.variantName}` : item.productName;
-    // Truncate long names
-    const displayName = name.length > 35 ? name.substring(0, 32) + '...' : name;
+    const name = item.variantName ? `${item.productName} / ${item.variantName}` : item.productName;
+    // Truncate long names and strip non-WinAnsi chars
+    const displayName = safeText(name.length > 35 ? name.substring(0, 32) + '...' : name);
 
     page.drawText(displayName, { x: col.item, y, size: 9, font: regularFont, color: dark });
-    page.drawText(item.sku ?? '—', { x: col.sku, y, size: 9, font: regularFont, color: gray });
+    page.drawText(safeText(item.sku ?? '-'), { x: col.sku, y, size: 9, font: regularFont, color: gray });
     page.drawText(String(item.quantity), { x: col.qty, y, size: 9, font: regularFont, color: dark });
     page.drawText(fmt(item.unitPrice), { x: col.price, y, size: 9, font: regularFont, color: dark });
     page.drawText(fmt(item.lineTotal), { x: col.total - boldFont.widthOfTextAtSize(fmt(item.lineTotal), 9), y, size: 9, font: boldFont, color: dark });
@@ -257,7 +263,7 @@ async function generatePdf(data: InvoiceData): Promise<Buffer> {
   if (data.taxAmount > 0) {
     drawTotal(`GST (${(data.taxRate * 100).toFixed(0)}%)`, fmt(data.taxAmount));
   } else {
-    drawTotal('GST', '₹0.00 (pending registration)');
+    drawTotal('GST', 'Rs. 0.00 (pending registration)');
   }
 
   // Total line
@@ -286,7 +292,7 @@ async function generatePdf(data: InvoiceData): Promise<Buffer> {
   // ── Footer ────────────────────────────────────────────────
   page.drawRectangle({ x: 0, y: 0, width, height: 40, color: dark });
   page.drawText(
-    `${data.businessName} · ${data.businessEmail} · This is a computer-generated invoice.`,
+    safeText(`${data.businessName} | ${data.businessEmail} | Computer-generated invoice`),
     { x: margin, y: 14, size: 8, font: regularFont, color: gray }
   );
 
