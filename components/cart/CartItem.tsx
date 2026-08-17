@@ -8,7 +8,7 @@
  * Real-time stock awareness:
  *   - Receives stockStatus prop from CartPageClient (server-validated)
  *   - Out-of-stock: shows red "SOLD OUT" badge, disables qty controls, grays row
- *   - Low stock: shows amber "Only N left" warning
+ *   - Low stock: shows amber "Only N left" warning with SVG indicator
  */
 import React from "react";
 import Image from "next/image";
@@ -101,7 +101,8 @@ export function CartItem({ item, stockStatus }: CartItemProps) {
         )}
         {isLowStock && !isOutOfStock && (
           <div className={styles.lowStockBadge} role="status" aria-live="polite">
-            ⚡ Only {stockStatus!.availableQty} left in stock
+            <BoltIcon />
+            <span>Only {stockStatus!.availableQty} left in stock</span>
           </div>
         )}
       </div>
@@ -160,6 +161,21 @@ export function CartItem({ item, stockStatus }: CartItemProps) {
         <TrashIcon />
       </button>
     </div>
+  );
+}
+
+function BoltIcon() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      style={{ flexShrink: 0 }}
+    >
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+    </svg>
   );
 }
 

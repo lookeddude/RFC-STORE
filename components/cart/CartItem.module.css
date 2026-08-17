@@ -148,24 +148,27 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #dc2626;
+  color: var(--rfc-error, #dc2626);
 }
 
 .soldOutDot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: #dc2626;
+  background-color: var(--rfc-error, #dc2626);
   flex-shrink: 0;
 }
 
 .lowStockBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   margin-top: 4px;
   font-family: var(--font-label);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: #d97706;
+  color: var(--rfc-warning, #d97706);
 }
 
 /* ── Quantity Control ───────────────────────────────────── */
@@ -283,5 +286,14 @@
     grid-column: 3 / 4;
     grid-row: 2;
     justify-self: end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row,
+  .productName,
+  .qtyBtn,
+  .removeBtn {
+    transition: none;
   }
 }

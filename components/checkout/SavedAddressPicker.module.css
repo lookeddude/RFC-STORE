@@ -10,11 +10,17 @@
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--rfc-text-muted);
   margin-bottom: 12px;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  color: var(--rfc-accent);
 }
 
 .list {
@@ -98,5 +104,11 @@
   .card {
     max-width: 100%;
     width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
   }
 }

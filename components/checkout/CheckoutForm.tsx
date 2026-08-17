@@ -307,12 +307,17 @@ export function CheckoutForm({
         {(!razorpayEnabled || paymentMethod === 'cod') && (
           <div className={styles.codBlock}>
             <div className={styles.codHeader}>
-              <span className={styles.codIcon}>💵</span>
+              <span className={styles.codIcon} aria-hidden="true">
+                <BanknoteIcon />
+              </span>
               <div>
                 <p className={styles.codTitle}>Cash on Delivery</p>
                 <p className={styles.codSubtitle}>Pay when your order arrives. No advance required.</p>
               </div>
-              <span className={styles.codBadge}>✓ Available</span>
+              <span className={styles.codBadge}>
+                <CheckIcon />
+                <span>Available</span>
+              </span>
             </div>
             <div className={styles.codDetails}>
               <div className={styles.codRow}>
@@ -354,7 +359,8 @@ export function CheckoutForm({
       </button>
 
       <p className={styles.secureNote}>
-        🔒 Your information is secured with 256-bit SSL encryption.
+        <LockIcon />
+        <span>Your information is secured with 256-bit SSL encryption.</span>
       </p>
     </form>
   );
@@ -409,6 +415,24 @@ function LockIcon() {
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
       <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
       <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </svg>
+  );
+}
+
+function BanknoteIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <rect x="2" y="6" width="20" height="12" rx="2" />
+      <circle cx="12" cy="12" r="2" />
+      <path d="M6 12h.01M18 12h.01" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <polyline points="20 6 9 17 4 12" />
     </svg>
   );
 }

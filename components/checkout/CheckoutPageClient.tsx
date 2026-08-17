@@ -201,7 +201,10 @@ export function CheckoutPageClient() {
       {/* Page heading */}
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>Checkout</h1>
-        <Link href="/cart" className={styles.backLink}>← Back to Cart</Link>
+        <Link href="/cart" className={styles.backLink}>
+          <ArrowLeftIcon />
+          <span>Back to Cart</span>
+        </Link>
       </div>
 
       <div className={styles.layout}>
@@ -259,5 +262,13 @@ export function CheckoutPageClient() {
         </div>
       )}
     </div>
+  );
+}
+
+function ArrowLeftIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <path d="M19 12H5M12 19l-7-7 7-7" />
+    </svg>
   );
 }

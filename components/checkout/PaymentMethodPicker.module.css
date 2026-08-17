@@ -124,11 +124,22 @@
 /* ── Secure icon ─────────────────────────────────────── */
 
 .secureIcon {
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rfc-text-subtle);
   opacity: 0.6;
   flex-shrink: 0;
 }
 
 .card.selected .secureIcon {
   opacity: 1;
+  color: var(--rfc-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .radioIndicator {
+    transition: none;
+  }
 }

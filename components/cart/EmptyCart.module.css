@@ -14,12 +14,18 @@
 
 .icon { margin-bottom: 24px; }
 
+.iconSvg {
+  color: var(--rfc-text-subtle);
+  display: block;
+}
+
 .heading {
   font-family: var(--font-headline);
-  font-size: 24px;
-  font-weight: 700;
+  font-size: clamp(24px, 3.5vw, 32px);
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   color: var(--rfc-text);
   margin-bottom: 12px;
 }
@@ -52,3 +58,9 @@
 }
 
 .shopBtn:hover { background-color: var(--rfc-accent-dark); }
+
+@media (prefers-reduced-motion: reduce) {
+  .shopBtn {
+    transition: none;
+  }
+}

@@ -42,7 +42,7 @@
   height: 24px;
   border-radius: 50%;
   background-color: var(--rfc-accent);
-  color: var(--rfc-surface);
+  color: var(--rfc-text-inv, #fff);
   font-size: 12px;
   font-weight: 700;
   flex-shrink: 0;
@@ -73,7 +73,7 @@
 .fieldGroupError .select,
 .fieldGroupError .textarea {
   border-color: var(--rfc-error);
-  background-color: var(--rfc-surface)9f9;
+  background-color: var(--rfc-error-bg, rgba(230, 57, 70, 0.04));
 }
 
 /* ── Label ──────────────────────────────────────────────── */
@@ -200,7 +200,7 @@
   border: none;
   border-radius: var(--radius-sm);
   background-color: var(--rfc-accent);
-  color: var(--rfc-surface);
+  color: var(--rfc-text-inv, #fff);
   cursor: pointer;
   transition: background-color var(--transition-fast), opacity var(--transition-fast);
 }
@@ -223,17 +223,25 @@
 
 /* ── Secure Note ────────────────────────────────────────── */
 .secureNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   font-family: var(--font-body);
   font-size: 12px;
   color: var(--rfc-text-subtle);
   text-align: center;
 }
 
+.secureNote svg {
+  color: var(--rfc-text-subtle);
+}
+
 /* ── COD Payment Block ────────────────────────────────── */
 .codBlock {
-  border: 1.5px solid #22c55e;
+  border: 1.5px solid var(--rfc-success, #22c55e);
   border-radius: var(--radius-md, 8px);
-  background: #f0fdf4;
+  background: var(--rfc-success-bg, #f0fdf4);
   padding: 16px 20px;
   display: flex;
   flex-direction: column;
@@ -247,7 +255,9 @@
 }
 
 .codIcon {
-  font-size: 24px;
+  display: flex;
+  align-items: center;
+  color: #15803d;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -271,8 +281,11 @@
 .codBadge {
   margin-left: auto;
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 3px 10px;
-  background: #22c55e;
+  background: var(--rfc-success, #22c55e);
   color: #fff;
   border-radius: 20px;
   font-family: var(--font-label);
@@ -324,4 +337,15 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .input,
+  .select,
+  .textarea,
+  .placeOrderBtn,
+  .spinner {
+    transition: none;
+    animation: none;
+  }
 }

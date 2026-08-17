@@ -12,8 +12,6 @@
  *
  * If orderNumber doesn't exist → notFound()
  * If authenticated user tries to view another user's order → notFound()
- *
- * Phase 7 integration: link to order history in account dashboard
  */
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -46,7 +44,6 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
   const supabase = await createClient();
 
   // Fetch order with items (admin client — bypasses RLS for server-side render)
-  // user_id included here to avoid a second DB round-trip for the security check below
   const { data: orderRaw, error } = await admin
     .from("orders")
     .select(`
@@ -101,10 +98,7 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
     }>;
   };
 
-
   // Security: if this order belongs to a specific user, verify the authenticated user matches.
-  // getUser() re-validates the JWT with Supabase Auth server — cannot be forged.
-  // Never use getSession() for security decisions (reads cookie without server validation).
   const { data: { user: sessionUser } } = await supabase.auth.getUser();
   if (order.user_id) {
     if (!sessionUser || sessionUser.id !== order.user_id) {
@@ -126,9 +120,7 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
         {/* ── Success Hero ──────────────────────────────── */}
         <div className={styles.hero}>
           <div className={styles.checkCircle} aria-hidden="true">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
+            <CheckIcon size={32} strokeWidth={2.5} color="#fff" />
           </div>
           <h1 className={styles.heroTitle}>Order Confirmed!</h1>
           <p className={styles.heroSub}>
@@ -230,7 +222,7 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
                   <div>
                     <div className={styles.stepTitle}>Dispatch &amp; Delivery</div>
                     <div className={styles.stepDesc}>
-                      Estimated delivery by <strong>{estimatedDelivery}</strong> after payment.
+                      Estimated delivery by <strong>{estimatedDelivery}</strong>.
                     </div>
                   </div>
                 </li>
@@ -276,44 +268,54 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
               {order.payment_method === 'razorpay' ? (
                 <div className={styles.codPaymentBlock}>
                   <div className={styles.codPaymentHeader}>
-                    <span className={styles.codPaymentIcon}>🔒</span>
+                    <span className={styles.codPaymentIcon}>
+                      <LockIcon />
+                    </span>
                     <div>
                       <p className={styles.codPaymentTitle}>Online Payment — Paid</p>
                       <p className={styles.codPaymentText}>
                         Your payment of <strong>₹{Number(order.total_amount).toLocaleString('en-IN')}</strong> was processed securely via Razorpay.
                       </p>
                       {order.razorpay_payment_id && (
-                        <p style={{ fontSize: '11px', color: 'var(--rfc-text-muted)', marginTop: '4px', fontFamily: 'monospace' }}>
+                        <p className={styles.txnId}>
                           Transaction ID: {order.razorpay_payment_id}
                         </p>
                       )}
                     </div>
                   </div>
                   <ul className={styles.codSteps}>
-                    <li>✓ Payment received &amp; verified</li>
-                    <li>✓ Order confirmed</li>
-                    <li>⏳ Processing &amp; dispatch (2–3 days)</li>
-                    <li>🚚 Delivered to your address</li>
+                    <li>
+                      <CheckIcon size={14} color="#15803d" />
+                      <span>Payment received &amp; verified</span>
+                    </li>
+                    <li>
+                      <CheckIcon size={14} color="#15803d" />
+                      <span>Order confirmed</span>
+                    </li>
+                    <li>
+                      <ClockIcon size={14} color="#15803d" />
+                      <span>Processing &amp; dispatch (2–3 days)</span>
+                    </li>
+                    <li>
+                      <TruckIcon size={14} color="#15803d" />
+                      <span>Delivered to your address</span>
+                    </li>
                   </ul>
                   {/* Invoice download */}
                   <a
                     href={`/api/invoices/${order.id}`}
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: '6px',
-                      marginTop: '12px', padding: '8px 14px',
-                      background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
-                      borderRadius: '6px', color: 'var(--rfc-text)',
-                      textDecoration: 'none', fontSize: '12px', fontWeight: 600,
-                    }}
+                    className={styles.invoiceBtn}
                   >
-                    📄 Download Invoice
+                    <FileTextIcon />
+                    <span>Download Invoice</span>
                   </a>
                 </div>
               ) : (
                 <div className={styles.codPaymentBlock}>
                   <div className={styles.codPaymentHeader}>
-                    <span className={styles.codPaymentIcon}>💵</span>
+                    <span className={styles.codPaymentIcon}>
+                      <BanknoteIcon />
+                    </span>
                     <div>
                       <p className={styles.codPaymentTitle}>Cash on Delivery</p>
                       <p className={styles.codPaymentText}>
@@ -322,10 +324,22 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
                     </div>
                   </div>
                   <ul className={styles.codSteps}>
-                    <li>✓ Order placed &amp; confirmed</li>
-                    <li>⏳ Processing &amp; dispatch (2–3 days)</li>
-                    <li>🚚 Out for delivery</li>
-                    <li>💵 Pay on delivery &amp; receive</li>
+                    <li>
+                      <CheckIcon size={14} color="#15803d" />
+                      <span>Order placed &amp; confirmed</span>
+                    </li>
+                    <li>
+                      <ClockIcon size={14} color="#15803d" />
+                      <span>Processing &amp; dispatch (2–3 days)</span>
+                    </li>
+                    <li>
+                      <TruckIcon size={14} color="#15803d" />
+                      <span>Out for delivery</span>
+                    </li>
+                    <li>
+                      <BanknoteIcon size={14} color="#15803d" />
+                      <span>Pay on delivery &amp; receive</span>
+                    </li>
                   </ul>
                 </div>
               )}
@@ -354,5 +368,66 @@ export default async function OrderConfirmationPage({ params }: PageProps) {
 
       </div>
     </div>
+  );
+}
+
+// ── Icons ──────────────────────────────────────────────────
+
+function CheckIcon({ size = 16, strokeWidth = 2.5, color = "currentColor" }: { size?: number; strokeWidth?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function LockIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </svg>
+  );
+}
+
+function BanknoteIcon({ size = 20, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <rect x="2" y="6" width="20" height="12" rx="2" />
+      <circle cx="12" cy="12" r="2" />
+      <path d="M6 12h.01M18 12h.01" />
+    </svg>
+  );
+}
+
+function ClockIcon({ size = 14, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
+  );
+}
+
+function TruckIcon({ size = 14, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <rect x="1" y="3" width="15" height="13" />
+      <polygon points="16 8 20 8 23 11 23 16 16 16 8" />
+      <circle cx="5.5" cy="18.5" r="2.5" />
+      <circle cx="18.5" cy="18.5" r="2.5" />
+    </svg>
+  );
+}
+
+function FileTextIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
+      <polyline points="10 9 9 9 8 9" />
+    </svg>
   );
 }

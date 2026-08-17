@@ -13,7 +13,6 @@ import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/utils/format";
 import { SHIPPING_CONFIG, COD_CONFIG, TAX_CONFIG } from "@/lib/config/shipping";
-
 import styles from "./CheckoutSummary.module.css";
 
 export function CheckoutSummary({ paymentMethod = 'cod' }: { paymentMethod?: 'cod' | 'razorpay' }) {
@@ -24,7 +23,6 @@ export function CheckoutSummary({ paymentMethod = 'cod' }: { paymentMethod?: 'co
   const codFee = COD_CONFIG.ENABLED && paymentMethod === 'cod' ? COD_CONFIG.FEE : 0;
   const tax = Math.round(subtotal * TAX_CONFIG.RATE * 100) / 100;
   const total = subtotal + shipping + codFee + tax;
-
 
   // Show skeleton during localStorage hydration to avoid ₹0 flash
   if (isLoading) {
@@ -120,20 +118,48 @@ export function CheckoutSummary({ paymentMethod = 'cod' }: { paymentMethod?: 'co
       {/* Trust signals */}
       <div className={styles.trust}>
         <div className={styles.trustItem}>
-          <span>🔒</span>
+          <ShieldIcon />
           <span>Secure SSL</span>
         </div>
         <div className={styles.trustItem}>
-          <span>↩️</span>
+          <ReturnIcon />
           <span>7-Day Returns</span>
         </div>
         <div className={styles.trustItem}>
-          <span>📦</span>
+          <TruckIcon />
           <span>
             {shipping === 0 ? "Free Shipping" : `₹${SHIPPING_CONFIG.STANDARD_RATE} Shipping`}
           </span>
         </div>
       </div>
     </div>
+  );
+}
+
+function ShieldIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    </svg>
+  );
+}
+
+function ReturnIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <polyline points="1 4 1 10 7 10" />
+      <path d="M3.51 15a9 9 0 1 0 .49-4" />
+    </svg>
+  );
+}
+
+function TruckIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <rect x="1" y="3" width="15" height="13" />
+      <polygon points="16 8 20 8 23 11 23 16 16 16 8" />
+      <circle cx="5.5" cy="18.5" r="2.5" />
+      <circle cx="18.5" cy="18.5" r="2.5" />
+    </svg>
   );
 }

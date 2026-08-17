@@ -12,7 +12,7 @@
 .skeletonItem,
 .skeletonRow,
 .skeletonTotal {
-  background: linear-gradient(90deg, #f0f4ff 25%, #e5eeff 50%, #f0f4ff 75%);
+  background: linear-gradient(90deg, #F0F0F0 25%, #E8E8E8 50%, #F0F0F0 75%);
   background-size: 200% 100%;
   animation: shimmer 1.4s infinite;
   border-radius: 4px;
@@ -34,10 +34,11 @@
 
 .heading {
   font-family: var(--font-headline);
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   color: var(--rfc-text);
   margin-bottom: 20px;
 }
@@ -67,7 +68,7 @@
   overflow: hidden;
   border: 1px solid var(--rfc-border);
   flex-shrink: 0;
-  background: #f0f0f0;
+  background: var(--rfc-bg, #f0f0f0);
 }
 
 .image { object-fit: cover; }
@@ -166,7 +167,7 @@
 }
 
 .row span[data-free="true"] {
-  color: #1a7a3c;
+  color: var(--rfc-success, #1a7a3c);
   font-weight: 700;
 }
 
@@ -221,4 +222,16 @@
   flex: 1;
 }
 
-.trustItem span:first-child { font-size: 16px; }
+.trustItem svg {
+  color: var(--rfc-text-subtle);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonTitle,
+  .skeletonItem,
+  .skeletonRow,
+  .skeletonTotal {
+    animation: none;
+    background: #EEEEEE;
+  }
+}

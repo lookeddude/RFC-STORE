@@ -20,23 +20,28 @@
 
 .pageTitle {
   font-family: var(--font-headline);
-  font-size: clamp(24px, 4vw, 36px);
-  font-weight: 700;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--rfc-text);
 }
 
 .backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-label);
   font-size: 13px;
   font-weight: 600;
-  color: rgba(11, 28, 48, 0.5);
+  color: var(--rfc-text-muted);
   text-decoration: none;
   letter-spacing: 0.04em;
   transition: color var(--transition-fast);
 }
-.backLink:hover { color: var(--color-primary); }
+
+.backLink:hover { color: var(--rfc-text); }
 
 /* ── Two Column Layout ──────────────────────────────────── */
 .layout {
@@ -70,16 +75,17 @@
 .emptyHeading {
   font-family: var(--font-headline);
   font-size: 28px;
-  font-weight: 700;
+  font-weight: 900;
   text-transform: uppercase;
-  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  color: var(--rfc-text);
   margin-bottom: 12px;
 }
 
 .emptyText {
   font-family: var(--font-body);
   font-size: 15px;
-  color: rgba(11, 28, 48, 0.55);
+  color: var(--rfc-text-muted);
   margin-bottom: 32px;
 }
 
@@ -95,12 +101,13 @@
   letter-spacing: 0.07em;
   text-transform: uppercase;
   text-decoration: none;
-  background-color: var(--color-secondary);
-  color: var(--color-on-secondary);
+  background-color: var(--rfc-accent);
+  color: var(--rfc-text-inv);
   border-radius: var(--radius-sm);
   transition: background-color var(--transition-fast);
 }
-.shopBtn:hover { background-color: var(--color-secondary-dark); }
+
+.shopBtn:hover { background-color: var(--rfc-accent-dark); }
 
 /* ── Mobile sticky Place Order bar ─────────────────────── */
 .stickyBar {
@@ -131,7 +138,7 @@
     color: #fff;
     font-family: var(--font-headline, 'Archivo Narrow', sans-serif);
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 900;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     border: none;
@@ -147,5 +154,13 @@
   .stickyBtn:disabled {
     opacity: 0.65;
     cursor: not-allowed;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backLink,
+  .shopBtn,
+  .stickyBtn {
+    transition: none;
   }
 }

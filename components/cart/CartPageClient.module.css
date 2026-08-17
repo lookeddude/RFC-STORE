@@ -1,6 +1,7 @@
 /*
  * RFC Store — CartPageClient Styles
  * Two-column layout: items (left) + summary (right)
+ * Token-compliant, responsive, craft-floor aligned.
  */
 
 .page {
@@ -10,34 +11,36 @@
 /* ── Header ─────────────────────────────────────────────── */
 .header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   flex-wrap: wrap;
 }
 
 .title {
   font-family: var(--font-headline);
-  font-size: clamp(24px, 4vw, 36px);
-  font-weight: 700;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--rfc-text);
 }
 
 .count {
   font-family: var(--font-label);
-  font-size: 14px;
-  font-weight: 600;
-  color: rgba(11, 28, 48, 0.45);
-  letter-spacing: 0.04em;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--rfc-text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .validatingNote {
   font-family: var(--font-label);
   font-size: 12px;
-  font-weight: 500;
-  color: rgba(11, 28, 48, 0.4);
+  font-weight: 600;
+  color: var(--rfc-text-subtle);
   letter-spacing: 0.05em;
   margin-left: auto;
 }
@@ -46,11 +49,11 @@
 .stockWarningBanner {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 24px;
   padding: 14px 18px;
-  background: #fff8f0;
-  border: 1.5px solid #f59e0b;
+  background: var(--rfc-warning-bg, #fff8f0);
+  border: 1.5px solid var(--rfc-warning, #f59e0b);
   border-radius: var(--radius-sm);
   color: #92400e;
   font-family: var(--font-body);
@@ -82,14 +85,14 @@
   grid-template-columns: 96px 1fr auto auto auto;
   gap: 20px;
   padding-bottom: 12px;
-  border-bottom: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--rfc-text);
   margin-bottom: 0;
   font-family: var(--font-label);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: rgba(11, 28, 48, 0.4);
+  color: var(--rfc-text-muted);
 }
 
 .colRight { text-align: right; }
@@ -105,8 +108,8 @@
 .errorBanner {
   margin-top: 16px;
   padding: 12px 16px;
-  background-color: var(--color-error-container);
-  color: var(--color-on-error-container);
+  background-color: var(--rfc-error-bg);
+  color: var(--rfc-error);
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: 14px;

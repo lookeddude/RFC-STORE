@@ -5,7 +5,7 @@
 
 .page {
   min-height: 100vh;
-  background: var(--color-surface);
+  background: var(--rfc-bg);
   padding-block: 40px 120px;
 }
 
@@ -36,17 +36,18 @@
 .heroTitle {
   font-family: var(--font-headline);
   font-size: clamp(28px, 5vw, 44px);
-  font-weight: 700;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--rfc-text);
   margin-bottom: 10px;
 }
 
 .heroSub {
   font-family: var(--font-body);
   font-size: 16px;
-  color: rgba(11, 28, 48, 0.6);
+  color: var(--rfc-text-muted);
   margin-bottom: 24px;
 }
 
@@ -56,18 +57,18 @@
   align-items: center;
   gap: 4px;
   padding: 14px 28px;
-  background: var(--color-primary);
+  background: var(--rfc-text);
   border-radius: var(--radius-sm);
-  color: #fff;
+  color: var(--rfc-text-inv, #fff);
 }
 
 .orderNumLabel {
   font-family: var(--font-label);
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .orderNum {
@@ -98,9 +99,9 @@
 
 /* ── Card ───────────────────────────────────────────────── */
 .card {
-  background: var(--color-surface-container-lowest);
-  border: 1px solid var(--color-outline-variant);
-  border-radius: var(--radius-default);
+  background: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
+  border-radius: var(--radius-md);
   padding: 24px;
 }
 
@@ -110,7 +111,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(11, 28, 48, 0.45);
+  color: var(--rfc-text-muted);
   margin-bottom: 16px;
 }
 
@@ -130,7 +131,7 @@
   align-items: flex-start;
   gap: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--color-outline-variant);
+  border-bottom: 1px solid var(--rfc-border);
 }
 .item:last-child { border-bottom: none; padding-bottom: 0; }
 
@@ -141,21 +142,21 @@
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   letter-spacing: 0.02em;
 }
 
 .itemVariant {
   font-family: var(--font-body);
   font-size: 12px;
-  color: rgba(11, 28, 48, 0.5);
+  color: var(--rfc-text-muted);
   margin-top: 3px;
 }
 
 .itemSku {
   font-family: var(--font-label);
   font-size: 11px;
-  color: rgba(11, 28, 48, 0.35);
+  color: var(--rfc-text-subtle);
   margin-top: 2px;
 }
 
@@ -170,23 +171,23 @@
 .itemQty {
   font-family: var(--font-body);
   font-size: 12px;
-  color: rgba(11, 28, 48, 0.45);
+  color: var(--rfc-text-muted);
 }
 
 .itemTotal {
   font-family: var(--font-label);
   font-size: 13px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
-/* ── Totals ─────────────────────────────────────────────── */
+/* ── Totals ─────────────────────────────────────── */
 .totals {
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding-top: 16px;
-  border-top: 1px solid var(--color-outline-variant);
+  border-top: 1px solid var(--rfc-border);
 }
 
 .totalRow {
@@ -195,25 +196,25 @@
   align-items: center;
   font-family: var(--font-body);
   font-size: 14px;
-  color: rgba(11, 28, 48, 0.6);
+  color: var(--rfc-text-muted);
 }
 
 .totalRow span:last-child {
   font-family: var(--font-label);
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .totalRow span[data-free="true"] {
-  color: #16a34a;
+  color: var(--rfc-success, #16a34a);
   font-weight: 700;
 }
 
-.discountVal { color: #16a34a !important; }
+.discountVal { color: var(--rfc-success, #16a34a) !important; }
 
 .grandTotal {
   padding-top: 10px;
-  border-top: 1.5px solid var(--color-primary);
+  border-top: 1.5px solid var(--rfc-text);
   margin-top: 4px;
 }
 
@@ -221,7 +222,7 @@
   font-family: var(--font-label) !important;
   font-size: 16px !important;
   font-weight: 700 !important;
-  color: var(--color-primary) !important;
+  color: var(--rfc-text) !important;
 }
 
 /* ── Steps ──────────────────────────────────────────────── */
@@ -244,7 +245,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--color-secondary);
+  background: var(--rfc-accent);
   color: #fff;
   font-family: var(--font-label);
   font-size: 13px;
@@ -259,7 +260,7 @@
   font-family: var(--font-label);
   font-size: 13px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   margin-bottom: 3px;
   letter-spacing: 0.01em;
 }
@@ -267,7 +268,7 @@
 .stepDesc {
   font-family: var(--font-body);
   font-size: 13px;
-  color: rgba(11, 28, 48, 0.55);
+  color: var(--rfc-text-muted);
   line-height: 1.5;
 }
 
@@ -277,19 +278,19 @@
   font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.8;
-  color: rgba(11, 28, 48, 0.7);
+  color: var(--rfc-text-muted);
 }
 
 .addrName {
   font-family: var(--font-label);
   font-size: 14px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--rfc-text);
 }
 
 .addrPhone {
   margin-top: 4px;
-  color: rgba(11, 28, 48, 0.5);
+  color: var(--rfc-text-subtle);
   font-size: 13px;
 }
 
@@ -313,27 +314,27 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(11, 28, 48, 0.4);
+  color: var(--rfc-text-subtle);
 }
 
 .statusBadge {
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-full, 9999px);
   font-family: var(--font-label);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: capitalize;
-  background: var(--color-surface-container);
-  color: var(--color-primary);
+  background: var(--rfc-bg);
+  color: var(--rfc-text);
 }
 
 /* Payment status variants */
 .pay_pending { background: #fef3c7; color: #92400e; }
 .pay_paid    { background: #dcfce7; color: #166534; }
-.pay_failed  { background: var(--color-error-container); color: var(--color-on-error-container); }
+.pay_failed  { background: var(--rfc-error-bg); color: var(--rfc-error); }
 
 /* Order status variants */
 .pending    { background: #fef3c7; color: #92400e; }
@@ -341,28 +342,14 @@
 .processing { background: #dbeafe; color: #1e40af; }
 .shipped    { background: #ede9fe; color: #4c1d95; }
 .delivered  { background: #dcfce7; color: #166534; }
-.cancelled  { background: var(--color-error-container); color: var(--color-on-error-container); }
-
-.paymentNote {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 12px 14px;
-  background: #fffbeb;
-  border: 1px solid #f59e0b;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-body);
-  font-size: 12px;
-  color: #92400e;
-  line-height: 1.5;
-}
+.cancelled  { background: var(--rfc-error-bg); color: var(--rfc-error); }
 
 /* ── Contact ────────────────────────────────────────────── */
 .contactEmail {
   font-family: var(--font-label);
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--rfc-text);
   margin-bottom: 8px;
   word-break: break-all;
 }
@@ -370,7 +357,7 @@
 .contactNote {
   font-family: var(--font-body);
   font-size: 13px;
-  color: rgba(11, 28, 48, 0.5);
+  color: var(--rfc-text-muted);
   line-height: 1.5;
 }
 
@@ -394,26 +381,28 @@
   letter-spacing: 0.07em;
   text-transform: uppercase;
   text-decoration: none;
-  background-color: var(--color-secondary);
+  background-color: var(--rfc-accent);
   color: #fff;
   border-radius: var(--radius-sm);
   transition: background-color var(--transition-fast);
 }
-.shopBtn:hover { background-color: var(--color-secondary-dark); }
+
+.shopBtn:hover { background-color: var(--rfc-accent-dark); }
 
 .homeLink {
   font-family: var(--font-body);
   font-size: 14px;
-  color: rgba(11, 28, 48, 0.45);
+  color: var(--rfc-text-muted);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
-.homeLink:hover { color: var(--color-primary); }
 
-/* ── COD Payment Block ──────────────────────────────── */
+.homeLink:hover { color: var(--rfc-text); }
+
+/* ── COD / Payment Block ──────────────────────────────── */
 .codPaymentBlock {
-  background: #f0fdf4;
-  border: 1.5px solid #22c55e;
+  background: var(--rfc-success-bg, #f0fdf4);
+  border: 1.5px solid var(--rfc-success, #22c55e);
   border-radius: 8px;
   padding: 16px;
   display: flex;
@@ -428,7 +417,9 @@
 }
 
 .codPaymentIcon {
-  font-size: 24px;
+  display: flex;
+  align-items: center;
+  color: #15803d;
   flex-shrink: 0;
 }
 
@@ -448,19 +439,62 @@
   margin-top: 4px;
 }
 
+.txnId {
+  font-size: 11px;
+  color: var(--rfc-text-muted);
+  margin-top: 4px;
+  font-family: monospace;
+}
+
 .codSteps {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   padding-top: 12px;
   border-top: 1px solid #bbf7d0;
 }
 
 .codSteps li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--font-body);
   font-size: 13px;
   color: #166534;
+}
+
+.invoiceBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: var(--rfc-surface);
+  border: 1px solid var(--rfc-border);
+  border-radius: var(--radius-sm);
+  color: var(--rfc-text);
+  text-decoration: none;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  align-self: flex-start;
+}
+
+.invoiceBtn:hover {
+  border-color: var(--rfc-text);
+  background: var(--rfc-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shopBtn,
+  .homeLink,
+  .invoiceBtn {
+    transition: none;
+  }
 }
