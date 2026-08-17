@@ -8,6 +8,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { HeroSlide } from '@/types/hero-slide';
 import s from './HeroSlideshowClient.module.css';
 
@@ -95,17 +96,18 @@ export function HeroSlideshowClient({ slides }: Props) {
             style={{ '--spd': `${speed}ms` } as React.CSSProperties}
             aria-hidden={!isActive}
           >
-            {/* Background */}
+            {/* Background — Next.js Image for LCP optimisation */}
             {src(sl) && (
-              <picture className={s.pic}>
-                <source media="(max-width: 767px)" srcSet={msrc(sl)} />
-                <img
-                  src={src(sl)}
-                  alt={sl.desktopImageAlt ?? sl.heading}
-                  className={s.img}
-                  loading={i === 0 ? 'eager' : 'lazy'}
-                />
-              </picture>
+              <Image
+                src={src(sl)}
+                alt={sl.desktopImageAlt ?? sl.heading}
+                fill
+                sizes="(max-width: 767px) 100vw, 100vw"
+                className={s.img}
+                priority={i === 0}   /* LCP element: preload first slide */
+                loading={i === 0 ? undefined : 'lazy'}
+                style={{ objectFit: 'cover', objectPosition: i === 0 ? 'center 20%' : undefined }}
+              />
             )}
 
             {/* Scrim */}

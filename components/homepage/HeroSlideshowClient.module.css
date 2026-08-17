@@ -7,7 +7,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: #0d1117;
+  background: var(--rfc-dark, #111827);
   /* Mobile — 75% of visible viewport */
   height: 75svh;
   min-height: 440px;
@@ -159,7 +159,7 @@
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #E63946;
+  color: var(--rfc-accent, #E63946);
   margin: 0 0 7px;
 }
 @media (min-width: 768px) { .eyebrow { font-size: 12px; margin-bottom: 16px; } }
@@ -173,7 +173,7 @@
   line-height: 0.92;
   letter-spacing: -0.025em;
   text-transform: uppercase;
-  color: #F9FAFB;
+  color: var(--rfc-text-inv, #F9FAFB);
   margin: 0 0 10px;
 }
 @media (min-width: 768px) { .heading { margin-bottom: 20px; } }
@@ -215,7 +215,7 @@
   justify-content: center;
   height: 40px;
   padding: 0 22px;
-  background: #E63946;
+  background: var(--rfc-accent, #E63946);
   color: #fff;
   font-family: var(--font-label, 'Inter', sans-serif);
   font-size: 11px;
@@ -228,7 +228,7 @@
   transition: background .14s, transform .14s;
   white-space: nowrap;
 }
-.btnA:hover { background: #c81d28; transform: translateY(-1px); }
+.btnA:hover { background: var(--rfc-accent-dark, #c81d28); transform: translateY(-1px); }
 
 .btnB {
   display: inline-flex;
@@ -237,7 +237,7 @@
   height: 40px;
   padding: 0 22px;
   background: transparent;
-  color: #F9FAFB;
+  color: var(--rfc-text-inv, #F9FAFB);
   font-family: var(--font-label, 'Inter', sans-serif);
   font-size: 11px;
   font-weight: 700;
@@ -249,7 +249,7 @@
   transition: border-color .14s, background .14s;
   white-space: nowrap;
 }
-.btnB:hover { border-color: #F9FAFB; background: rgba(249,250,251,.08); }
+.btnB:hover { border-color: var(--rfc-text-inv, #F9FAFB); background: rgba(249,250,251,.08); }
 
 @media (min-width: 768px) {
   .btnA, .btnB { height: 52px; padding: 0 34px; font-size: 13px; }
@@ -307,6 +307,11 @@
 }
 @media (min-width: 768px) { .dots { bottom: 28px; gap: 8px; } }
 
+/*
+ * DOT — active state uses transform:scaleX() instead of width
+ * to avoid layout thrash. Base is a 6px circle; active stretches to
+ * 24px pill via transform. transform-origin:left keeps left edge anchored.
+ */
 .dot {
   width: 6px;
   height: 6px;
@@ -315,12 +320,15 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  transition: background .2s, width .25s;
+  /* Pad to 44×44px touch target */
+  margin: 19px 10px;
+  transition: background .2s, transform .25s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: left center;
 }
 .dotOn {
-  width: 24px;
   border-radius: 3px;
-  background: #E63946;
+  background: var(--rfc-accent, #E63946);
+  transform: scaleX(4); /* 6px × 4 = 24px equivalent */
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -337,13 +345,14 @@
 }
 .progress {
   height: 100%;
-  background: #E63946;
+  width: 100%; /* full width, transform controls visual fill */
+  background: var(--rfc-accent, #E63946);
   animation: progressAnim linear forwards;
   transform-origin: left;
 }
 @keyframes progressAnim {
-  from { width: 0%; }
-  to   { width: 100%; }
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 
 /* ═══════════════════════════════════════════════════════════

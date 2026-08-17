@@ -1,21 +1,20 @@
 /**
  * RFC Store — Homepage
  *
- * Commerce-first homepage inspired by serious sports-retail UX.
- *
- * Section order:
- *   1. HeroSection       — 75vh mobile / 100vh desktop fighter image
+ * Section order (post-critique reorder):
+ *   1. HeroSlideshow     — full-viewport fighter image + CMS slides
  *   2. OfferStrip        — animated marquee benefits
  *   3. CategoryRail      — swipeable circles mobile / card row desktop
- *   4. BestDeals         — products with compare_at_price (discounted)
- *   5. MiniPromoBanner   — compact dark promo strip
- *   6. BestSellers       — is_bestseller products
- *   7. NewArrivals       — is_new_arrival products (newest fallback)
- *   8. TrustBar          — 4 value propositions
- *   9. EditorialBanner   — brand story + fighter image
+ *   4. BestSellers       — flagship, premium-positioned products FIRST
+ *   5. TrustBar          — brand authority before the sale ask
+ *   6. MiniPromoBanner   — dark visual break / brand moment
+ *   7. NewArrivals       — fresh products
+ *   8. EditorialBanner   — brand story + fighter image
+ *   9. BestDeals         — discounts at the bottom, not the top
  *
- * All product data fetched in parallel with Promise.all.
- * Each section gracefully hides if its data is empty.
+ * Rationale: Luxury athletic brands lead with their best, not their cheapest.
+ * Trust (TrustBar) now precedes further product asks. Editorial brand story
+ * appears before deals to build desire and authority first.
  *
  * Server Component — no "use client" required.
  */
@@ -24,12 +23,12 @@ import {
   HeroSlideshow,
   OfferStrip,
   CategoryRail,
-  BestDeals,
-  MiniPromoBanner,
   BestSellers,
-  NewArrivals,
   TrustBar,
+  MiniPromoBanner,
+  NewArrivals,
   EditorialBanner,
+  BestDeals,
 } from "@/components/homepage";
 
 export const metadata: Metadata = {
@@ -63,10 +62,13 @@ export default function HomePage() {
       {/* Category Rail — swipeable circles on mobile */}
       <CategoryRail />
 
-      {/* Best Deals — discounted products */}
-      <BestDeals />
+      {/* Best Sellers — flagship products FIRST (premium positioning) */}
+      <BestSellers />
 
-      {/* Mini Promo Banner — compact dark strip */}
+      {/* Trust Bar — authority before further product asks */}
+      <TrustBar />
+
+      {/* Mini Promo Banner — dark visual break */}
       <MiniPromoBanner
         headline="TRAIN HARD. GEAR HARDER."
         subtext="Professional combat sports gear engineered for those who refuse to quit."
@@ -74,17 +76,14 @@ export default function HomePage() {
         ctaHref="/shop"
       />
 
-      {/* Best Sellers — flagship products */}
-      <BestSellers />
-
-      {/* New Arrivals — freshest products */}
+      {/* New Arrivals — fresh drops */}
       <NewArrivals />
 
-      {/* Trust Bar — value propositions */}
-      <TrustBar />
-
-      {/* Brand Editorial + campaign image */}
+      {/* Brand Editorial — story + fighter image (builds desire before deals) */}
       <EditorialBanner />
+
+      {/* Best Deals — discounts last; brand value established first */}
+      <BestDeals />
     </>
   );
 }

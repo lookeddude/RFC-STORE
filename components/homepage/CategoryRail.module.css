@@ -125,13 +125,15 @@
   }
 }
 
-/* ── Emoji fallback ─────────────────────────────────── */
-.emoji {
-  font-size: 28px;
+/* ── Typographic initial fallback (replaces emoji) ──── */
+.initial {
+  font-family: var(--font-headline);
+  font-size: 26px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: -0.02em;
   line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  user-select: none;
 }
 
 /* ── Name ───────────────────────────────────────────── */
@@ -153,4 +155,12 @@
 
 @media (min-width: 768px) {
   .name { font-size: 11px; max-width: 90px; }
+}
+
+/* ── Reduced motion ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .circle { transition: none; }
+  .card:hover .circle { transform: none; }
+  .viewAll { transition: none; }
+  .name { transition: none; }
 }

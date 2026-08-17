@@ -5,7 +5,7 @@
 
 .section {
   background-color: var(--rfc-bg);
-  padding-block: clamp(40px, 5vw, 64px);
+  padding-block: clamp(64px, 8vw, 96px);
 }
 
 .inner {

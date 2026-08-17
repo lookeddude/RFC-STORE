@@ -5,7 +5,7 @@
 
 .section {
   background-color: var(--rfc-bg);
-  padding-block: clamp(40px, 5vw, 64px);
+  padding-block: clamp(64px, 8vw, 96px);
   border-top: 1px solid var(--rfc-border);
 }
 
@@ -30,25 +30,14 @@
   gap: 10px;
 }
 
-/* Green pulsing dot — freshness signal */
+/* Freshness dot — RFC accent, no animation (luxury brands don't pulse) */
 .freshDot {
   display: block;
-  width: 9px;
-  height: 9px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background-color: #22c55e;
+  background-color: var(--rfc-accent);
   flex-shrink: 0;
-  box-shadow: 0 0 0 0 rgba(34,197,94,0.4);
-  animation: pulse-green 2s ease-in-out infinite;
-}
-
-@keyframes pulse-green {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
-  50%       { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .freshDot { animation: none; }
 }
 
 .eyebrow {
@@ -57,7 +46,7 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #22c55e;
+  color: var(--rfc-accent);
   margin-bottom: 4px;
 }
 .title {
