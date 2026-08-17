@@ -295,5 +295,7 @@ async function generatePdf(data: InvoiceData): Promise<Buffer> {
 }
 
 function fmt(n: number): string {
-  return '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  // pdf-lib StandardFonts.Helvetica uses WinAnsiEncoding — does not support
+  // the Indian Rupee sign (U+20B9). Use 'Rs.' as a safe ASCII alternative.
+  return 'Rs. ' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
