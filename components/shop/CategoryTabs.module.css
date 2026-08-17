@@ -49,3 +49,7 @@
   background: var(--rfc-accent);
   border-color: var(--rfc-accent);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .tab { transition: none; }
+}

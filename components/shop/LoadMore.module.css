@@ -1,5 +1,7 @@
 /*
  * RFC Store — Load More Styles
+ * Fixed: stale --color-primary tokens → RFC token system.
+ * Fixed: hardcoded rgba(11,28,48,0.45) → var(--rfc-text-muted).
  */
 
 .wrapper {
@@ -7,24 +9,25 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  padding-top: 16px;
+  padding-top: 40px;
+  padding-bottom: 8px;
 }
 
-/* Ghost button — Stitch design: border, no fill, hover fill */
+/* Ghost button — border only, hover fills with RFC charcoal */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: 52px;
-  padding-inline: 48px;
+  padding-inline: 52px;
   font-family: var(--font-label);
   font-size: var(--font-label-bold-size);
   font-weight: var(--font-label-bold-weight);
   letter-spacing: var(--font-label-bold-letter-spacing);
   text-transform: uppercase;
   background: transparent;
-  color: var(--color-primary);
-  border: 1.5px solid var(--color-primary);
+  color: var(--rfc-text);
+  border: 1.5px solid var(--rfc-text);
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition:
@@ -34,8 +37,8 @@
 }
 
 .btn:hover {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
+  background-color: var(--rfc-text);
+  color: var(--rfc-text-inv, #F9FAFB);
 }
 
 .btn:active {
@@ -44,7 +47,12 @@
 
 .count {
   font-family: var(--font-label);
-  font-size: 13px;
-  letter-spacing: 0.03em;
-  color: rgba(11, 28, 48, 0.45);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rfc-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
 }

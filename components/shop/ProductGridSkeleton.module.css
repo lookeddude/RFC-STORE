@@ -1,11 +1,13 @@
 /*
  * RFC Store — ProductGridSkeleton Styles
- * Shimmer animation matching ProductCard layout
+ * Fixed: shimmer colours changed from cold #eff4ff/#e5eeff to warm
+ * off-white palette matching var(--rfc-bg)/var(--rfc-border).
+ * Fixed: prefers-reduced-motion guard added.
  */
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
 }
 
 .card {
@@ -21,12 +23,12 @@
   aspect-ratio: 3 / 4;
   background: linear-gradient(
     90deg,
-    #eff4ff 25%,
-    #e5eeff 50%,
-    #eff4ff 75%
+    #F0F0F0 25%,
+    #E8E8E8 50%,
+    #F0F0F0 75%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 1.6s ease-in-out infinite;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
@@ -43,17 +45,28 @@
 .price {
   background: linear-gradient(
     90deg,
-    #eff4ff 25%,
-    #e5eeff 50%,
-    #eff4ff 75%
+    #F0F0F0 25%,
+    #E8E8E8 50%,
+    #F0F0F0 75%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 1.6s ease-in-out infinite;
   border-radius: 4px;
   height: 12px;
 }
 
-.category { width: 40%; height: 10px; }
-.name { width: 90%; height: 14px; }
-.nameShort { width: 65%; height: 14px; }
-.price { width: 30%; height: 14px; }
+.category   { width: 40%; height: 10px; }
+.name       { width: 90%; height: 14px; }
+.nameShort  { width: 65%; height: 14px; }
+.price      { width: 30%; height: 14px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .image,
+  .category,
+  .name,
+  .nameShort,
+  .price {
+    animation: none;
+    background: #EEEEEE;
+  }
+}

@@ -32,7 +32,7 @@
 /* On desktop: only Search + Sort (sidebar handles filters) */
 .toolbarRow {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
 }
 

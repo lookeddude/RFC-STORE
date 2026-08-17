@@ -54,6 +54,12 @@
   color: var(--rfc-text-subtle);
 }
 
+/* Search icon — muted colour via token */
+.searchIcon {
+  flex-shrink: 0;
+  color: var(--rfc-text-subtle);
+}
+
 /* ── Clear Search Button ─────────────────────────────────── */
 .clearBtn {
   display: flex;
@@ -83,8 +89,11 @@
 }
 
 .sortLabel {
-  font-family: var(--font-body);
-  font-size: 14px;
+  font-family: var(--font-label);
+  font-size: var(--font-label-bold-size, 10px);
+  font-weight: var(--font-label-bold-weight, 700);
+  letter-spacing: var(--font-label-bold-letter-spacing, 0.1em);
+  text-transform: uppercase;
   color: var(--rfc-text-muted);
   white-space: nowrap;
 }
@@ -127,4 +136,10 @@
 .resultQuery {
   color: var(--rfc-text);
   font-style: italic;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .searchWrapper { transition: none; }
+  .clearBtn { transition: none; }
+  .sortSelect { transition: none; }
 }

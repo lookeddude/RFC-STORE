@@ -16,6 +16,12 @@
   margin-bottom: 24px;
 }
 
+/* SVG icon colour — muted, via token not hardcoded rgba */
+.iconSvg {
+  color: var(--rfc-text-subtle);
+  display: block;
+}
+
 .heading {
   font-family: var(--font-headline);
   font-size: 24px;
