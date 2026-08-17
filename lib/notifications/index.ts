@@ -1,50 +1,121 @@
 /**
- * RFC Store — Notification Service (Phase 9)
+ * RFC Store — Notification Service
  *
- * Clean event-based notification architecture.
- * Currently: SERVER-SIDE LOGGING ONLY.
+ * Event-based transactional email system using Brevo.
  *
- * ┌─────────────────────────────────────────────────────────┐
- * │  PENDING EXTERNAL CONFIGURATION                         │
- * │                                                         │
- * │  To enable email notifications, configure ONE of:       │
- * │    - Resend:      RESEND_API_KEY in .env.local          │
- * │    - SendGrid:    SENDGRID_API_KEY in .env.local        │
- * │    - Nodemailer:  SMTP_HOST, SMTP_USER, SMTP_PASS       │
- * │                                                         │
- * │  To enable SMS notifications:                           │
- * │    - Twilio:      TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN │
- * │    - MSG91:       MSG91_API_KEY                         │
- * │                                                         │
- * │  Then implement the sendEmail / sendSMS functions       │
- * │  below and remove the NOT_CONFIGURED guard.             │
- * └─────────────────────────────────────────────────────────┘
+ * This module is SERVER-ONLY. Never import in client components.
+ * All secrets (BREVO_API_KEY, ADMIN_NOTIFICATION_EMAIL) stay server-side.
+ *
+ * ┌─────────────────────────────────────────────────────────────────┐
+ * │  IMPLEMENTED EMAIL TRIGGERS                                      │
+ * │                                                                  │
+ * │  notifyOrderCreated       — COD order placed (checkout.ts)      │
+ * │  notifyPaymentConfirmed   — Razorpay paid (razorpay.ts, webhook)│
+ * │  notifyPaymentFailed      — Razorpay failed (webhook)           │
+ * │  notifyOrderStatusChanged — Admin status change (admin/orders)  │
+ * │  notifyRefundInitiated    — Inventory failure refund             │
+ * └─────────────────────────────────────────────────────────────────┘
  *
  * USAGE:
  *   import { notifyOrderCreated } from '@/lib/notifications';
- *   await notifyOrderCreated({ orderNumber, customerEmail, ... });
+ *   void notifyOrderCreated({ ... });   // non-blocking — never throws
  *
- * This module is SERVER-ONLY. Never import it in client components.
- * All secrets stay server-side.
+ * Email failure NEVER breaks order flow. Errors are caught and logged.
  */
 
 import { getBrevoClient, BREVO_SENDER } from './brevo';
-import { getOrderConfirmationSubject, renderOrderConfirmationHtml, renderOrderConfirmationText } from './templates/order-confirmation';
-import { getOrderStatusSubject, renderOrderStatusHtml } from './templates/order-status';
 
+// ── Template Imports ──────────────────────────────────────────────────
 
-// ── Order Event Types ──────────────────────────────────────
+import {
+  getOrderConfirmationSubject,
+  renderOrderConfirmationHtml,
+  renderOrderConfirmationText,
+} from './templates/order-confirmation';
+
+import {
+  getOrderStatusSubject,
+  renderOrderStatusHtml,
+  renderOrderStatusText,
+} from './templates/order-status';
+
+import {
+  getPaymentConfirmedSubject,
+  renderPaymentConfirmedHtml,
+  renderPaymentConfirmedText,
+  getPaymentFailedSubject,
+  renderPaymentFailedHtml,
+  renderPaymentFailedText,
+  getRefundInitiatedSubject,
+  renderRefundInitiatedHtml,
+  renderRefundInitiatedText,
+} from './templates/payment';
+
+import {
+  getAdminNewOrderSubject,
+  renderAdminNewOrderHtml,
+  getAdminPaymentSubject,
+  renderAdminPaymentHtml,
+} from './templates/admin-alert';
+
+// ── Notification Status ───────────────────────────────────────────────
+
+const EMAIL_CONFIGURED = !!process.env.BREVO_API_KEY;
+const SMS_CONFIGURED   = !!(process.env.MSG91_API_KEY || process.env.TWILIO_ACCOUNT_SID);
+
+// ── Core Email Send ───────────────────────────────────────────────────
+
+interface EmailPayload {
+  to: string;
+  subject: string;
+  html: string;
+  text?: string;
+}
+
+async function sendTransactionalEmail(eventName: string, payload: EmailPayload): Promise<void> {
+  if (!EMAIL_CONFIGURED) {
+    console.info(`[RFC Notifications] EMAIL NOT CONFIGURED — skipping: ${eventName} → ${payload.to}`);
+    return;
+  }
+
+  const client = getBrevoClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const body: Record<string, any> = {
+    sender:      BREVO_SENDER,
+    to:          [{ email: payload.to }],
+    subject:     payload.subject,
+    htmlContent: payload.html,
+  };
+  if (payload.text) body.textContent = payload.text;
+
+  await client.transactionalEmails.sendTransacEmail(body);
+  console.info(`[RFC Notifications] Sent: ${eventName} → ${payload.to}`);
+}
+
+async function sendSMS(_event: string, _to: string): Promise<void> {
+  if (!SMS_CONFIGURED) {
+    console.info(`[RFC Notifications] SMS NOT CONFIGURED — skipping: ${_event}`);
+    return;
+  }
+  // TODO: Implement MSG91 or Twilio integration
+  console.info(`[RFC Notifications] SMS sent: ${_event} → ${_to}`);
+}
+
+// ── Public Event Interfaces ───────────────────────────────────────────
 
 export interface OrderCreatedEvent {
   orderNumber: string;
   orderId: string;
   customerName: string;
   customerEmail: string;
-  customerPhone?: string;
+  customerPhone?: string | null;
   totalAmount: number;
+  subtotal?: number;
+  shippingAmount?: number;
+  taxAmount?: number;
+  discountAmount?: number;
+  codFee?: number;
   currency: string;
-  paymentMethod: string;   // 'cod' | 'razorpay' etc.
-  codFee?: number;         // ₹ COD fee if applicable
   items: Array<{
     productName: string;
     variantName?: string | null;
@@ -52,13 +123,15 @@ export interface OrderCreatedEvent {
     unitPrice: number;
   }>;
   shippingAddress: {
+    fullName?: string | null;
     line1: string;
     line2?: string | null;
     city: string;
     state: string;
     postalCode: string;
-    country: string;
+    country?: string | null;
   };
+  paymentMethod: 'cod' | 'razorpay' | string;
 }
 
 export interface OrderStatusChangedEvent {
@@ -70,157 +143,18 @@ export interface OrderStatusChangedEvent {
   newStatus: string;
   trackingNumber?: string | null;
   trackingUrl?: string | null;
+  carrier?: string | null;
+  estimatedDelivery?: string | null;
+  totalAmount?: number;
+  deliveredDate?: string | null;
 }
-
-export interface PaymentEvent {
-  orderNumber: string;
-  orderId: string;
-  customerEmail: string;
-  customerName: string;
-  amount: number;
-  currency: string;
-  paymentId?: string;
-  status: 'paid' | 'failed' | 'refunded';
-}
-
-// ── Notification Channel Status ────────────────────────────
-
-const EMAIL_CONFIGURED = !!process.env.BREVO_API_KEY;
-
-const SMS_CONFIGURED = !!(
-  process.env.MSG91_API_KEY ||
-  process.env.TWILIO_ACCOUNT_SID
-);
-
-// ── Internal helpers ───────────────────────────────────────
-
-async function sendEmail(_event: string, to: string, payload: unknown): Promise<void> {
-  if (!EMAIL_CONFIGURED) {
-    console.info(`[RFC Notifications] EMAIL NOT CONFIGURED — skipping event: ${_event} → ${to}`);
-    return;
-  }
-
-  try {
-    const client = getBrevoClient();
-
-    // Build email payload (Brevo v6 API — plain object, no class instantiation)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const emailPayload: Record<string, any> = {
-      sender: BREVO_SENDER,
-      to: [{ email: to }],
-    };
-
-    // Route event to correct template
-    if (_event === 'order_created') {
-      const data = payload as Parameters<typeof renderOrderConfirmationHtml>[0];
-      emailPayload.subject      = getOrderConfirmationSubject(data.orderNumber);
-      emailPayload.htmlContent  = renderOrderConfirmationHtml(data);
-      emailPayload.textContent  = renderOrderConfirmationText(data);
-    } else if (_event === 'order_created_admin') {
-      const data = payload as { orderNumber: string; customerName: string; customerEmail: string; totalAmount: number };
-      emailPayload.subject      = `🛒 New COD Order: ${data.orderNumber}`;
-      emailPayload.htmlContent  = `<p>New order from <b>${data.customerName}</b> (${data.customerEmail}). Total: ₹${data.totalAmount.toLocaleString('en-IN')}. Order: ${data.orderNumber}</p>`;
-      emailPayload.textContent  = `New order ${data.orderNumber} from ${data.customerName}. Total: ₹${data.totalAmount}`;
-    } else if (_event === 'order_status_changed') {
-      const data = payload as Parameters<typeof renderOrderStatusHtml>[0];
-      emailPayload.subject      = getOrderStatusSubject(data.orderNumber, data.newStatus);
-      emailPayload.htmlContent  = renderOrderStatusHtml(data);
-    } else {
-      emailPayload.subject      = `RFC Store — ${_event}`;
-      emailPayload.htmlContent  = `<pre>${JSON.stringify(payload, null, 2)}</pre>`;
-    }
-
-    await client.transactionalEmails.sendTransacEmail(emailPayload);
-    console.info(`[RFC Notifications] Email sent: ${_event} → ${to}`);
-  } catch (err) {
-    console.error(`[RFC Notifications] Brevo send failed: ${_event} → ${to}`, err);
-    throw err;
-  }
-}
-
-
-async function sendSMS(_event: string, _to: string, _message: string): Promise<void> {
-  if (!SMS_CONFIGURED) {
-    console.info(`[RFC Notifications] SMS NOT CONFIGURED — skipping event: ${_event} → ${_to}`);
-    return;
-  }
-
-  // TODO: Implement SMS sending with MSG91 or Twilio
-  console.info(`[RFC Notifications] SMS sent: ${_event} → ${_to}`);
-}
-
-// ── Public Notification Functions ──────────────────────────
-
-/**
- * Fire when a new order is created.
- * Sends confirmation email to customer + alert to admin.
- * Safe to call without awaiting — failures are caught and logged.
- */
-export async function notifyOrderCreated(event: OrderCreatedEvent): Promise<void> {
-  try {
-    // Customer confirmation
-    await sendEmail('order_created', event.customerEmail, {
-      orderNumber: event.orderNumber,
-      customerName: event.customerName,
-      totalAmount: event.totalAmount,
-      paymentMethod: event.paymentMethod,
-      codFee: event.codFee,
-      items: event.items,
-      shippingAddress: event.shippingAddress,
-    });
-
-    // Admin alert (use store contact email from store_settings or env)
-    const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
-    if (adminEmail) {
-      await sendEmail('order_created_admin', adminEmail, event);
-    }
-
-    // SMS confirmation (Indian mobile numbers)
-    if (event.customerPhone) {
-      const msg = `RFC Store: Order ${event.orderNumber} confirmed! Total: ₹${event.totalAmount}. We'll update you when it ships.`;
-      await sendSMS('order_created_sms', event.customerPhone, msg);
-    }
-
-    console.info(`[RFC Notifications] notifyOrderCreated: ${event.orderNumber}`);
-  } catch (err) {
-    // NEVER let notification failure break the order flow
-    console.error('[RFC Notifications] notifyOrderCreated failed:', err);
-  }
-}
-
-/**
- * Fire when an admin changes order status (confirmed/shipped/delivered/cancelled).
- */
-export async function notifyOrderStatusChanged(event: OrderStatusChangedEvent): Promise<void> {
-  try {
-    await sendEmail('order_status_changed', event.customerEmail, event);
-    console.info(`[RFC Notifications] notifyOrderStatusChanged: ${event.orderNumber} → ${event.newStatus}`);
-  } catch (err) {
-    console.error('[RFC Notifications] notifyOrderStatusChanged failed:', err);
-  }
-}
-
-/**
- * Fire when payment is confirmed, failed, or refunded.
- */
-export async function notifyPaymentEvent(event: PaymentEvent): Promise<void> {
-  try {
-    const eventType = `payment_${event.status}`;
-    await sendEmail(eventType, event.customerEmail, event);
-    console.info(`[RFC Notifications] notifyPaymentEvent: ${event.orderNumber} status=${event.status}`);
-  } catch (err) {
-    console.error('[RFC Notifications] notifyPaymentEvent failed:', err);
-  }
-}
-
-// ── Razorpay-specific Notification Events ──────────────────
 
 export interface PaymentConfirmedEvent {
   orderNumber: string;
   orderId: string;
   customerName: string;
   customerEmail: string;
-  customerPhone?: string;
+  customerPhone?: string | null;
   totalAmount: number;
   currency: string;
   razorpayPaymentId: string;
@@ -240,31 +174,133 @@ export interface RefundInitiatedEvent {
   amount: number;
 }
 
+// ── Legacy type — kept for compatibility ─────────────────────────────
+
+export interface PaymentEvent {
+  orderNumber: string;
+  orderId: string;
+  customerEmail: string;
+  customerName: string;
+  amount: number;
+  currency: string;
+  paymentId?: string;
+  status: 'paid' | 'failed' | 'refunded';
+}
+
+// ── Public Notification Functions ─────────────────────────────────────
+
 /**
- * Fire when Razorpay payment is confirmed (captured + verified server-side).
- * MUST only be called when confirm_razorpay_payment() returns was_already_paid=false.
- * This ensures exactly one email per payment confirmation (idempotency via DB FOR UPDATE).
+ * Fire when a new COD order is created.
+ * Sends order confirmation to customer + admin alert.
+ * Safe to call without awaiting — failures are caught internally.
+ */
+export async function notifyOrderCreated(event: OrderCreatedEvent): Promise<void> {
+  try {
+    // Customer: order confirmation
+    await sendTransactionalEmail('order_created', {
+      to:      event.customerEmail,
+      subject: getOrderConfirmationSubject(event.orderNumber, event.paymentMethod),
+      html:    renderOrderConfirmationHtml({
+        orderNumber:    event.orderNumber,
+        orderId:        event.orderId,
+        customerName:   event.customerName,
+        totalAmount:    event.totalAmount,
+        subtotal:       event.subtotal,
+        shippingAmount: event.shippingAmount,
+        taxAmount:      event.taxAmount,
+        discountAmount: event.discountAmount,
+        codFee:         event.codFee,
+        paymentMethod:  event.paymentMethod,
+        orderDate:      new Date(),
+        items:          event.items,
+        shippingAddress: event.shippingAddress,
+      }),
+      text: renderOrderConfirmationText({
+        orderNumber:     event.orderNumber,
+        customerName:    event.customerName,
+        totalAmount:     event.totalAmount,
+        paymentMethod:   event.paymentMethod,
+        items:           event.items,
+        shippingAddress: event.shippingAddress,
+      }),
+    });
+
+    // Admin: new order alert
+    const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+    if (adminEmail) {
+      await sendTransactionalEmail('order_created_admin', {
+        to:      adminEmail,
+        subject: getAdminNewOrderSubject(event.orderNumber, event.totalAmount),
+        html:    renderAdminNewOrderHtml({
+          orderNumber:    event.orderNumber,
+          orderId:        event.orderId,
+          customerName:   event.customerName,
+          customerEmail:  event.customerEmail,
+          customerPhone:  event.customerPhone,
+          totalAmount:    event.totalAmount,
+          paymentMethod:  event.paymentMethod,
+          itemCount:      event.items.length,
+        }),
+      });
+    }
+
+    // SMS
+    if (event.customerPhone) {
+      await sendSMS('order_created_sms', event.customerPhone);
+    }
+
+    console.info(`[RFC Notifications] notifyOrderCreated: ${event.orderNumber}`);
+  } catch (err) {
+    // NEVER let notification failure break the order flow
+    console.error('[RFC Notifications] notifyOrderCreated failed:', err);
+  }
+}
+
+/**
+ * Fire when Razorpay payment is confirmed.
+ * MUST only be called when confirm_razorpay_payment() returns was_already_paid=false
+ * to ensure exactly one email per payment (idempotency via DB FOR UPDATE lock).
  */
 export async function notifyPaymentConfirmed(event: PaymentConfirmedEvent): Promise<void> {
   try {
-    await sendEmail('payment_confirmed', event.customerEmail, {
-      orderNumber: event.orderNumber,
-      customerName: event.customerName,
-      totalAmount: event.totalAmount,
-      currency: event.currency,
-      razorpayPaymentId: event.razorpayPaymentId,
+    // Customer: payment confirmed
+    await sendTransactionalEmail('payment_confirmed', {
+      to:      event.customerEmail,
+      subject: getPaymentConfirmedSubject(event.orderNumber),
+      html:    renderPaymentConfirmedHtml({
+        orderNumber:       event.orderNumber,
+        orderId:           event.orderId,
+        customerName:      event.customerName,
+        totalAmount:       event.totalAmount,
+        currency:          event.currency,
+        razorpayPaymentId: event.razorpayPaymentId,
+        orderDate:         new Date(),
+      }),
+      text: renderPaymentConfirmedText({
+        orderNumber:       event.orderNumber,
+        customerName:      event.customerName,
+        totalAmount:       event.totalAmount,
+        razorpayPaymentId: event.razorpayPaymentId,
+      }),
     });
 
+    // Admin: payment alert
     const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
     if (adminEmail) {
-      await sendEmail('payment_confirmed_admin', adminEmail, {
-        orderNumber: event.orderNumber,
-        customerName: event.customerName,
-        customerEmail: event.customerEmail,
-        totalAmount: event.totalAmount,
-        razorpayPaymentId: event.razorpayPaymentId,
+      await sendTransactionalEmail('payment_confirmed_admin', {
+        to:      adminEmail,
+        subject: getAdminPaymentSubject(event.orderNumber),
+        html:    renderAdminPaymentHtml({
+          orderNumber:       event.orderNumber,
+          orderId:           event.orderId,
+          customerName:      event.customerName,
+          customerEmail:     event.customerEmail,
+          totalAmount:       event.totalAmount,
+          razorpayPaymentId: event.razorpayPaymentId,
+        }),
       });
     }
+
     console.info(`[RFC Notifications] notifyPaymentConfirmed: ${event.orderNumber}`);
   } catch (err) {
     console.error('[RFC Notifications] notifyPaymentConfirmed failed:', err);
@@ -276,7 +312,19 @@ export async function notifyPaymentConfirmed(event: PaymentConfirmedEvent): Prom
  */
 export async function notifyPaymentFailed(event: PaymentFailedEvent): Promise<void> {
   try {
-    await sendEmail('payment_failed', event.customerEmail, event);
+    await sendTransactionalEmail('payment_failed', {
+      to:      event.customerEmail,
+      subject: getPaymentFailedSubject(event.orderNumber),
+      html:    renderPaymentFailedHtml({
+        orderNumber:  event.orderNumber,
+        orderId:      event.orderId,
+        customerName: event.customerName,
+      }),
+      text: renderPaymentFailedText({
+        orderNumber:  event.orderNumber,
+        customerName: event.customerName,
+      }),
+    });
     console.info(`[RFC Notifications] notifyPaymentFailed: ${event.orderNumber}`);
   } catch (err) {
     console.error('[RFC Notifications] notifyPaymentFailed failed:', err);
@@ -284,7 +332,42 @@ export async function notifyPaymentFailed(event: PaymentFailedEvent): Promise<vo
 }
 
 /**
- * Fire when a refund is initiated (typically due to inventory unavailable after payment).
+ * Fire when admin changes order status (confirmed/processing/shipped/delivered/cancelled).
+ */
+export async function notifyOrderStatusChanged(event: OrderStatusChangedEvent): Promise<void> {
+  try {
+    await sendTransactionalEmail('order_status_changed', {
+      to:      event.customerEmail,
+      subject: getOrderStatusSubject(event.orderNumber, event.newStatus),
+      html:    renderOrderStatusHtml({
+        orderNumber:       event.orderNumber,
+        orderId:           event.orderId,
+        customerName:      event.customerName,
+        newStatus:         event.newStatus,
+        previousStatus:    event.previousStatus,
+        trackingNumber:    event.trackingNumber,
+        trackingUrl:       event.trackingUrl,
+        carrier:           event.carrier,
+        estimatedDelivery: event.estimatedDelivery,
+        totalAmount:       event.totalAmount,
+        deliveredDate:     event.deliveredDate,
+      }),
+      text: renderOrderStatusText({
+        orderNumber:    event.orderNumber,
+        orderId:        event.orderId,
+        customerName:   event.customerName,
+        newStatus:      event.newStatus,
+        trackingNumber: event.trackingNumber,
+      }),
+    });
+    console.info(`[RFC Notifications] notifyOrderStatusChanged: ${event.orderNumber} → ${event.newStatus}`);
+  } catch (err) {
+    console.error('[RFC Notifications] notifyOrderStatusChanged failed:', err);
+  }
+}
+
+/**
+ * Fire when a refund is initiated (inventory unavailable post-payment).
  */
 export async function notifyRefundInitiated(event: RefundInitiatedEvent): Promise<void> {
   try {
@@ -297,25 +380,59 @@ export async function notifyRefundInitiated(event: RefundInitiatedEvent): Promis
       .maybeSingle();
 
     if (order?.customer_email) {
-      await sendEmail('refund_initiated', order.customer_email, {
-        orderNumber: event.orderNumber,
-        customerName: order.customer_name,
-        amount: event.amount,
-        razorpayPaymentId: event.razorpayPaymentId,
+      await sendTransactionalEmail('refund_initiated', {
+        to:      order.customer_email as string,
+        subject: getRefundInitiatedSubject(event.orderNumber),
+        html:    renderRefundInitiatedHtml({
+          orderNumber:       event.orderNumber,
+          customerName:      order.customer_name as string | null,
+          amount:            event.amount,
+          razorpayPaymentId: event.razorpayPaymentId,
+        }),
+        text: renderRefundInitiatedText({
+          orderNumber:  event.orderNumber,
+          customerName: order.customer_name as string | null,
+          amount:       event.amount,
+        }),
       });
     }
 
     const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
     if (adminEmail) {
-      await sendEmail('refund_initiated_admin', adminEmail, event);
+      await sendTransactionalEmail('refund_initiated_admin', {
+        to:      adminEmail,
+        subject: `\u26A0\uFE0F Refund Initiated \u2014 ${event.orderNumber}`,
+        html:    renderRefundInitiatedHtml({
+          orderNumber:       event.orderNumber,
+          amount:            event.amount,
+          razorpayPaymentId: event.razorpayPaymentId,
+        }),
+      });
     }
+
     console.info(`[RFC Notifications] notifyRefundInitiated: ${event.orderNumber}`);
   } catch (err) {
     console.error('[RFC Notifications] notifyRefundInitiated failed:', err);
   }
 }
 
-// ── Notification Status (for admin diagnostics) ────────────
+/**
+ * Legacy compatibility shim — routes generic PaymentEvent to typed functions.
+ * Prefer the specific typed functions above for new code.
+ */
+export async function notifyPaymentEvent(event: PaymentEvent): Promise<void> {
+  if (event.status === 'failed') {
+    return notifyPaymentFailed({
+      orderNumber:   event.orderNumber,
+      orderId:       event.orderId,
+      customerName:  event.customerName,
+      customerEmail: event.customerEmail,
+    });
+  }
+  console.info(`[RFC Notifications] notifyPaymentEvent: ${event.orderNumber} status=${event.status} (no specific template)`);
+}
+
+// ── Diagnostic ────────────────────────────────────────────────────────
 
 export function getNotificationStatus() {
   return {
@@ -327,4 +444,3 @@ export function getNotificationStatus() {
       : { configured: false, message: 'Set MSG91_API_KEY or TWILIO_ACCOUNT_SID to enable' },
   };
 }
-

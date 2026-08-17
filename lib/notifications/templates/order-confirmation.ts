@@ -1,128 +1,158 @@
 /**
- * RFC Store — Order Confirmation Email Template
- * Sent to customer when COD order is placed.
+ * RFC Store — Order Confirmation Email Templates
+ *
+ * Handles:
+ *  - COD order placed
+ *  - Razorpay-paid order (called from notifyPaymentConfirmed or notifyOrderCreated)
+ *
+ * Uses the RFC Store shared email design system (components.ts).
  */
 
-interface OrderConfirmationData {
+import {
+  esc, fmtInr, fmtDate, emailShell, emailHeader, emailHero,
+  emailBodyOpen, emailBodyClose, emailGreeting, emailParagraph,
+  emailInfoCard, emailOrderItems, emailPriceSummary, emailCodNotice,
+  emailAddressBlock, emailStatusTimeline, emailCTAButton,
+  emailSupportSection, emailFooter, emailSpacer, BRAND,
+  type OrderItemRow, type AddressData,
+} from './components';
+
+// ── Types ────────────────────────────────────────────────────────────
+
+export interface OrderConfirmationData {
   orderNumber: string;
+  orderId?: string;
   customerName: string;
   totalAmount: number;
-  paymentMethod: string;
+  subtotal?: number;
+  shippingAmount?: number;
+  taxAmount?: number;
+  discountAmount?: number;
   codFee?: number;
-  items: Array<{
-    productName: string;
-    variantName?: string | null;
-    quantity: number;
-    unitPrice: number;
-  }>;
-  shippingAddress: {
-    line1: string;
-    line2?: string | null;
-    city: string;
-    state: string;
-    postalCode: string;
-    country: string;
-  };
+  paymentMethod: 'cod' | 'razorpay' | string;
+  currency?: string;
+  orderDate?: Date | string | null;
+  items: OrderItemRow[];
+  shippingAddress: AddressData;
 }
 
-export function getOrderConfirmationSubject(orderNumber: string): string {
-  return `Order Confirmed — ${orderNumber} | Revive Fight Club`;
+// ── Subject Lines ─────────────────────────────────────────────────────
+
+export function getOrderConfirmationSubject(orderNumber: string, paymentMethod?: string): string {
+  if (paymentMethod === 'cod') {
+    return `Your RFC Store order is confirmed \u2014 ${orderNumber}`;
+  }
+  return `Your RFC Store order is confirmed \u2014 ${orderNumber}`;
 }
+
+// ── HTML ─────────────────────────────────────────────────────────────
 
 export function renderOrderConfirmationHtml(data: OrderConfirmationData): string {
-  const itemsHtml = data.items.map(item => `
-    <tr>
-      <td style="padding:10px 0; border-bottom:1px solid #e5e7eb; font-family:Arial,sans-serif; font-size:14px; color:#374151;">
-        ${item.productName}${item.variantName ? ` — ${item.variantName}` : ''}
-        <span style="color:#6b7280;"> × ${item.quantity}</span>
-      </td>
-      <td style="padding:10px 0; border-bottom:1px solid #e5e7eb; text-align:right; font-family:Arial,sans-serif; font-size:14px; font-weight:700; color:#111827;">
-        ₹${(item.unitPrice * item.quantity).toLocaleString('en-IN')}
-      </td>
-    </tr>
-  `).join('');
-
-  const addr = data.shippingAddress;
-  const addrHtml = [addr.line1, addr.line2, addr.city, addr.state, addr.postalCode]
-    .filter(Boolean).join(', ');
-
   const isCod = data.paymentMethod === 'cod';
+  const orderUrl = data.orderId
+    ? `${BRAND.SITE_URL}/account/orders/${data.orderId}`
+    : `${BRAND.SITE_URL}/account/orders`;
 
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:40px 16px;">
-    <tr><td align="center">
-      <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:8px;overflow:hidden;">
-        <!-- Header -->
-        <tr><td style="background:#0B1C30;padding:32px 40px;text-align:center;">
-          <p style="margin:0;font-size:22px;font-weight:900;color:#ffffff;text-transform:uppercase;letter-spacing:0.1em;">REVIVE FIGHT CLUB</p>
-          <p style="margin:8px 0 0;font-size:12px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.08em;">Order Confirmed</p>
-        </td></tr>
-        <!-- Body -->
-        <tr><td style="padding:40px;">
-          <p style="margin:0 0 8px;font-size:16px;color:#374151;">Hi <strong>${data.customerName}</strong>,</p>
-          <p style="margin:0 0 24px;font-size:15px;color:#374151;">Your order has been placed successfully. Here are your order details:</p>
+  // Build price lines
+  const priceLines = [];
+  if (data.subtotal != null && data.subtotal !== data.totalAmount) {
+    priceLines.push({ label: 'Subtotal', value: data.subtotal });
+    if (data.discountAmount && data.discountAmount > 0) {
+      priceLines.push({ label: 'Discount', value: -data.discountAmount, muted: true });
+    }
+    if (data.shippingAmount != null) {
+      priceLines.push({ label: 'Shipping', value: data.shippingAmount, muted: data.shippingAmount === 0 });
+    }
+    if (data.taxAmount && data.taxAmount > 0) {
+      priceLines.push({ label: 'GST', value: data.taxAmount, muted: true });
+    }
+    if (isCod && data.codFee && data.codFee > 0) {
+      priceLines.push({ label: 'COD Handling Fee', value: data.codFee, muted: true });
+    }
+  }
+  priceLines.push({ label: 'Total', value: data.totalAmount, total: true });
 
-          <!-- Order Number -->
-          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:16px;margin-bottom:24px;">
-            <p style="margin:0;font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;">Order Number</p>
-            <p style="margin:4px 0 0;font-size:20px;font-weight:900;color:#0B1C30;letter-spacing:0.02em;">${data.orderNumber}</p>
-          </div>
+  // Timeline — COD confirmed, payment on delivery
+  const timelineSteps = isCod
+    ? [
+        { label: 'Order Placed', state: 'done' as const },
+        { label: 'Order Confirmed', state: 'active' as const },
+        { label: 'Processing & Packing', state: 'pending' as const },
+        { label: 'Shipped', state: 'pending' as const },
+        { label: 'Delivered & Payment Collected', state: 'pending' as const },
+      ]
+    : [
+        { label: 'Order Placed', state: 'done' as const },
+        { label: 'Payment Received', state: 'done' as const },
+        { label: 'Order Confirmed', state: 'active' as const },
+        { label: 'Processing & Packing', state: 'pending' as const },
+        { label: 'Shipped', state: 'pending' as const },
+        { label: 'Delivered', state: 'pending' as const },
+      ];
 
-          <!-- Items -->
-          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
-            <tr><th style="text-align:left;padding-bottom:10px;border-bottom:2px solid #0B1C30;font-size:12px;text-transform:uppercase;letter-spacing:0.06em;color:#0B1C30;">Item</th>
-            <th style="text-align:right;padding-bottom:10px;border-bottom:2px solid #0B1C30;font-size:12px;text-transform:uppercase;letter-spacing:0.06em;color:#0B1C30;">Amount</th></tr>
-            ${itemsHtml}
-            ${data.codFee ? `<tr><td style="padding:10px 0;border-bottom:1px solid #e5e7eb;font-size:14px;color:#374151;">COD Handling Fee</td><td style="padding:10px 0;border-bottom:1px solid #e5e7eb;text-align:right;font-size:14px;font-weight:700;color:#374151;">₹${data.codFee}</td></tr>` : ''}
-            <tr><td style="padding:16px 0 0;font-size:16px;font-weight:900;color:#0B1C30;">Total</td>
-            <td style="padding:16px 0 0;text-align:right;font-size:18px;font-weight:900;color:#0B1C30;">₹${data.totalAmount.toLocaleString('en-IN')}</td></tr>
-          </table>
+  const heroTitle = isCod
+    ? 'Order Confirmed'
+    : 'Order Confirmed';
+  const heroSubtitle = isCod
+    ? `Thank you, ${esc(data.customerName)}. Your Cash on Delivery order has been placed successfully.`
+    : `Thank you, ${esc(data.customerName)}. Your order has been confirmed.`;
 
-          <!-- Payment Method -->
-          ${isCod ? `
-          <div style="background:#f0fdf4;border:1px solid #22c55e;border-radius:6px;padding:14px 16px;margin-bottom:24px;">
-            <p style="margin:0;font-size:13px;font-weight:700;color:#15803d;text-transform:uppercase;">💵 Cash on Delivery</p>
-            <p style="margin:6px 0 0;font-size:14px;color:#166534;">Keep <strong>₹${data.totalAmount.toLocaleString('en-IN')}</strong> ready when your order arrives. Our delivery partner will collect payment.</p>
-          </div>` : ''}
+  const body = [
+    emailGreeting(data.customerName),
+    emailParagraph(
+      isCod
+        ? 'Your order is confirmed and will be dispatched within 1\u20132 business days. Keep the exact amount ready at delivery.'
+        : 'Your payment has been received and your order is confirmed. We\u2019ll notify you once it\u2019s dispatched.'
+    ),
+    emailInfoCard([
+      { label: 'Order Number', value: data.orderNumber, bold: true, large: true },
+      { label: 'Order Date',   value: fmtDate(data.orderDate) },
+      { label: 'Payment',      value: isCod ? 'Cash on Delivery' : 'Online Payment' },
+      { label: 'Order Total',  value: fmtInr(data.totalAmount), bold: true },
+    ]),
+    emailOrderItems(data.items),
+    emailPriceSummary(priceLines),
+    isCod && data.totalAmount ? emailCodNotice(data.totalAmount) : '',
+    emailAddressBlock(data.shippingAddress),
+    emailStatusTimeline(timelineSteps),
+    emailCTAButton('View Your Order', orderUrl),
+    emailSpacer(8),
+    emailSupportSection(),
+  ].join('');
 
-          <!-- Shipping Address -->
-          <div style="margin-bottom:24px;">
-            <p style="margin:0 0 8px;font-size:12px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;">Delivering To</p>
-            <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;">${addrHtml}</p>
-          </div>
+  const html = [
+    emailHeader(isCod ? 'Order Confirmed' : 'Order Confirmed'),
+    emailHero({ tone: 'success', title: heroTitle, subtitle: heroSubtitle }),
+    emailBodyOpen(),
+    body,
+    emailBodyClose(),
+  ].join('');
 
-          <p style="font-size:14px;color:#6b7280;line-height:1.6;">Estimated delivery: <strong>5–7 business days</strong>. You'll receive another email with tracking details once dispatched.</p>
-          <p style="font-size:14px;color:#6b7280;">Questions? Reply to this email or contact <a href="mailto:revivefightclub@gmail.com" style="color:#E63946;">revivefightclub@gmail.com</a></p>
-        </td></tr>
-        <!-- Footer -->
-        <tr><td style="background:#f9fafb;padding:24px 40px;text-align:center;border-top:1px solid #e5e7eb;">
-          <p style="margin:0;font-size:12px;color:#9ca3af;">© 2026 Revive Fight Club. All rights reserved.</p>
-          <p style="margin:4px 0 0;font-size:12px;color:#9ca3af;">revivefightclub@gmail.com</p>
-        </td></tr>
-      </table>
-    </td></tr>
-  </table>
-</body>
-</html>`;
+  return emailShell(html + emailFooter());
 }
 
+// ── Plain Text ────────────────────────────────────────────────────────
+
 export function renderOrderConfirmationText(data: OrderConfirmationData): string {
-  return `
-Revive Fight Club — Order Confirmed
-
-Hi ${data.customerName},
-
-Your order ${data.orderNumber} has been placed!
-
-Total: ₹${data.totalAmount.toLocaleString('en-IN')}
-Payment: ${data.paymentMethod === 'cod' ? 'Cash on Delivery (pay when delivered)' : data.paymentMethod}
-
-Delivery in 5–7 business days.
-
-Questions? revivefightclub@gmail.com
-  `.trim();
+  const isCod = data.paymentMethod === 'cod';
+  const lines = [
+    `RFC Store \u2014 Order Confirmed`,
+    ``,
+    `Hi ${data.customerName},`,
+    ``,
+    `Your order ${data.orderNumber} has been confirmed.`,
+    `Total: ${fmtInr(data.totalAmount)}`,
+    `Payment: ${isCod ? 'Cash on Delivery' : 'Online Payment'}`,
+    `Date: ${fmtDate(data.orderDate)}`,
+    ``,
+    `Items:`,
+    ...data.items.map(i => `  \u2022 ${i.productName}${i.variantName ? ` (${i.variantName})` : ''} x${i.quantity} \u2014 ${fmtInr(i.unitPrice * i.quantity)}`),
+    ``,
+    isCod ? `Please keep ${fmtInr(data.totalAmount)} ready at delivery.` : '',
+    ``,
+    `Shipping to: ${[data.shippingAddress.line1, data.shippingAddress.line2, data.shippingAddress.city, data.shippingAddress.state, data.shippingAddress.postalCode].filter(Boolean).join(', ')}`,
+    ``,
+    `Questions? ${BRAND.SUPPORT}`,
+  ];
+  return lines.filter(l => l !== undefined).join('\n').trim();
 }
